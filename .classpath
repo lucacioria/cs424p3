@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<classpath>
+	<classpathentry kind="src" path="src"/>
+	<classpathentry kind="con" path="org.eclipse.jdt.launching.JRE_CONTAINER/org.eclipse.jdt.internal.debug.ui.launcher.StandardVMType/JavaSE-1.6"/>
+	<classpathentry kind="lib" path="resty-0.3.1.jar"/>
+	<classpathentry kind="lib" path="external-libs/unfoldingmaps/lib/core.jar"/>
+	<classpathentry kind="lib" path="external-libs/unfoldingmaps/lib/jogl.jar"/>
+	<classpathentry kind="lib" path="external-libs/unfoldingmaps/lib/log4j-1.2.15.jar"/>
+	<classpathentry kind="lib" path="external-libs/OmicronAPI/library/OmicronAPI.jar"/>
+	<classpathentry kind="lib" path="external-libs/processing-net-libs/library/net.jar"/>
+	<classpathentry kind="lib" path="external-libs/unfoldingmaps/lib/unfolding.0.9.1.jar"/>
+	<classpathentry kind="lib" path="external-libs/unfoldingmaps/lib/glgraphics.jar"/>
+	<classpathentry kind="lib" path="external-libs/unfoldingmaps/lib/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="external-libs/unfoldingmaps/lib/opengl.jar"/>
+	<classpathentry kind="lib" path="external-libs/processing-libs/core.jar"/>
+	<classpathentry kind="lib" path="external-libs/processing-libs/gluegen-rt.jar"/>
+	<classpathentry kind="lib" path="external-libs/processing-libs/jogl-all.jar"/>
+	<classpathentry kind="lib" path="external-libs/processing-libs/jogl-all-natives-linux-amd64.jar"/>
+	<classpathentry kind="lib" path="external-libs/processing-libs/jogl-all-natives-linux-i586.jar"/>
+	<classpathentry kind="lib" path="external-libs/processing-libs/jogl-all-natives-macosx-universal.jar"/>
+	<classpathentry kind="lib" path="external-libs/processing-libs/jogl-all-natives-windows-amd64.jar"/>
+	<classpathentry kind="lib" path="external-libs/processing-libs/jogl-all-natives-windows-i586.jar"/>
+	<classpathentry kind="output" path="bin"/>
+</classpath>

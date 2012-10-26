@@ -1,4 +1,4 @@
-cs424p3
-=======
+another-brick-in-the-wall
+=========================
 
-cs424 project3
+Processing library for developing touch apps for the Wall (EVL - UIC)
