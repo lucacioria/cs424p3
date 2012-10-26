@@ -7,7 +7,7 @@ import omicronAPI.OmicronAPI;
 import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
-import com.anotherbrick.inthewall.VizEnabled.TouchTypeEnum;
+import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
 import com.example.app.Application;
 
 public class Main extends PApplet {
@@ -51,9 +51,9 @@ public class Main extends PApplet {
   }
 
   public static void main(String[] args) {
-      PApplet.main(new String[] {"com.anotherbrick.inthewall.Main"});
+    PApplet.main(new String[] { "com.anotherbrick.inthewall.Main" });
   }
-  
+
   @Override
   public void setup() {
     setupConfig();

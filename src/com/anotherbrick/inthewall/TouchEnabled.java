@@ -1,6 +1,6 @@
 package com.anotherbrick.inthewall;
 
-public interface VizEnabled {
+public interface TouchEnabled {
 
   public static enum TouchTypeEnum {
     ONE_FINGER, FIVE_FINGERS

@@ -12,7 +12,7 @@ import processing.core.PVector;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.VizTimeline.Modes;
 
-public class VizTimeSlider extends VizPanel implements VizEnabled {
+public class VizTimeSlider extends VizPanel implements TouchEnabled {
 
     public float PADDING_LEFT = 0;
     public float HANDLE_WIDTH = 0;

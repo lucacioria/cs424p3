@@ -6,7 +6,7 @@ import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 
-public class VizList extends VizPanel implements VizEnabled {
+public class VizList extends VizPanel implements TouchEnabled {
 
   private int numOfRows = 10;
   private ArrayList<Object> selectedObjects = new ArrayList<Object>();
@@ -271,7 +271,7 @@ public class VizList extends VizPanel implements VizEnabled {
 
   }
 
-  private class VizSlider extends VizPanel implements VizEnabled {
+  private class VizSlider extends VizPanel implements TouchEnabled {
 
     private Handle handle;
 

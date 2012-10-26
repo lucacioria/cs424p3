@@ -13,7 +13,7 @@ import processing.core.PVector;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.Model.Datas;
 
-public class VizGraph extends VizPanel implements VizEnabled {
+public class VizGraph extends VizPanel implements TouchEnabled {
 
   public int TICK_COUNT = 10;
   public float YAXIS_TICKS_OFFSET = 10;

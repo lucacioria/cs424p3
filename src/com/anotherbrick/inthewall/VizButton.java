@@ -6,7 +6,7 @@ import processing.core.PShape;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 
-public class VizButton extends VizPanel implements VizEnabled {
+public class VizButton extends VizPanel implements TouchEnabled {
 
   private String text = "";
   private float xOffset = 0;

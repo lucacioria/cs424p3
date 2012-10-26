@@ -10,7 +10,7 @@ public class Model {
   public Main p;
   public float touchX;
   public float touchY;
-  public VizEnabled currentModalVizPanel;
+  public TouchEnabled currentModalVizPanel;
   public DataSource dataSource;
   public ArrayList<Object> selectedGenres = new ArrayList<Object>();
   public ArrayList<Object> selectedMonsters = new ArrayList<Object>();

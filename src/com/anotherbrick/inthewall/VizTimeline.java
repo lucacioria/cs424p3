@@ -2,7 +2,7 @@ package com.anotherbrick.inthewall;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 
-public class VizTimeline extends VizPanel implements VizEnabled {
+public class VizTimeline extends VizPanel implements TouchEnabled {
 
   private static final float GRAPH_HEIGHT = 0;
   private static final float GRAPH_WIDTH = 0;

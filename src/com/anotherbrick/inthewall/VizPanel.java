@@ -12,7 +12,7 @@ import processing.core.PShape;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.Config.MyFontEnum;
-import com.anotherbrick.inthewall.VizEnabled.TouchTypeEnum;
+import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
 
 public abstract class VizPanel {
 
@@ -34,7 +34,7 @@ public abstract class VizPanel {
   VizPanel parent;
   PGraphics pg;
   boolean redraw = true, firstDraw = true;
-  ArrayList<VizEnabled> touchChildren = new ArrayList<VizEnabled>();
+  ArrayList<TouchEnabled> touchChildren = new ArrayList<TouchEnabled>();
   // ArrayList<VizPanelInterface> drawChildren = new
   // ArrayList<VizPanelInterface>();
   private boolean visible = true;
@@ -89,7 +89,7 @@ public abstract class VizPanel {
     this.parent = parent;
   }
 
-  public void addTouchSubscriber(VizEnabled child) {
+  public void addTouchSubscriber(TouchEnabled child) {
     touchChildren.add(child);
   }
 
@@ -330,7 +330,7 @@ public abstract class VizPanel {
 
   public boolean propagateTouch(float x, float y, boolean down, TouchTypeEnum touchType) {
     boolean consumed = false;
-    for (VizEnabled child : touchChildren) {
+    for (TouchEnabled child : touchChildren) {
       if (child.containsPoint(x, y) && (((VizPanel) child).isVisible())
           && child.touch(x, y, down, touchType)) {
         consumed = true;
@@ -380,7 +380,7 @@ public abstract class VizPanel {
 
   public void setModal(boolean val) {
     if (val) {
-      m.currentModalVizPanel = (VizEnabled) this;
+      m.currentModalVizPanel = (TouchEnabled) this;
       log("Setting " + toString() + " as modal..");
     } else {
       m.currentModalVizPanel = null;

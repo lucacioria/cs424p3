@@ -4,8 +4,6 @@ import java.io.IOException;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import codeanticode.glgraphics.GLConstants;
-
 import processing.core.PApplet;
 import processing.core.PFont;
 import processing.core.PImage;
@@ -16,7 +14,7 @@ import us.monoid.json.JSONObject;
 public class Config {
 
   public boolean onWall = false;
-  public String defaultRenderer = GLConstants.GLGRAPHICS;
+  public String defaultRenderer = PApplet.P3D;
   public String path;
   static Config instance;
   private PApplet p;
@@ -59,16 +57,14 @@ public class Config {
       } else {
         this.currentLanguage = ENGLISH;
       }
-      /*
-       * if (obj.getString("renderer").equalsIgnoreCase("java2d")) {
-       * this.defaultRenderer = PApplet.JAVA2D; } else if
-       * (obj.getString("renderer").equalsIgnoreCase("p2d")) {
-       * this.defaultRenderer = PApplet.P2D; } else if
-       * (obj.getString("renderer").equalsIgnoreCase("p3d")) {
-       * this.defaultRenderer = PApplet.P3D; } else if
-       * (obj.getString("renderer").equalsIgnoreCase("GLGRAPHICS")) {
-       * this.defaultRenderer = GLConstants.GLGRAPHICS; }
-       */
+
+      if (obj.getString("renderer").equalsIgnoreCase("java2d")) {
+        this.defaultRenderer = PApplet.JAVA2D;
+      } else if (obj.getString("renderer").equalsIgnoreCase("p2d")) {
+        this.defaultRenderer = PApplet.P2D;
+      } else if (obj.getString("renderer").equalsIgnoreCase("p3d")) {
+        this.defaultRenderer = PApplet.P3D;
+      }
 
       enableSafeLine = obj.getBoolean("enable_safe_line");
       enableGridLines = obj.getBoolean("enable_grid_lines");
