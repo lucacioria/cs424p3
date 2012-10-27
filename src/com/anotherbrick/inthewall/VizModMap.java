@@ -46,7 +46,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		background(MyColorEnum.BLACK);
 
 		map.draw();
-		float[] array = focusOnState(1);
+		float[] array = focusOnState(index);
 		map.setCenterZoom(new Location(array[0], array[1]), (int) array[2]);
 		noFill();
 		stroke(MyColorEnum.RED);
@@ -65,7 +65,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 	}
 
 	public float[] focusOnState(int i) {
-i=40;
+
 		if (i == 1) {
 			return new float[] { 33.027088f, -86.616211f, 6 };
 		} else if (i == 2) {
@@ -141,33 +141,33 @@ i=40;
 		} else if (i == 40) {
 			return new float[] { 35.407752f, -98.492877f, 6 };
 		} else if (i == 41) {
-			return new float[] { 43.804133f, -120.554201f, 5 };
+			return new float[] { 43.804133f, -120.554201f, 6 };
 		} else if (i == 42) {
-			return new float[] { 41.203322f, -77.194525f, 5 };
+			return new float[] { 41.203322f, -77.194525f, 6 };
 		} else if (i == 44) {
-			return new float[] { 41.580095f, -71.477429f, 5 };
+			return new float[] { 41.580095f, -71.477429f, 8 };
 		} else if (i == 45) {
-			return new float[] { 33.836081f, -81.163724f, 5 };
+			return new float[] { 33.836081f, -81.163724f, 6 };
 		} else if (i == 46) {
-			return new float[] { 43.969515f, -99.901813f, 5 };
+			return new float[] { 44.569515f, -100.501813f, 6 };
 		} else if (i == 47) {
-			return new float[] { 35.517491f, -86.580447f, 5 };
+			return new float[] { 35.517491f, -86.580447f, 6 };
 		} else if (i == 48) {
 			return new float[] { 31.968599f, -99.901813f, 5 };
 		} else if (i == 49) {
-			return new float[] { 39.32098f, -111.093731f, 5 };
+			return new float[] { 39.32098f, -111.693731f, 6 };
 		} else if (i == 50) {
-			return new float[] { 44.558803f, -72.577841f, 5 };
+			return new float[] { 43.958803f, -72.577841f, 7 };
 		} else if (i == 51) {
-			return new float[] { 37.431573f, -78.656894f, 5 };
+			return new float[] { 37.431573f, -80.156894f, 6 };
 		} else if (i == 53) {
-			return new float[] { 47.751074f, -120.740139f, 5 };
+			return new float[] { 47.751074f, -120.740139f, 6 };
 		} else if (i == 54) {
-			return new float[] { 38.597626f, -80.454903f, 5 };
+			return new float[] { 39.697626f, -80.454903f, 6 };
 		} else if (i == 55) {
-			return new float[] { 43.78444f, -88.787868f, 5 };
+			return new float[] { 44.78444f, -89.787868f, 6 };
 		} else if (i == 56) {
-			return new float[] { 43.075968f, -107.290284f, 5 };
+			return new float[] { 43.075968f, -107.690284f, 6 };
 		} else
 			return new float[] { 0, 0, 0 };
 
