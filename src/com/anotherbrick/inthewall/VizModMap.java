@@ -10,6 +10,7 @@ import processing.core.PVector;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
+import com.anotherbrick.inthewall.datasource.DSAccident;
 import com.modestmaps.InteractiveMap;
 import com.modestmaps.core.Point2f;
 import com.modestmaps.geo.Location;
@@ -20,6 +21,9 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 	private InteractiveMap map;
 	private PVector mapOffset;
 	private PVector mapSize;
+	
+	private ArrayList<DSAccident> accidents=new ArrayList<DSAccident>();
+	//private ArrayList<>
 
 	public VizModMap(float x0, float y0, float width, float height,
 			VizPanel parent) {
@@ -35,7 +39,11 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 		map = new InteractiveMap(m.p, new Microsoft.RoadProvider(), getX0(),
 				getY0(), mapSize.x, mapSize.y);
-		map.setCenterZoom(new Location(40.145289f, -89.077148f), 5);
+		float[] Illinois=focusOnState(17);
+		map.setCenterZoom(new Location(Illinois[0], Illinois[1]), (int)Illinois[2]);
+		
+		accidents.add(new DSAccident(41.878114f,-87.629798f));
+		
 
 	}
 
@@ -47,12 +55,12 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 		map.draw();
 		float[] array = focusOnState(index);
-		map.setCenterZoom(new Location(array[0], array[1]), (int) array[2]);
+		//map.setCenterZoom(new Location(array[0], array[1]), (int) array[2]);
 		noFill();
 		stroke(MyColorEnum.RED);
 		strokeWeight(2);
 		rect(mapOffset.x, mapOffset.y, mapSize.x, mapSize.y);
-
+		drawAccidents(accidents);
 		popStyle();
 		return false;
 	}
@@ -64,6 +72,19 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 	}
 
+	public void drawAccidents(ArrayList <DSAccident> accidents){
+		for(DSAccident accident: accidents){
+			Location location=new Location(accident.getLatitude(), accident.getLongitude());
+			Point2f p=map.locationPoint(location);
+			
+			fill(MyColorEnum.BLACK);
+			stroke(MyColorEnum.RED);
+			ellipse(p.x-getX0(), p.y-getY0(), 15, 15);
+			println(p.x+" "+p.y);
+			
+		}
+	}
+	
 	public float[] focusOnState(int i) {
 
 		if (i == 1) {
@@ -93,7 +114,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		} else if (i == 16) {
 			return new float[] { 45.614037f, -115.290527f, 5 };
 		} else if (i == 17) {
-			return new float[] { 40.633125f, -89.398528f, 6 };
+			return new float[] { 39.833125f, -89.398528f, 6 };
 		} else if (i == 18) {
 			return new float[] { 40.069665f, -86.033936f, 6 };
 		} else if (i == 19) {
@@ -171,6 +192,14 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		} else
 			return new float[] { 0, 0, 0 };
 
+	}
+
+	public ArrayList<DSAccident> getAccidents() {
+		return accidents;
+	}
+
+	public void setAccidents(ArrayList<DSAccident> accidents) {
+		this.accidents = accidents;
 	}
 
 }
