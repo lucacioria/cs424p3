@@ -58,6 +58,7 @@ public class VizMap extends VizPanel implements TouchEnabled {
 
     map = new InteractiveMap(m.p, new Microsoft.RoadProvider(), mapOffset.x, mapOffset.y,
         mapSize.x, mapSize.y);
+    map.setCenterZoom(new Location(40.633125f,-89.398528f), 6);
 
     m.p.addMouseWheelListener(new MouseWheelListener() {
       @Override

@@ -23,7 +23,7 @@ public class Application extends VizPanel implements TouchEnabled {
 
   @Override
   public void setup() {
-    map = new VizModMap(0, 0, 512, 256, this);
+    map = new VizModMap(50, 50, 512, 256, this);
     map.setup();
     //addTouchSubscriber(map);
     

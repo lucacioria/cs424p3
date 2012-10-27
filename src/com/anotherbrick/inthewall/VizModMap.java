@@ -33,11 +33,13 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
   
 
-    mapOffset = new PVector(getX0(), getY0());
+    mapOffset = new PVector(0, 0);
     mapSize = new PVector(getWidth(), getHeight());
 
-    map = new InteractiveMap(m.p, new Microsoft.RoadProvider(), mapOffset.x, mapOffset.y,
-        mapSize.x, mapSize.y);
+    map = new InteractiveMap(m.p, new Microsoft.RoadProvider(), getX0(), getY0(), mapSize.x, mapSize.y);
+    map.setCenterZoom(new Location(
+
+40.145289f,-89.077148f), 5);
 
 
   }
