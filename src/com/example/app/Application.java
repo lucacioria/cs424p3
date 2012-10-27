@@ -4,6 +4,7 @@ import com.anotherbrick.inthewall.MapStyles;
 import com.anotherbrick.inthewall.MarkerType;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizMap;
+import com.anotherbrick.inthewall.VizModMap;
 import com.anotherbrick.inthewall.VizPanel;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 
@@ -13,7 +14,7 @@ public class Application extends VizPanel implements TouchEnabled {
     super(x0, y0, width, height);
   }
 
-  private VizMap map;
+  private VizModMap map;
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -22,11 +23,10 @@ public class Application extends VizPanel implements TouchEnabled {
 
   @Override
   public void setup() {
-    map = new VizMap(0, 0, 512, 256, this);
+    map = new VizModMap(0, 0, 512, 256, this);
     map.setup();
-    addTouchSubscriber(map);
-    map.changeMapStyle(MapStyles.MICROSOFT_AERIAL);
-    map.addLocation(41.9f, -87.6f, MarkerType.DEFAULT_MARKER, 0);
+    //addTouchSubscriber(map);
+    
   }
 
   @Override

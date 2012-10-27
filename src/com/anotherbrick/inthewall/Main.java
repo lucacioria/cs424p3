@@ -33,8 +33,7 @@ public class Main extends PApplet {
   @Override
   public void init() {
     super.init();
-    System.out.println("asdf");
-    setupConfig();
+     setupConfig();
     // init omicron
     if (c.onWall) {
       omicronManager = new OmicronAPI(this);
@@ -52,10 +51,8 @@ public class Main extends PApplet {
   }
 
   public static void main(String[] args) {
-	  System.out.println("asdf");
-    PApplet.main(new String[] { "com.anotherbrick.inthewall.Main" });
-    System.out.println("asdf");
-  }
+	PApplet.main(new String[] { "com.anotherbrick.inthewall.Main" });
+     }
 
   @Override
   public void setup() {
@@ -94,7 +91,6 @@ public class Main extends PApplet {
 
     // draw application
     application.draw();
-System.out.println("dfghj");
     // draw red line on top quarter (too high buttons)
     if (c.enableSafeLine) {
       pushStyle();
