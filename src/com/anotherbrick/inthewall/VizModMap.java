@@ -1,6 +1,7 @@
 package com.anotherbrick.inthewall;
 
 import java.awt.event.MouseWheelListener;
+import java.security.acl.LastOwnerException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Hashtable;
@@ -21,9 +22,9 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 	private InteractiveMap map;
 	private PVector mapOffset;
 	private PVector mapSize;
-	
+	private PVector firstTouch=new PVector(0,0);
 	private ArrayList<DSAccident> accidents=new ArrayList<DSAccident>();
-	//private ArrayList<>
+	private boolean mapTouched;
 
 	public VizModMap(float x0, float y0, float width, float height,
 			VizPanel parent) {
@@ -49,6 +50,8 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 	@Override
 	public boolean draw() {
+		
+		manageDrag();
 		pushStyle();
 
 		background(MyColorEnum.BLACK);
@@ -67,9 +70,15 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 	@Override
 	public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
-		index++;
-		return true;
-
+		if(down){
+		
+		
+		firstTouch=new PVector(x, y);
+		mapTouched=true;
+		return true;}
+		else {
+mapTouched=false;
+return false;}
 	}
 
 	public void drawAccidents(ArrayList <DSAccident> accidents){
@@ -80,9 +89,19 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 			fill(MyColorEnum.BLACK);
 			stroke(MyColorEnum.RED);
 			ellipse(p.x-getX0(), p.y-getY0(), 15, 15);
-			println(p.x+" "+p.y);
-			
+						
 		}
+	}
+	
+	public void manageDrag(){
+		if(mapTouched){
+		if(m.touchX!=firstTouch.x && m.touchY!=firstTouch.y
+				&& m.touchX!=0 && m.touchY!=0){
+			println("moving "+m.touchX);
+		    map.tx += (m.touchX - firstTouch.x)/map.sc;
+		    map.ty += (m.touchY - firstTouch.y)/map.sc;
+			firstTouch=new PVector(m.touchX,m.touchY);
+		}}
 	}
 	
 	public float[] focusOnState(int i) {
