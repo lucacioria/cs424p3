@@ -1,11 +1,7 @@
 package com.anotherbrick.inthewall;
 
-import java.awt.event.MouseWheelListener;
-import java.security.acl.LastOwnerException;
+
 import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.Hashtable;
-import java.util.Map;
 
 import processing.core.PVector;
 
@@ -43,7 +39,9 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		float[] Illinois=focusOnState(17);
 		map.setCenterZoom(new Location(Illinois[0], Illinois[1]), (int)Illinois[2]);
 		
-		accidents.add(new DSAccident(41.878114f,-87.629798f));
+		DSAccident accident=new DSAccident(41.878114f,-87.629798f);
+		accident.setDimension(15);
+		accidents.add(accident);
 		
 
 	}
@@ -72,6 +70,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 	public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
 		if(down){
 		
+			manageAccidentPopup();
 		
 		firstTouch=new PVector(x, y);
 		mapTouched=true;
@@ -88,8 +87,34 @@ return false;}
 			
 			fill(MyColorEnum.BLACK);
 			stroke(MyColorEnum.RED);
-			ellipse(p.x-getX0(), p.y-getY0(), 15, 15);
+			ellipse(p.x-getX0(), p.y-getY0(), accident.getDimension(), accident.getDimension());
+			
+			if(accident.isSelected()){println("ciao");
+			popUp(accident,p.x-getX0(), p.y-getY0());
+			}
 						
+		}
+	}
+	
+	private void popUp(DSAccident accident, float ics, float ips) {
+		fill(MyColorEnum.RED);
+		rect(ics,ips,100,40);
+		
+	}
+
+	public void manageAccidentPopup(){
+		for(DSAccident accident: accidents){
+			
+			float ics=(map.locationPoint(new Location(accident.getLatitude(), accident.getLongitude()))).x;
+			float ips=(map.locationPoint(new Location(accident.getLatitude(), accident.getLongitude()))).y;
+
+			println("px "+ics+"  py "+ips);
+			
+			if(dist(m.touchX,m.touchY,ics,ips)<accident.getDimension()){
+				
+				accident.setSelected(true);
+				break;
+			}
 		}
 	}
 	
