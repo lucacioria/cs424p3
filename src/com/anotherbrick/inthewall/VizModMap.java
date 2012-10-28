@@ -1,6 +1,5 @@
 package com.anotherbrick.inthewall;
 
-
 import java.util.ArrayList;
 
 import processing.core.PVector;
@@ -18,8 +17,8 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 	private InteractiveMap map;
 	private PVector mapOffset;
 	private PVector mapSize;
-	private PVector firstTouch=new PVector(0,0);
-	private ArrayList<DSAccident> accidents=new ArrayList<DSAccident>();
+	private PVector firstTouch = new PVector(0, 0);
+	private ArrayList<DSAccident> accidents = new ArrayList<DSAccident>();
 	private boolean mapTouched;
 
 	public VizModMap(float x0, float y0, float width, float height,
@@ -36,19 +35,23 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 		map = new InteractiveMap(m.p, new Microsoft.RoadProvider(), getX0(),
 				getY0(), mapSize.x, mapSize.y);
-		float[] Illinois=focusOnState(17);
-		map.setCenterZoom(new Location(Illinois[0], Illinois[1]), (int)Illinois[2]);
-		
-		DSAccident accident=new DSAccident(41.878114f,-87.629798f);
+		float[] Illinois = focusOnState(17);
+		map.setCenterZoom(new Location(Illinois[0], Illinois[1]),
+				(int) Illinois[2]);
+
+		DSAccident accident = new DSAccident(41.878114f, -87.629798f);
 		accident.setDimension(15);
 		accidents.add(accident);
-		
+
+		accident = new DSAccident(40.813809f, -89.604492f);
+		accident.setDimension(15);
+		accidents.add(accident);
 
 	}
 
 	@Override
 	public boolean draw() {
-		
+
 		manageDrag();
 		pushStyle();
 
@@ -56,7 +59,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 		map.draw();
 		float[] array = focusOnState(index);
-		//map.setCenterZoom(new Location(array[0], array[1]), (int) array[2]);
+		// map.setCenterZoom(new Location(array[0], array[1]), (int) array[2]);
 		noFill();
 		stroke(MyColorEnum.RED);
 		strokeWeight(2);
@@ -68,73 +71,84 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 	@Override
 	public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
-		if(down){
-		
-			manageAccidentPopup();
-		
-		firstTouch=new PVector(x, y);
-		mapTouched=true;
-		return true;}
-		else {
-mapTouched=false;
-return false;}
-	}
+		if (down) {
 
-	public void drawAccidents(ArrayList <DSAccident> accidents){
-		for(DSAccident accident: accidents){
-			Location location=new Location(accident.getLatitude(), accident.getLongitude());
-			Point2f p=map.locationPoint(location);
-			
-			fill(MyColorEnum.BLACK);
-			stroke(MyColorEnum.RED);
-			ellipse(p.x-getX0(), p.y-getY0(), accident.getDimension(), accident.getDimension());
-			
-			if(accident.isSelected()){println("ciao");
-			popUp(accident,p.x-getX0(), p.y-getY0());
-			}
-						
+			manageAccidentPopup();
+
+			firstTouch = new PVector(x, y);
+			mapTouched = true;
+			return true;
+		} else {
+			mapTouched = false;
+			return false;
 		}
 	}
-	
-	private void popUp(DSAccident accident, float ics, float ips) {
-		fill(MyColorEnum.RED);
-		rect(ics,ips,100,40);
-		
+
+	public void drawAccidents(ArrayList<DSAccident> accidents) {
+		for (DSAccident accident : accidents) {
+			Location location = new Location(accident.getLatitude(),
+					accident.getLongitude());
+			Point2f p = map.locationPoint(location);
+
+			fill(MyColorEnum.BLACK);
+			stroke(MyColorEnum.RED);
+			ellipse(p.x - getX0(), p.y - getY0(), accident.getDimension(),
+					accident.getDimension());
+
+			if (accident.isSelected()) {
+				popUp(accident, p.x - getX0(), p.y - getY0());
+			}
+
+		}
 	}
 
-	public void manageAccidentPopup(){
-		for(DSAccident accident: accidents){
-			
-			float ics=(map.locationPoint(new Location(accident.getLatitude(), accident.getLongitude()))).x;
-			float ips=(map.locationPoint(new Location(accident.getLatitude(), accident.getLongitude()))).y;
+	private void popUp(DSAccident accident, float ics, float ips) {
+		fill(MyColorEnum.RED);
+		rect(ics, ips, 100, 40);
+		fill(255);
+		textSize(6);
+		text("latitude: " + accident.getLatitude() + "\nlongitude: "
+				+ accident.getLongitude(), ics + 5, ips + 7);
 
-			println("px "+ics+"  py "+ips);
-			
-			if(dist(m.touchX,m.touchY,ics,ips)<accident.getDimension()){
-				
-				accident.setSelected(true);
+	}
+
+	public void manageAccidentPopup() {
+		for (DSAccident accident : accidents) {
+
+			float ics = (map.locationPoint(new Location(accident.getLatitude(),
+					accident.getLongitude()))).x;
+			float ips = (map.locationPoint(new Location(accident.getLatitude(),
+					accident.getLongitude()))).y;
+
+			println("px " + ics + "  py " + ips);
+
+			if (dist(m.touchX, m.touchY, ics, ips) < accident.getDimension()) {
+
+				if(!accident.isSelected()){accident.setSelected(true);}
+				else{accident.setSelected(false);}
 				break;
 			}
 		}
 	}
-	
-	public void manageDrag(){
-		if(mapTouched){
-		if(m.touchX!=firstTouch.x && m.touchY!=firstTouch.y
-				&& m.touchX!=0 && m.touchY!=0){
-			println("moving "+m.touchX);
-		    map.tx += (m.touchX - firstTouch.x)/map.sc;
-		    map.ty += (m.touchY - firstTouch.y)/map.sc;
-			firstTouch=new PVector(m.touchX,m.touchY);
-		}}
+
+	public void manageDrag() {
+		if (mapTouched) {
+			if (m.touchX != firstTouch.x && m.touchY != firstTouch.y
+					&& m.touchX != 0 && m.touchY != 0) {
+				println("moving " + m.touchX);
+				map.tx += (m.touchX - firstTouch.x) / map.sc;
+				map.ty += (m.touchY - firstTouch.y) / map.sc;
+				firstTouch = new PVector(m.touchX, m.touchY);
+			}
+		}
 	}
-	
+
 	public float[] focusOnState(int i) {
 
 		if (i == 1) {
 			return new float[] { 33.027088f, -86.616211f, 6 };
 		} else if (i == 2) {
-			return new float[] { 64.54844f,-139.945312f, 3 };
+			return new float[] { 64.54844f, -139.945312f, 3 };
 		} else if (i == 4) {
 			return new float[] { 34.361576f, -111.665039f, 6 };
 		} else if (i == 5) {
@@ -144,7 +158,7 @@ return false;}
 		} else if (i == 8) {
 			return new float[] { 38.925229f, -105.724805f, 6 };
 		} else if (i == 9) {
-			return new float[] { 41.590797f,-72.597656f, 8 };
+			return new float[] { 41.590797f, -72.597656f, 8 };
 		} else if (i == 10) {
 			return new float[] { 39.095963f, -75.454102f, 8 };
 		} else if (i == 11) {
@@ -164,7 +178,7 @@ return false;}
 		} else if (i == 19) {
 			return new float[] { 42.098222f, -93.405762f, 6 };
 		} else if (i == 20) {
-			return new float[] { 38.634036f, -98.239746f, 6};
+			return new float[] { 38.634036f, -98.239746f, 6 };
 		} else if (i == 21) {
 			return new float[] { 37.544577f, -84.737549f, 6 };
 		} else if (i == 22) {
