@@ -20,6 +20,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 	private PVector firstTouch = new PVector(0, 0);
 	private ArrayList<DSAccident> accidents = new ArrayList<DSAccident>();
 	private boolean mapTouched;
+	long lastTouchTime;
 
 	public VizModMap(float x0, float y0, float width, float height,
 			VizPanel parent) {
@@ -29,7 +30,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 	@Override
 	public void setup() {
-
+		println("mill " + System.currentTimeMillis());
 		mapOffset = new PVector(0, 0);
 		mapSize = new PVector(getWidth(), getHeight());
 
@@ -77,6 +78,15 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 			firstTouch = new PVector(x, y);
 			mapTouched = true;
+			//if double click, then zoom
+			if ((System.currentTimeMillis() - lastTouchTime) < 1000) {
+				map.sc = map.sc * 1.2;
+				println("" + System.currentTimeMillis());
+				lastTouchTime = 0;
+			}
+			lastTouchTime = System.currentTimeMillis();
+			println("" + System.currentTimeMillis());
+
 			return true;
 		} else {
 			mapTouched = false;
@@ -120,12 +130,13 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 			float ips = (map.locationPoint(new Location(accident.getLatitude(),
 					accident.getLongitude()))).y;
 
-			println("px " + ics + "  py " + ips);
-
 			if (dist(m.touchX, m.touchY, ics, ips) < accident.getDimension()) {
 
-				if(!accident.isSelected()){accident.setSelected(true);}
-				else{accident.setSelected(false);}
+				if (!accident.isSelected()) {
+					accident.setSelected(true);
+				} else {
+					accident.setSelected(false);
+				}
 				break;
 			}
 		}
@@ -135,7 +146,6 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		if (mapTouched) {
 			if (m.touchX != firstTouch.x && m.touchY != firstTouch.y
 					&& m.touchX != 0 && m.touchY != 0) {
-				println("moving " + m.touchX);
 				map.tx += (m.touchX - firstTouch.x) / map.sc;
 				map.ty += (m.touchY - firstTouch.y) / map.sc;
 				firstTouch = new PVector(m.touchX, m.touchY);
