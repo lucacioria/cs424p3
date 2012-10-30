@@ -11,6 +11,7 @@ import com.modestmaps.InteractiveMap;
 import com.modestmaps.core.Point2f;
 import com.modestmaps.geo.Location;
 import com.modestmaps.providers.Microsoft;
+import com.modestmaps.providers.Yahoo;
 
 public class VizModMap extends VizPanel implements TouchEnabled {
 	private int index = 0;
@@ -77,13 +78,13 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 			firstTouch = new PVector(x, y);
 			mapTouched = true;
-			//if double click, then zoom
+			// if double touch, then zoom
 			if ((System.currentTimeMillis() - lastTouchTime) < 1000) {
-				map.setZoom(map.getZoom()+1);
-				Point2f center=new Point2f(m.touchX, m.touchY);
-				
+				map.setZoom(map.getZoom() + 1);
+				Point2f center = new Point2f(m.touchX, m.touchY);
 				map.setCenter(map.pointLocation(center));
 				lastTouchTime = 0;
+				setProvider(3);
 			}
 			lastTouchTime = System.currentTimeMillis();
 			println("" + System.currentTimeMillis());
@@ -151,6 +152,16 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 				map.ty += (m.touchY - firstTouch.y) / map.sc;
 				firstTouch = new PVector(m.touchX, m.touchY);
 			}
+		}
+	}
+
+	public void setProvider(int i) {
+		if (i == 1) {
+			map.setMapProvider(new Microsoft.RoadProvider());
+		} else if (i == 2) {
+			map.setMapProvider(new Microsoft.AerialProvider());
+		} else if (i == 3) {
+			map.setMapProvider(new Microsoft.HybridProvider());
 		}
 	}
 
