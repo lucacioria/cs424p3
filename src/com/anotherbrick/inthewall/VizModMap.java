@@ -30,7 +30,6 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 	@Override
 	public void setup() {
-		println("mill " + System.currentTimeMillis());
 		mapOffset = new PVector(0, 0);
 		mapSize = new PVector(getWidth(), getHeight());
 
@@ -80,8 +79,10 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 			mapTouched = true;
 			//if double click, then zoom
 			if ((System.currentTimeMillis() - lastTouchTime) < 1000) {
-				map.sc = map.sc * 1.2;
-				println("" + System.currentTimeMillis());
+				map.setZoom(map.getZoom()+1);
+				Point2f center=new Point2f(m.touchX, m.touchY);
+				
+				map.setCenter(map.pointLocation(center));
 				lastTouchTime = 0;
 			}
 			lastTouchTime = System.currentTimeMillis();
