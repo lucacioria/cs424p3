@@ -8,6 +8,7 @@ public class Model {
 
   static Model instance;
   public Main p;
+  public VizNotificationCenter notificationCenter;
   public float touchX;
   public float touchY;
   public TouchEnabled currentModalVizPanel;
@@ -27,13 +28,15 @@ public class Model {
   public Datas currentDataDisplayed = Datas.NUMBER_OF_MOVIES;
   public DataSourceSQL dataSourceSQL;
 
-  public static void setup(Main p, DataSourceSQL dataSourceSQL) {
-    Model.instance = new Model(p, dataSourceSQL);
+  public static void setup(Main p, DataSourceSQL dataSourceSQL,
+      VizNotificationCenter notificationCenter) {
+    Model.instance = new Model(p, dataSourceSQL, notificationCenter);
   }
 
-  private Model(Main p, DataSourceSQL dataSourceSQL) {
+  private Model(Main p, DataSourceSQL dataSourceSQL, VizNotificationCenter notificationCenter) {
     this.p = p;
     this.dataSourceSQL = dataSourceSQL;
+    this.notificationCenter = notificationCenter;
   }
 
   public static Model getInstance() {

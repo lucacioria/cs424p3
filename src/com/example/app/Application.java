@@ -1,10 +1,6 @@
 package com.example.app;
 
-import java.util.ArrayList;
-
 import com.anotherbrick.inthewall.Config.MyColorEnum;
-import com.anotherbrick.inthewall.datasource.DSCrash;
-import com.anotherbrick.inthewall.datasource.DSFilter;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizModMap;
 import com.anotherbrick.inthewall.VizPanel;

@@ -171,11 +171,12 @@ public class VizList extends VizPanel implements TouchEnabled {
   @SuppressWarnings("unchecked")
   @Override
   public boolean draw() {
-    if (!startDraw()) return false;
+    // if (!startDraw()) return false;
     //
     pushStyle();
     noStroke();
     background(MyColorEnum.MEDIUM_GRAY);
+    textAlign(PApplet.LEFT, PApplet.TOP);
     //
     if (isNested) {
       for (int i = startIndex, j = 0; i < stopIndex && i < expandedSize && j < numOfRows; i++, j++) {
@@ -242,7 +243,8 @@ public class VizList extends VizPanel implements TouchEnabled {
     }
     rect(0, -1, getWidth(), getHeight() + 2);
     popStyle();
-    return endDraw(slider.handle.moving);
+    // return endDraw(slider.handle.moving);
+    return false;
   }
 
   private class Handle extends VizPanel {
@@ -265,8 +267,8 @@ public class VizList extends VizPanel implements TouchEnabled {
 
     @Override
     public void setup() {
-	// TODO Auto-generated method stub
-	
+      // TODO Auto-generated method stub
+
     }
 
   }
@@ -326,8 +328,8 @@ public class VizList extends VizPanel implements TouchEnabled {
 
     @Override
     public void setup() {
-	// TODO Auto-generated method stub
-	
+      // TODO Auto-generated method stub
+
     }
 
   }
@@ -341,10 +343,10 @@ public class VizList extends VizPanel implements TouchEnabled {
     startIndex = (int) f;
   }
 
-@Override
-public void setup() {
+  @Override
+  public void setup() {
     // TODO Auto-generated method stub
-    
-}
+
+  }
 
 }

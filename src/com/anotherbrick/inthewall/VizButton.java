@@ -5,6 +5,7 @@ import processing.core.PImage;
 import processing.core.PShape;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 
 public class VizButton extends VizPanel implements TouchEnabled {
 
@@ -12,7 +13,7 @@ public class VizButton extends VizPanel implements TouchEnabled {
   private float xOffset = 0;
   private float yOffset = 0;
   // common styles
-  private String name;
+  public String name;
   private float round_a = 0;
   private float round_b = 0;
   private float round_c = 0;
@@ -247,26 +248,22 @@ public class VizButton extends VizPanel implements TouchEnabled {
       pressed = true;
     } else {
       pressed = false;
+      sendTouchedEvent();
     }
     return true;
   }
 
-  public String getName() {
-    return name;
-  }
-
-  public void setName(String name) {
-    this.name = name;
+  private void sendTouchedEvent() {
+    m.notificationCenter.notifyEvent(EventName.BUTTON_TOUCHED, name);
   }
 
   public void setShapeFillingColor(MyColorEnum shapeFillingColor) {
     this.shapeFillingColor = shapeFillingColor;
   }
 
-@Override
-public void setup() {
+  @Override
+  public void setup() {
 
-    
-}
+  }
 
 }

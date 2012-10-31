@@ -8,17 +8,20 @@ public class VizNotificationCenter {
   private static VizNotificationCenter instance = new VizNotificationCenter();
 
   public enum EventName {
-    GRAPH_YEAR_CHANGED
+    GRAPH_YEAR_CHANGED, BUTTON_TOUCHED, FILTER_LIST_CLOSE, FILTER_LIST_OPEN
   }
 
   private HashMap<EventName, ArrayList<EventSubscriber>> subscribers;
 
-  public VizNotificationCenter getInstance() {
+  public static VizNotificationCenter getInstance() {
     return instance;
   }
 
   private VizNotificationCenter() {
     subscribers = new HashMap<VizNotificationCenter.EventName, ArrayList<EventSubscriber>>();
+    for (EventName eventName : EventName.values()) {
+      subscribers.put(eventName, new ArrayList<EventSubscriber>());
+    }
   }
 
   public void registerToEvent(EventName eventName, EventSubscriber eventSubscriber) {
@@ -32,6 +35,7 @@ public class VizNotificationCenter {
   }
 
   public void notifyEvent(EventName eventName, Object data) {
+    if (subscribers.get(eventName) == null) return;
     for (EventSubscriber es : subscribers.get(eventName)) {
       es.eventReceived(eventName, data);
     }
