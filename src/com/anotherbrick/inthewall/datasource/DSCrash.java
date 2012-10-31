@@ -9,8 +9,8 @@ public class DSCrash {
 	public int hour;
 	public int minutes;
 	public int day_of_week;
-	public int weather;
-	public int alcohol_involved;
+	public String weather;
+	public String alcohol_involved;
 	public int[] travel_speed;
 	public int[] vehicle_configuration;
 	public int[] age;
@@ -23,7 +23,8 @@ public class DSCrash {
 	public DSCrash() {
 	}
 
-	public DSCrash(int alcohol_involved, Float latitude, Float longitude) {
+	public DSCrash(String weather, String alcohol_involved, Float latitude, Float longitude) {
+		this.weather = weather;
 		this.alcohol_involved =alcohol_involved;
 		this.latitude = latitude;
 		this.longitude = longitude;

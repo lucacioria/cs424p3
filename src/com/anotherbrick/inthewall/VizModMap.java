@@ -38,14 +38,14 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		map.setCenterZoom(new Location(Illinois[0], Illinois[1]),
 				(int) Illinois[2]);
 
-		DSCrash accident = new DSCrash(7, 41.878114f, -87.629798f);
-		
+		DSCrash accident = new DSCrash("sunny", "yes", 41.878114f, -87.629798f);
+
 		accident.dimension = 15f;
 		accidents.add(accident);
-		/*
-		 * accident = new DSCrash(40.813809f, -89.604492f); accident.dimension =
-		 * 15f; accidents.add(accident);
-		 */
+
+		accident = new DSCrash("cloudy", "no", 40.813809f, -89.604492f);
+		accident.dimension = 15f;
+		accidents.add(accident);
 
 	}
 
@@ -103,7 +103,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 					accident.longitude);
 			Point2f p = map.locationPoint(location);
 
-			fill(colorBy("alcohol_involved",accident));
+			fill(colorBy("weather", accident));
 			noStroke();
 			ellipse(p.x - getX0(), p.y - getY0(), accident.dimension,
 					accident.dimension);
@@ -288,8 +288,6 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 	public void drawClusterGrid() {
 		int clusterLevel = 256 / map.getZoom();
-		println("clu" + clusterLevel);
-		println("zoom" + map.getZoom());
 		for (int i = 0; i < getWidth(); i++) {
 			if (i % clusterLevel == 0) {
 				fill(MyColorEnum.RED);
@@ -307,13 +305,16 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 	public MyColorEnum colorBy(String filter, DSCrash crash) {
 		if (filter.equals("alcohol_involved")) {
-			if (crash.alcohol_involved == 0) {
+			if (crash.alcohol_involved.equals("no")) {
 				return MyColorEnum.LIGHT_GREEN;
-			}
-			else if (crash.alcohol_involved==1){
+			} else if (crash.alcohol_involved.equals("yes")) {
 				return MyColorEnum.RED;
 			}
-		} 
+		} else if (filter.equals("weather")) {
+			if (crash.weather.equals("sunny")) {
+				return MyColorEnum.YELLOW;
+			}
+		}
 		return MyColorEnum.BLACK;
 	}
 }
