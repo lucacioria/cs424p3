@@ -40,7 +40,8 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		map.setCenterZoom(new Location(Illinois[0], Illinois[1]),
 				(int) Illinois[2]);
 		legend = new VizMapLegend(0,getHeight()*0.8f,getWidth() , getHeight()*0.2f, this);
-		//legend.setColorFilter(colorFilter);
+		legend.setColorFilter(colorFilter);
+		legend.setup();
 
 		DSCrash accident = new DSCrash("sunny", "yes", 41.878114f, -87.629798f);
 		accident.dimension = 15f;

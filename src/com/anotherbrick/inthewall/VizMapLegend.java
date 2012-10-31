@@ -1,27 +1,62 @@
 package com.anotherbrick.inthewall;
 
+import java.util.ArrayList;
+
+import processing.core.PConstants;
+
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 
 public class VizMapLegend extends VizPanel implements TouchEnabled {
 private String colorFilter="";
+private ArrayList<MyColorEnum> legendColors;
+private ArrayList<String> labels;
+
 	public VizMapLegend(float x0, float y0, float width, float height,
 			VizPanel parent) {
 		super(x0, y0, width, height, parent);
 	}
 	
 public void setup(){
-		
+	
+	legendColors=new ArrayList<MyColorEnum>();
+	labels=new ArrayList<String>();
+	legendByFilter();
+	
+	
 	}
+
+
 
 	public boolean draw(){
 		pushStyle();
-		fill(MyColorEnum.WHITE);
+		fill(MyColorEnum.BLACK);
 		rect(0,0,getWidth(),getHeight());
 		textSize(10);
-		fill(MyColorEnum.BLACK);
-		text("Color coding by: "+colorFilter,5,15);
+		fill(MyColorEnum.WHITE);
+		text("Color coding by: "+colorFilter.toUpperCase(),5,15);
+		int legendColumn=1;
+		
+		//for(float i=getHeight()/3+5;i<getHeight();i=i+getHeight()/3){
+		for(int i=1;i<=legendColors.size();i++){
+						
+			fill(legendColors.get(i-1));
+			stroke(MyColorEnum.WHITE);
+			strokeWeight(1);
+			rectMode(PConstants.CENTER);
+			rect(70+95*(legendColumn-1),(i+1)%2*getHeight()/3+30,10,10);
+			fill(MyColorEnum.WHITE);
+			textAlign(PConstants.LEFT, PConstants.CENTER);
+			textSize(8);
+			text(labels.get(i-1),80+95*(legendColumn-1),(i+1)%2*getHeight()/3+30);
+			if(i%2==0){
+				legendColumn++;
+			}
+		}
+		
 		popStyle();
 		return false;
+		
+		
 	}
 	
 	
@@ -36,6 +71,28 @@ public void setup(){
 		this.colorFilter = colorFilter;
 	}
 
+	public void legendByFilter(){
+		if(colorFilter.equals("weather")){
+			legendColors.clear();
+			labels.clear();
+			
+			labels.add("sunny");
+			legendColors.add(MyColorEnum.YELLOW);
+			
+			labels.add("cloudy");
+			legendColors.add(MyColorEnum.LIGHT_BLUE);
+			
+			labels.add("rainy");
+			legendColors.add(MyColorEnum.DARK_BLUE);
+			
+			labels.add("snow");
+			legendColors.add(MyColorEnum.WHITE);
+			
+			labels.add("unknown");
+			legendColors.add(MyColorEnum.BLACK);
+		}
+	}
+	
 	public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
 		return false;
 	}
