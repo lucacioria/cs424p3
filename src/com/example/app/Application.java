@@ -1,12 +1,9 @@
 package com.example.app;
 
-import com.anotherbrick.inthewall.MapStyles;
-import com.anotherbrick.inthewall.MarkerType;
+import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled;
-import com.anotherbrick.inthewall.VizMap;
 import com.anotherbrick.inthewall.VizModMap;
 import com.anotherbrick.inthewall.VizPanel;
-import com.anotherbrick.inthewall.Config.MyColorEnum;
 
 public class Application extends VizPanel implements TouchEnabled {
 
@@ -23,10 +20,10 @@ public class Application extends VizPanel implements TouchEnabled {
 
   @Override
   public void setup() {
-    map = new VizModMap(1360/6*4, 0, 1360/6*2, 384, this);
+    map = new VizModMap(1360 / 6 * 4, 0, 1360 / 6 * 2, 384, this);
     map.setup();
     addTouchSubscriber(map);
-    
+
   }
 
   @Override

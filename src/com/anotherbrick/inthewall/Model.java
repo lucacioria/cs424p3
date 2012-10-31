@@ -2,8 +2,6 @@ package com.anotherbrick.inthewall;
 
 import java.util.ArrayList;
 
-import com.anotherbrick.inthewall.datasource.DataSource;
-
 public class Model {
 
   static Model instance;
@@ -11,7 +9,6 @@ public class Model {
   public float touchX;
   public float touchY;
   public TouchEnabled currentModalVizPanel;
-  public DataSource dataSource;
   public ArrayList<Object> selectedGenres = new ArrayList<Object>();
   public ArrayList<Object> selectedMonsters = new ArrayList<Object>();
   public ArrayList<Object> selectedCountries = new ArrayList<Object>();
@@ -33,7 +30,6 @@ public class Model {
 
   private Model(Main p) {
     this.p = p;
-    this.dataSource = new DataSource();
   }
 
   public static Model getInstance() {

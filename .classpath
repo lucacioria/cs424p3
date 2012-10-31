@@ -7,5 +7,7 @@
 	<classpathentry kind="lib" path="libs/OmicronAPI.jar"/>
 	<classpathentry kind="lib" path="libs/resty-0.3.1.jar"/>
 	<classpathentry kind="lib" path="libs/core.jar"/>
+	<classpathentry kind="lib" path="libs/mysql-connector-java-3.1.14-bin.jar"/>
+	<classpathentry kind="lib" path="libs/SQLibrary.jar"/>
 	<classpathentry kind="output" path="bin"/>
 </classpath>
