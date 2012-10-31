@@ -35,13 +35,13 @@ public class VizModMap extends VizPanel implements TouchEnabled {
     float[] Illinois = focusOnState(17);
     map.setCenterZoom(new Location(Illinois[0], Illinois[1]), (int) Illinois[2]);
 
-    DSCrash accident = new DSCrash(41.878114f, -87.629798f);
+    DSCrash accident = new DSCrash(1,41.878114f, -87.629798f);
     accident.dimension = 15f;
     accidents.add(accident);
-
+/*
     accident = new DSCrash(40.813809f, -89.604492f);
     accident.dimension = 15f;
-    accidents.add(accident);
+    accidents.add(accident);*/
 
   }
 
