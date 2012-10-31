@@ -107,6 +107,22 @@ public void setup(){
 		}
 	}
 	
+	public ArrayList<MyColorEnum> getLegendColors() {
+		return legendColors;
+	}
+
+	public void setLegendColors(ArrayList<MyColorEnum> legendColors) {
+		this.legendColors = legendColors;
+	}
+
+	public ArrayList<String> getLabels() {
+		return labels;
+	}
+
+	public void setLabels(ArrayList<String> labels) {
+		this.labels = labels;
+	}
+
 	public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
 		return false;
 	}
