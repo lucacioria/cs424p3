@@ -278,8 +278,6 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
   public void drawClusterGrid() {
     int clusterLevel = 256 / map.getZoom();
-    println("clu" + clusterLevel);
-    println("zoom" + map.getZoom());
     for (int i = 0; i < getWidth(); i++) {
       if (i % clusterLevel == 0) {
         fill(MyColorEnum.RED);

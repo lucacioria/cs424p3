@@ -60,7 +60,8 @@ public class Main extends PApplet {
     setupConfig();
     // load model class
     DataSourceSQL ds = new DataSourceSQL(this);
-    Model.setup(this, ds);
+    VizNotificationCenter notificationCenter = VizNotificationCenter.getInstance();
+    Model.setup(this, ds, notificationCenter);
     m = Model.getInstance();
     m.loadFiles();
     //

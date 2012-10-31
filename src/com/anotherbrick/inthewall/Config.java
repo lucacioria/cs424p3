@@ -132,9 +132,9 @@ public class Config {
     case DARK_GRAY:
       return hex("#1f1f1f");
     case MEDIUM_GRAY:
-      return hex("#282826"); // 2d2d2c
+      return hex("#2d2d2d");
     case LIGHT_GRAY:
-      return hex("#2d2d2c"); // 565656
+      return hex("#565656");
     case TEXT_GRAY:
       return hex("#757575");
     case BLACK:
