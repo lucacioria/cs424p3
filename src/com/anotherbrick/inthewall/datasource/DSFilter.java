@@ -19,7 +19,7 @@ public class DSFilter {
   public Float longitudeMax;
   public String weather;
 
-  public ArrayList<String> weatherVals = new ArrayList<String>();
+  private ArrayList<HashMap<String, String>> filterNames = new ArrayList<HashMap<String, String>>();
 
   public String getWhereClause() {
     ArrayList<String> a = new ArrayList<String>();
@@ -51,6 +51,24 @@ public class DSFilter {
       e.printStackTrace();
     }
     return o;
+  }
+
+  public static ArrayList<HashMap<String, String>> getFilterNames() {
+    ArrayList<HashMap<String, String>> filterNames = new ArrayList<HashMap<String, String>>();
+    try {
+      JSONObject j = getJsonFile("_filters");
+      JSONArray lines = j.getJSONArray("lines");
+      for (int i = 0; i < lines.length(); i++) {
+        JSONObject line = lines.getJSONObject(i);
+        HashMap<String, String> val = new HashMap<String, String>();
+        val.put("name", line.getString("name"));
+        val.put("label", line.getString("label"));
+        filterNames.add(val);
+      }
+    } catch (Exception e) {
+      e.printStackTrace();
+    }
+    return filterNames;
   }
 
   private static HashMap<String, ArrayList<Integer>> getMapping(String name) {

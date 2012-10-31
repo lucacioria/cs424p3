@@ -16,7 +16,6 @@ class FilterList extends VizPanel implements TouchEnabled, EventSubscriber {
     super(x0, y0, width, height, parent);
   }
 
-  private ArrayList<String> values = new ArrayList<String>();
   private VizList list;
 
   @Override
@@ -26,15 +25,15 @@ class FilterList extends VizPanel implements TouchEnabled, EventSubscriber {
 
   @Override
   public void setup() {
-    setupVizList();
     m.notificationCenter.registerToEvent(EventName.FILTER_LIST_CLOSE, this);
     m.notificationCenter.registerToEvent(EventName.FILTER_LIST_OPEN, this);
   }
 
-  private void setupVizList() {
+  private void setupVizList(ArrayList<String> values) {
     list = new VizList(0, 0, getWidth(), getHeight(), this);
-    list.setup(MyColorEnum.LIGHT_BLUE, MyColorEnum.LIGHT_ORANGE, 10, values, false,
+    list.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 10, values, false,
         SelectionMode.MULTIPLE);
+    addTouchSubscriber(list);
   }
 
   @Override
@@ -52,8 +51,7 @@ class FilterList extends VizPanel implements TouchEnabled, EventSubscriber {
   public void eventReceived(EventName eventName, Object data) {
     switch (eventName) {
     case FILTER_LIST_OPEN:
-      values = (ArrayList<String>) data;
-      setupVizList();
+      setupVizList((ArrayList<String>) data);
       setVisible(true);
       break;
     case FILTER_LIST_CLOSE:

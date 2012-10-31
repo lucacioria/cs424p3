@@ -2,9 +2,12 @@ package com.example.app;
 
 import java.awt.font.TextMeasurer;
 import java.util.ArrayList;
+import java.util.HashMap;
 
+import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizPanel;
+import com.anotherbrick.inthewall.datasource.DSFilter;
 
 public class FilterBox extends VizPanel implements TouchEnabled {
 
@@ -23,24 +26,30 @@ public class FilterBox extends VizPanel implements TouchEnabled {
   }
 
   private void setupFilterList() {
-    filterList = new FilterList(getWidth(), 0, 200, getHeight(), this);
+    filterList = new FilterList(200, 0, 200, getHeight(), this);
     filterList.setVisible(false);
     filterList.setup();
+    addTouchSubscriber(filterList);
   }
 
   private void setupFilterRows() {
     filterRows = new ArrayList<FilterRow>();
-    FilterRow row = new FilterRow(0, 0, 200, 30, this);
-    row.label = "weather";
-    row.name = "weather";
-    row.setup();
-    filterRows.add(row);
-    addTouchSubscriber(row);
+    float rowHeight = 30;
+    ArrayList<HashMap<String, String>> filterNames = DSFilter.getFilterNames();
+    for (int i = 0; i < filterNames.size(); i++) {
+      FilterRow row = new FilterRow(0, i * rowHeight, 200, rowHeight, this);
+      row.label = filterNames.get(i).get("label");
+      row.name = filterNames.get(i).get("name");
+      row.setup();
+      filterRows.add(row);
+      addTouchSubscriber(row);
+    }
   }
 
   @Override
   public boolean draw() {
     pushStyle();
+    background(MyColorEnum.RED);
     for (FilterRow row : filterRows) {
       row.draw();
     }
