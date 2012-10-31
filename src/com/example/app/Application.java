@@ -16,6 +16,7 @@ public class Application extends VizPanel implements TouchEnabled {
   }
 
   private VizModMap map;
+  private FilterBox filterBox;
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -24,16 +25,20 @@ public class Application extends VizPanel implements TouchEnabled {
 
   @Override
   public void setup() {
+    setupMap();
+    setupFilterBox();
+  }
+
+  private void setupFilterBox() {
+    filterBox = new FilterBox(100, 50, 300, 300, this);
+    filterBox.setup();
+    addTouchSubscriber(filterBox);
+  }
+
+  private void setupMap() {
     map = new VizModMap(1360 / 6 * 4, 0, 1360 / 6 * 2, 384, this);
     map.setup();
     addTouchSubscriber(map);
-    DSFilter filter = new DSFilter();
-    filter.latitudeMax = 34f;
-    filter.latitudeMin = 32f;
-    filter.longitudeMax = -84f;
-    filter.longitudeMin = -86f;
-    ArrayList<DSCrash> data = m.dataSourceSQL.getCrashes(filter);
-    println(data.size() + "");
   }
 
   @Override
@@ -41,8 +46,8 @@ public class Application extends VizPanel implements TouchEnabled {
     pushStyle();
     background(MyColorEnum.DARK_BLUE);
     map.draw();
+    filterBox.draw();
     popStyle();
     return false;
   }
-
 }
