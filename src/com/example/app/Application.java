@@ -26,7 +26,7 @@ public class Application extends VizPanel implements TouchEnabled {
   }
 
   private void setupFilterBox() {
-    filterBox = new FilterBox(100, 50, 300, 300, this);
+    filterBox = new FilterBox(100, 50, 400, 300, this);
     filterBox.setup();
     addTouchSubscriber(filterBox);
   }

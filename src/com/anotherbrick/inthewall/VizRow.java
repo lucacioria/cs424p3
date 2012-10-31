@@ -12,7 +12,7 @@ public class VizRow extends VizPanel {
   private ArrayList<PVector> values;
   public boolean selected = false;
   public MyColorEnum backgroundColorSelected, backgroundColor, strokeColor;
-  private String name;
+  public String name;
   public int cropAtNChars = -1;
 
   public VizRow(float x0, float y0, float width, float height, VizPanel parent) {
@@ -37,8 +37,7 @@ public class VizRow extends VizPanel {
     }
   }
 
-  public boolean drawStrings(String name) {
-    this.name = name;
+  public boolean draw() {
     pushStyle();
     noStroke();
     textSize(12);

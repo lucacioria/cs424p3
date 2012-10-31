@@ -35,7 +35,7 @@ public class VizList extends VizPanel implements TouchEnabled {
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
     if (!isVisible()) return false;
     if (selectionMode == SelectionMode.NOT_SELECTABLE) return true;
-    setToRedraw();
+    // setToRedraw();
     if (!propagateTouch(x, y, down, touchType)) {
       if (!down) {
         Object element = null;
@@ -213,7 +213,8 @@ public class VizList extends VizPanel implements TouchEnabled {
         slider.draw();
         row.backgroundColorSelected = MyColorEnum.LIGHT_BLUE;
         row.drawBackground();
-        row.drawStrings(c.translate(obj.toString()));
+        row.name = c.translate(obj.toString());
+        row.draw();
       }
     } else {
       for (int i = startIndex, j = 0; i < stopIndex && i < elements.size() && j < numOfRows; i++, j++) {
@@ -230,7 +231,8 @@ public class VizList extends VizPanel implements TouchEnabled {
         slider.draw();
         row.backgroundColorSelected = MyColorEnum.LIGHT_BLUE;
         row.drawBackground();
-        row.drawStrings(c.translate(elements.get(i).toString()));
+        row.name = c.translate(elements.get(i).toString());
+        row.draw();
       }
     }
     // stroke arount
@@ -252,7 +254,7 @@ public class VizList extends VizPanel implements TouchEnabled {
     public boolean moving;
 
     public Handle(float x0, float y0, VizPanel parent) {
-      super(x0, y0, 20, 20); // controllare cosa sia questo i 20 sono a caso
+      super(x0, y0, 20, 20, parent);
       moving = false;
     }
 
