@@ -8,6 +8,7 @@ import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
+import com.anotherbrick.inthewall.datasource.DataSourceSQL;
 import com.example.app.Application;
 
 public class Main extends PApplet {
@@ -33,7 +34,7 @@ public class Main extends PApplet {
   @Override
   public void init() {
     super.init();
-     setupConfig();
+    setupConfig();
     // init omicron
     if (c.onWall) {
       omicronManager = new OmicronAPI(this);
@@ -51,14 +52,15 @@ public class Main extends PApplet {
   }
 
   public static void main(String[] args) {
-	PApplet.main(new String[] { "com.anotherbrick.inthewall.Main" });
-     }
+    PApplet.main(new String[] { "com.anotherbrick.inthewall.Main" });
+  }
 
   @Override
   public void setup() {
     setupConfig();
     // load model class
-    Model.setup(this);
+    DataSourceSQL ds = new DataSourceSQL(this);
+    Model.setup(this, ds);
     m = Model.getInstance();
     m.loadFiles();
     //

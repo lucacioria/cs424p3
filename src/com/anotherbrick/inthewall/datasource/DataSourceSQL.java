@@ -26,9 +26,7 @@ public class DataSourceSQL {
     ArrayList<DSCrash> crashes = new ArrayList<DSCrash>();
     String query;
     if (sql.connect()) {
-      query = "SELECT _year, _crash, latitude, longitude FROM crashes WHERE latitude > "
-          + f.latitudeMin + " AND latitude < " + f.latitudeMax + " AND longitude > "
-          + f.longitudeMin + " AND longitude < " + f.longitudeMax;
+      query = "SELECT _year, _case, latitude, longitude FROM crashes WHERE " + f.getWhereClause();
       sql.query(query);
       createArrayFromQuery(crashes);
       return crashes;
@@ -39,10 +37,10 @@ public class DataSourceSQL {
   private void createArrayFromQuery(ArrayList<DSCrash> array) {
     while (sql.next()) {
       DSCrash event = new DSCrash();
-      event._year = sql.getInt(0);
-      event._crash = sql.getInt(1);
-      event.latitude = sql.getInt(2);
-      event.longitude = sql.getInt(3);
+      event._year = sql.getInt(1);
+      event._crash = sql.getInt(2);
+      event.latitude = sql.getFloat(3);
+      event.longitude = sql.getFloat(4);
       array.add(event);
     }
   }

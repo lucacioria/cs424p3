@@ -4,11 +4,19 @@ public class DSCrash {
 
   public int _year;
   public int _crash;
-  public float latitude;
-  public float longitude;
+  public Float latitude;
+  public Float longitude;
 
-  public float dimension;
+  public Float dimension;
   public boolean selected = false;
+
+  public DSCrash() {
+  }
+
+  public DSCrash(Float latitude, Float longitude) {
+    this.latitude = latitude;
+    this.longitude = longitude;
+  }
 
   @Override
   public String toString() {

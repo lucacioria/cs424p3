@@ -2,6 +2,8 @@ package com.anotherbrick.inthewall;
 
 import java.util.ArrayList;
 
+import com.anotherbrick.inthewall.datasource.DataSourceSQL;
+
 public class Model {
 
   static Model instance;
@@ -23,13 +25,15 @@ public class Model {
   };
 
   public Datas currentDataDisplayed = Datas.NUMBER_OF_MOVIES;
+  public DataSourceSQL dataSourceSQL;
 
-  public static void setup(Main p) {
-    Model.instance = new Model(p);
+  public static void setup(Main p, DataSourceSQL dataSourceSQL) {
+    Model.instance = new Model(p, dataSourceSQL);
   }
 
-  private Model(Main p) {
+  private Model(Main p, DataSourceSQL dataSourceSQL) {
     this.p = p;
+    this.dataSourceSQL = dataSourceSQL;
   }
 
   public static Model getInstance() {
