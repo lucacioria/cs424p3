@@ -1,3 +1,11 @@
 {
-sunny : [3,4]
+sunny : [1]
+rainy : [2]
+hail : [3]
+snow : [4,11]
+fog : [5]
+windy : [6]
+cloudy : [10]
+unknown : [-1,0,7,8,9,98,99]
+
 }
