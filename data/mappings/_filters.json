@@ -1,0 +1,6 @@
+{
+	lines: [
+		{name: weather, label: weather},
+		{name: alcohol_involved, label: 'alcohol involved'}
+	]
+}
