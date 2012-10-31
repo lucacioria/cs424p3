@@ -2,6 +2,8 @@ package com.example.app;
 
 import java.util.ArrayList;
 
+import javax.jws.Oneway;
+
 import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.EventSubscriber;
@@ -43,6 +45,8 @@ class FilterRow extends VizPanel implements TouchEnabled, EventSubscriber {
     openListButton.setText("SELECT");
     openListButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
         255f, 10);
+    openListButton.setStyleSelected(MyColorEnum.LIGHT_BLUE, MyColorEnum.WHITE,
+        MyColorEnum.DARK_GRAY, 255f, 255f, 10);
   }
 
   @Override
@@ -63,7 +67,15 @@ class FilterRow extends VizPanel implements TouchEnabled, EventSubscriber {
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.BUTTON_TOUCHED && data.toString().equals(name + "FilterRowButton")) {
-      println("button pressed: " + name);
+      if (openListButton.isSelected()) {
+        openListButton.setSelected(false);
+        m.notificationCenter.notifyEvent(EventName.FILTER_LIST_CLOSE);
+        println("close list: " + name);
+      } else {
+        println("open list: " + name);
+        openListButton.setSelected(true);
+        m.notificationCenter.notifyEvent(EventName.FILTER_LIST_OPEN, values);
+      }
     }
 
   }

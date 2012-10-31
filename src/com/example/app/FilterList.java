@@ -2,18 +2,13 @@ package com.example.app;
 
 import java.util.ArrayList;
 
-import processing.core.PApplet;
-
+import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
-import com.anotherbrick.inthewall.VizButton;
 import com.anotherbrick.inthewall.VizList;
 import com.anotherbrick.inthewall.VizList.SelectionMode;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
-import com.anotherbrick.inthewall.Config.MyColorEnum;
-import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
-import com.anotherbrick.inthewall.datasource.DSFilter;
 
 class FilterList extends VizPanel implements TouchEnabled, EventSubscriber {
 
@@ -31,6 +26,12 @@ class FilterList extends VizPanel implements TouchEnabled, EventSubscriber {
 
   @Override
   public void setup() {
+    setupVizList();
+    m.notificationCenter.registerToEvent(EventName.FILTER_LIST_CLOSE, this);
+    m.notificationCenter.registerToEvent(EventName.FILTER_LIST_OPEN, this);
+  }
+
+  private void setupVizList() {
     list = new VizList(0, 0, getWidth(), getHeight(), this);
     list.setup(MyColorEnum.LIGHT_BLUE, MyColorEnum.LIGHT_ORANGE, 10, values, false,
         SelectionMode.MULTIPLE);
@@ -38,6 +39,7 @@ class FilterList extends VizPanel implements TouchEnabled, EventSubscriber {
 
   @Override
   public boolean draw() {
+    if (!isVisible()) return false;
     pushStyle();
     background(MyColorEnum.DARK_GRAY);
     list.draw();
@@ -45,8 +47,21 @@ class FilterList extends VizPanel implements TouchEnabled, EventSubscriber {
     return false;
   }
 
+  @SuppressWarnings("unchecked")
   @Override
   public void eventReceived(EventName eventName, Object data) {
+    switch (eventName) {
+    case FILTER_LIST_OPEN:
+      values = (ArrayList<String>) data;
+      setupVizList();
+      setVisible(true);
+      break;
+    case FILTER_LIST_CLOSE:
+      setVisible(false);
+      break;
+    default:
+      break;
+    }
   }
 
 }

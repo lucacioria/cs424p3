@@ -24,6 +24,8 @@ public class FilterBox extends VizPanel implements TouchEnabled {
 
   private void setupFilterList() {
     filterList = new FilterList(getWidth(), 0, 200, getHeight(), this);
+    filterList.setVisible(false);
+    filterList.setup();
   }
 
   private void setupFilterRows() {
@@ -38,10 +40,12 @@ public class FilterBox extends VizPanel implements TouchEnabled {
 
   @Override
   public boolean draw() {
+    pushStyle();
     for (FilterRow row : filterRows) {
       row.draw();
     }
     filterList.draw();
+    popStyle();
     return false;
   }
 

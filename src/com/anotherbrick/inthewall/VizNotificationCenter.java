@@ -8,7 +8,7 @@ public class VizNotificationCenter {
   private static VizNotificationCenter instance = new VizNotificationCenter();
 
   public enum EventName {
-    GRAPH_YEAR_CHANGED, BUTTON_TOUCHED
+    GRAPH_YEAR_CHANGED, BUTTON_TOUCHED, FILTER_LIST_CLOSE, FILTER_LIST_OPEN
   }
 
   private HashMap<EventName, ArrayList<EventSubscriber>> subscribers;
