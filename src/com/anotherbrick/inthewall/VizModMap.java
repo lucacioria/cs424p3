@@ -21,7 +21,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 	private boolean mapTouched;
 	long lastTouchTime;
 	private VizMapLegend legend;
-	private String colorFilter="weather";
+	private String colorFilter = "weather";
 
 	public VizModMap(float x0, float y0, float width, float height,
 			VizPanel parent) {
@@ -39,7 +39,8 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		float[] Illinois = focusOnState(17);
 		map.setCenterZoom(new Location(Illinois[0], Illinois[1]),
 				(int) Illinois[2]);
-legend=new VizMapLegend(0, 0, 200, 200, this);
+		legend = new VizMapLegend(0,getHeight()*0.8f,getWidth() , getHeight()*0.2f, this);
+		//legend.setColorFilter(colorFilter);
 
 		DSCrash accident = new DSCrash("sunny", "yes", 41.878114f, -87.629798f);
 		accident.dimension = 15f;
@@ -48,9 +49,9 @@ legend=new VizMapLegend(0, 0, 200, 200, this);
 		accident = new DSCrash("cloudy", "no", 40.813809f, -89.604492f);
 		accident.dimension = 15f;
 		accidents.add(accident);
-		
-		accident=new DSCrash("rainy", "unknown", 39.504041f,-88.198242f);
-		accident.dimension=15f;
+
+		accident = new DSCrash("rainy", "unknown", 39.504041f, -88.198242f);
+		accident.dimension = 15f;
 		accidents.add(accident);
 
 	}
@@ -320,16 +321,16 @@ legend=new VizMapLegend(0, 0, 200, 200, this);
 		} else if (filter.equals("weather")) {
 			if (crash.weather.equals("sunny")) {
 				return MyColorEnum.YELLOW;
-			}
-			else if (crash.weather.equals("cloudy") ) {
+			} else if (crash.weather.equals("cloudy")) {
 				return MyColorEnum.LIGHT_BLUE;
 			}
-			
-			else if (crash.weather.equals("rainy") || crash.weather.equals("hail")  ){
+
+			else if (crash.weather.equals("rainy")
+					|| crash.weather.equals("hail")) {
 				return MyColorEnum.DARK_BLUE;
 			}
-			
-			else if(crash.weather.equals("snow")){
+
+			else if (crash.weather.equals("snow")) {
 				return MyColorEnum.WHITE;
 			}
 		}

@@ -1,14 +1,12 @@
 package com.anotherbrick.inthewall;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
-import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
 
 public class VizMapLegend extends VizPanel implements TouchEnabled {
-
+private String colorFilter="";
 	public VizMapLegend(float x0, float y0, float width, float height,
 			VizPanel parent) {
 		super(x0, y0, width, height, parent);
-		this.parent = parent;
 	}
 	
 public void setup(){
@@ -18,7 +16,10 @@ public void setup(){
 	public boolean draw(){
 		pushStyle();
 		fill(MyColorEnum.WHITE);
-		rect(getX0(),getY0(),getWidth(),getHeight());
+		rect(0,0,getWidth(),getHeight());
+		textSize(10);
+		fill(MyColorEnum.BLACK);
+		text("Color coding by: "+colorFilter,5,15);
 		popStyle();
 		return false;
 	}
@@ -27,6 +28,14 @@ public void setup(){
 	
 	
 	
+	public String getColorFilter() {
+		return colorFilter;
+	}
+
+	public void setColorFilter(String colorFilter) {
+		this.colorFilter = colorFilter;
+	}
+
 	public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
 		return false;
 	}
