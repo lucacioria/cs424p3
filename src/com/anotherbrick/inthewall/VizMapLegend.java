@@ -92,15 +92,15 @@ public void setup(){
 			legendColors.add(MyColorEnum.BLACK);
 		}
 		
-		else if(colorFilter.equals("alcohol_involved")){
+		else if(colorFilter.equals("alcohol_involved" )||colorFilter.equals("drug_involved" ) ){
 			legendColors.clear();
 			labels.clear();
 			
 			labels.add("no");
-			legendColors.add(MyColorEnum.LIGHT_GREEN);
+			legendColors.add(MyColorEnum.RED);
 			
 			labels.add("yes");
-			legendColors.add(MyColorEnum.RED);
+			legendColors.add(MyColorEnum.LIGHT_GREEN);
 			
 			labels.add("unknown");
 			legendColors.add(MyColorEnum.BLACK);

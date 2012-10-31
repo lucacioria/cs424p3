@@ -21,7 +21,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 	private boolean mapTouched;
 	long lastTouchTime;
 	private VizMapLegend legend;
-	private String colorFilter = "weather";
+	private String colorFilter = "alcohol_involved";
 
 	public VizModMap(float x0, float y0, float width, float height,
 			VizPanel parent) {
@@ -44,15 +44,15 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		legend.setColorFilter(colorFilter);
 		legend.setup();
 
-		DSCrash accident = new DSCrash("sunny", "yes", 41.878114f, -87.629798f);
+		DSCrash accident = new DSCrash("sunny", "yes","no", 41.878114f, -87.629798f);
 		accident.dimension = 15f;
 		accidents.add(accident);
 
-		accident = new DSCrash("cloudy", "no", 40.813809f, -89.604492f);
+		accident = new DSCrash("cloudy", "no", "no",40.813809f, -89.604492f);
 		accident.dimension = 15f;
 		accidents.add(accident);
 
-		accident = new DSCrash("rainy", "unknown", 39.504041f, -88.198242f);
+		accident = new DSCrash("rainy", "unknown", "unknown", 39.504041f, -88.198242f);
 		accident.dimension = 15f;
 		accidents.add(accident);
 
@@ -130,8 +130,10 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		rect(ics, ips, 100, 40);
 		fill(255);
 		textSize(6);
-		text("latitude: " + accident.latitude + "\nlongitude: "
-				+ accident.longitude, ics + 5, ips + 7);
+		//text("latitude: " + accident.latitude, ics + 5, ips + 7);
+		//text("longitude: "+ accident.longitude, ics + 5, ips + 7+7);
+		text("Weather: " + accident.weather, ics + 5, ips + 7);
+		text("Alcohol involved: " + accident.alcohol_involved, ics + 5, ips + 7 + 7*1);
 
 	}
 
@@ -321,7 +323,13 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 				return legend.getLegendColors().get(1);
 			}
 		}
-
+		else if (filter.equals("drug_involved")) {
+			if (crash.drug_involved.equals("no")) {
+				return legend.getLegendColors().get(0);
+			} else if (crash.drug_involved.equals("yes")) {
+				return legend.getLegendColors().get(1);
+			}
+		}
 		else if (filter.equals("weather")) {
 			if (crash.weather.equals("sunny")) {
 				return legend.getLegendColors().get(0);
