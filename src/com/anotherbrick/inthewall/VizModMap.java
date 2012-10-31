@@ -11,10 +11,8 @@ import com.modestmaps.InteractiveMap;
 import com.modestmaps.core.Point2f;
 import com.modestmaps.geo.Location;
 import com.modestmaps.providers.Microsoft;
-import com.modestmaps.providers.Yahoo;
 
 public class VizModMap extends VizPanel implements TouchEnabled {
-	private int index = 0;
 	private InteractiveMap map;
 	private PVector mapOffset;
 	private PVector mapSize;
@@ -22,7 +20,6 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 	private ArrayList<DSAccident> accidents = new ArrayList<DSAccident>();
 	private boolean mapTouched;
 	long lastTouchTime;
-	private Location upperLeftCorner;
 
 	public VizModMap(float x0, float y0, float width, float height,
 			VizPanel parent) {
@@ -48,9 +45,6 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		accident = new DSAccident(40.813809f, -89.604492f);
 		accident.setDimension(15);
 		accidents.add(accident);
-		
-		
-		
 
 	}
 
@@ -63,17 +57,16 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		background(MyColorEnum.BLACK);
 
 		map.draw();
-		float[] array = focusOnState(index);
 		// map.setCenterZoom(new Location(array[0], array[1]), (int) array[2]);
 		noFill();
 		stroke(MyColorEnum.RED);
 		strokeWeight(2);
 		rect(mapOffset.x, mapOffset.y, mapSize.x, mapSize.y);
 		drawAccidents(accidents);
-		
+
 		drawClusterGrid();
 		popStyle();
-		
+
 		return false;
 	}
 
@@ -91,7 +84,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 				Point2f center = new Point2f(m.touchX, m.touchY);
 				map.setCenter(map.pointLocation(center));
 				lastTouchTime = 0;
-				
+
 			}
 			lastTouchTime = System.currentTimeMillis();
 			println("" + System.currentTimeMillis());
@@ -288,26 +281,29 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 	public void setAccidents(ArrayList<DSAccident> accidents) {
 		this.accidents = accidents;
 	}
-/*
-	public void updateCornerLocations(){
-		Point2f point;
-		point=new Point2f(super.getX0(),super.getY0());
-		upperLeftCorner=map.pointLocation(point.x, point.y);
-		
-	}*/
-	
-	public void drawClusterGrid(){
-		float clusterLevel=10;
-		for(int i=0;i<getWidth();i++){
-			if(i%clusterLevel==0){
-				fill(MyColorEnum.RED);
-				line(0, i, getWidth(),i);}
-		}
-		for(int j=0;j<getWidth();j++){
-			if(j%clusterLevel==0){
-				fill(MyColorEnum.RED);
-				line(+j, 0, j,getHeight());
 
+	/*
+	 * public void updateCornerLocations(){ Point2f point; point=new
+	 * Point2f(super.getX0(),super.getY0());
+	 * upperLeftCorner=map.pointLocation(point.x, point.y);
+	 * 
+	 * }
+	 */
+
+	public void drawClusterGrid() {
+		int clusterLevel = 256 / map.getZoom();
+		println("clu" + clusterLevel);
+		println("zoom" + map.getZoom());
+		for (int i = 0; i < getWidth(); i++) {
+			if (i % clusterLevel == 0) {
+				fill(MyColorEnum.RED);
+				line(0, i, getWidth(), i);
+			}
+		}
+		for (int j = 0; j < getWidth(); j++) {
+			if (j % clusterLevel == 0) {
+				fill(MyColorEnum.RED);
+				line(+j, 0, j, getHeight());
 
 			}
 		}
