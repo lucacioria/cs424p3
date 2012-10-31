@@ -21,7 +21,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 	private boolean mapTouched;
 	long lastTouchTime;
 	private VizMapLegend legend;
-	private String colorFilter = "weather";
+	private String colorFilter = "alcohol_involved";
 
 	public VizModMap(float x0, float y0, float width, float height,
 			VizPanel parent) {

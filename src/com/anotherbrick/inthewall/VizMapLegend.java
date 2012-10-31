@@ -91,6 +91,20 @@ public void setup(){
 			labels.add("unknown");
 			legendColors.add(MyColorEnum.BLACK);
 		}
+		
+		else if(colorFilter.equals("alcohol_involved")){
+			legendColors.clear();
+			labels.clear();
+			
+			labels.add("no");
+			legendColors.add(MyColorEnum.LIGHT_GREEN);
+			
+			labels.add("yes");
+			legendColors.add(MyColorEnum.RED);
+			
+			labels.add("unknown");
+			legendColors.add(MyColorEnum.BLACK);
+		}
 	}
 	
 	public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
