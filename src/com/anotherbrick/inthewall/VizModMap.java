@@ -12,6 +12,7 @@ import com.modestmaps.InteractiveMap;
 import com.modestmaps.core.Point2f;
 import com.modestmaps.geo.Location;
 import com.modestmaps.providers.Microsoft;
+import com.mysql.jdbc.UpdatableResultSet;
 
 public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber {
   private InteractiveMap map;
@@ -57,6 +58,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     accident.dimension = 15f;
     accidents.add(accident);
 
+    updateCorners();
   }
 
   @Override
@@ -99,7 +101,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
 
       }
       lastTouchTime = System.currentTimeMillis();
-      println("" + System.currentTimeMillis());
+      updateCorners();
 
       return true;
     } else {
@@ -157,6 +159,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         map.ty += (m.touchY - firstTouch.y) / map.sc;
         firstTouch = new PVector(m.touchX, m.touchY);
       }
+      updateCorners();
     }
   }
 
@@ -287,13 +290,12 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     this.accidents = accidents;
   }
 
-  /*
-   * public void updateCornerLocations(){ Point2f point; point=new
-   * Point2f(super.getX0(),super.getY0());
-   * upperLeftCorner=map.pointLocation(point.x, point.y);
-   * 
-   * }
-   */
+  
+  public void updateCorners(){
+    m.upperLeftLocation=map.pointLocation(getX0(), getY0());
+      m.lowerRightLocation=map.pointLocation(getX0()+getWidth(), getY0()+getHeight());
+    }
+   
 
   public void drawClusterGrid() {
     int clusterLevel = 256 / map.getZoom();
