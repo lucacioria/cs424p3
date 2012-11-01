@@ -34,7 +34,7 @@ class FilterList extends VizPanel implements TouchEnabled, EventSubscriber {
   private void setupVizList(FilterRow row) {
     list = new VizList(0, 0, getWidth(), getHeight(), this);
     list.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 10, row.values, false,
-        SelectionMode.MULTIPLE);
+        row.selectMultiple ? SelectionMode.MULTIPLE : SelectionMode.SINGLE);
     ArrayList<Object> attributeValues = (ArrayList<Object>) (ArrayList<? extends Object>) m.currentFilter
         .getAttributeValues(row.name);
     list.setSelected(new ArrayList<Object>(attributeValues));
