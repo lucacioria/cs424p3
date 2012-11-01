@@ -42,7 +42,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         mapSize.y);
     float[] Illinois = focusOnState(17);
     map.setCenterZoom(new Location(Illinois[0], Illinois[1]), (int) Illinois[2]);
-    legend = new VizMapLegend(0, getHeight() * 0.8f, getWidth(), getHeight() * 0.2f, this);
+    legend = new VizMapLegend(0, 0, getWidth(), getHeight() * 0.2f, this);
     legend.setColorFilter(colorFilter);
     legend.setup();
 
