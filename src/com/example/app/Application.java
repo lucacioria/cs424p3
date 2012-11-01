@@ -1,14 +1,11 @@
 package com.example.app;
 
-import java.util.ArrayList;
-
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizModMap;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
-import com.anotherbrick.inthewall.datasource.DSCrash;
 
 public class Application extends VizPanel implements TouchEnabled, EventSubscriber {
 

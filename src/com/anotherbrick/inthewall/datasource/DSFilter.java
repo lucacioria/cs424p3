@@ -1,6 +1,7 @@
 package com.anotherbrick.inthewall.datasource;
 
 import java.io.IOException;
+import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
@@ -18,6 +19,7 @@ public class DSFilter {
   public Float longitudeMin;
   public Float longitudeMax;
   private HashMap<String, ArrayList<String>> listAttributes = new HashMap<String, ArrayList<String>>();
+  private static HashMap<String, HashMap<String, ArrayList<Integer>>> mappings = new HashMap<String, HashMap<String, ArrayList<Integer>>>();
 
   public DSFilter() {
     for (HashMap<String, String> h : DSFilter.getFilterNames()) {
@@ -122,7 +124,17 @@ public class DSFilter {
     return null;
   }
 
+  public static String getSelectClause() {
+    String o = "";
+    JSONObject j = getJsonFile("select.json");
+
+    return o;
+  }
+
   private static HashMap<String, ArrayList<Integer>> getMapping(String name) {
+    // cache
+    if (mappings.containsKey(name)) return mappings.get(name);
+    // retrieve
     HashMap<String, ArrayList<Integer>> o = new HashMap<String, ArrayList<Integer>>();
     try {
       JSONObject j = getJsonFile(name);
@@ -139,7 +151,20 @@ public class DSFilter {
     } catch (JSONException e) {
       e.printStackTrace();
     }
+    mappings.put(name, o);
     return o;
+  }
+
+  public static String getValueByCode(String name, int code) {
+    HashMap<String, ArrayList<Integer>> mapping = getMapping(name);
+    Iterator<String> it = mapping.keySet().iterator();
+    while (it.hasNext()) {
+      String key = it.next();
+      for (int _code : mapping.get(key)) {
+        if (_code == code) return key;
+      }
+    }
+    return null;
   }
 
   private static JSONObject getJsonFile(String name) {
