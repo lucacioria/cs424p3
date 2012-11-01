@@ -6,13 +6,14 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.datasource.DSCrash;
 import com.modestmaps.InteractiveMap;
 import com.modestmaps.core.Point2f;
 import com.modestmaps.geo.Location;
 import com.modestmaps.providers.Microsoft;
 
-public class VizModMap extends VizPanel implements TouchEnabled {
+public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber {
   private InteractiveMap map;
   private PVector mapOffset;
   private PVector mapSize;
@@ -30,6 +31,9 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
   @Override
   public void setup() {
+
+    m.notificationCenter.registerToEvent(EventName.CRASHES_UPDATED, this);
+
     mapOffset = new PVector(0, 0);
     mapSize = new PVector(getWidth(), getHeight());
 
@@ -53,7 +57,6 @@ public class VizModMap extends VizPanel implements TouchEnabled {
     accident.dimension = 15f;
     accidents.add(accident);
 
-    updateCorners();
   }
 
   @Override
@@ -83,7 +86,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
     if (down) {
 
-      manageAccidentPopup();
+    //  manageAccidentPopup();
 
       firstTouch = new PVector(x, y);
       mapTouched = true;
@@ -96,7 +99,8 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
       }
       lastTouchTime = System.currentTimeMillis();
-      updateCorners();
+      println("" + System.currentTimeMillis());
+
       return true;
     } else {
       mapTouched = false;
@@ -109,9 +113,10 @@ public class VizModMap extends VizPanel implements TouchEnabled {
       Location location = new Location(accident.latitude, accident.longitude);
       Point2f p = map.locationPoint(location);
 
-      fill(colorBy(colorFilter, accident));
+     // fill(colorBy(colorFilter, accident));
+      fill(MyColorEnum.BLACK);
       stroke(MyColorEnum.BLACK);
-      ellipse(p.x - getX0(), p.y - getY0(), accident.dimension, accident.dimension);
+      ellipse(p.x - getX0(), p.y - getY0(), 15, 15);
 
       if (accident.selected) {
         popUp(accident, p.x - getX0(), p.y - getY0());
@@ -152,7 +157,6 @@ public class VizModMap extends VizPanel implements TouchEnabled {
         map.ty += (m.touchY - firstTouch.y) / map.sc;
         firstTouch = new PVector(m.touchX, m.touchY);
       }
-      updateCorners();
     }
   }
 
@@ -335,8 +339,15 @@ public class VizModMap extends VizPanel implements TouchEnabled {
     return MyColorEnum.BLACK;
   }
 
-  public void updateCorners() {
-    m.upperLeftLocation = map.pointLocation(getX0(), getY0());
-    m.lowerRightLocation = map.pointLocation(getX0() + getWidth(), getY0() + getHeight());
+  @Override
+  public void eventReceived(EventName eventName, Object data) {
+    if (eventName == EventName.CRASHES_UPDATED) {
+       setAccidents(m.crashes);
+      
+      
+      float[] array = focusOnState(m.currentStateCode);
+      map.setCenterZoom(new Location(array[0], array[1]), (int) array[2]);
+
+    }
   }
 }
