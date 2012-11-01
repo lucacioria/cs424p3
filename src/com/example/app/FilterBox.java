@@ -56,6 +56,7 @@ public class FilterBox extends VizPanel implements TouchEnabled, EventSubscriber
       FilterRow row = new FilterRow(0, i * rowHeight, 200, rowHeight, this);
       row.label = filterNames.get(i).get("label");
       row.name = filterNames.get(i).get("name");
+      row.selectMultiple = filterNames.get(i).get("select").equals("multiple") ? true : false;
       row.setup();
       filterRows.add(row);
       addTouchSubscriber(row);

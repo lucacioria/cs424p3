@@ -1,6 +1,7 @@
 {
 	lines: [
-		{name: weather, label: weather},
-		{name: alcohol_involved, label: 'alcohol involved'}
+		{name: _state, label: state, select: single},
+		{name: weather, label: weather, select: multiple},
+		{name: alcohol_involved, label: 'alcohol involved', select: multiple}
 	]
 }

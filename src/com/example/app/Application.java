@@ -58,7 +58,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     if (eventName == EventName.CURRENT_FILTER_UPDATED) {
       println("asdf");
       ArrayList<DSCrash> crashes = m.dataSourceSQL.getCrashes(m.currentFilter);
-      println(crashes.toString());
+      println(crashes.size() + "");
     }
   }
 }

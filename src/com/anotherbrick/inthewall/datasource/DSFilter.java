@@ -5,8 +5,6 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
-import javax.swing.DebugGraphics;
-
 import us.monoid.json.JSONArray;
 import us.monoid.json.JSONException;
 import us.monoid.json.JSONObject;
@@ -22,8 +20,9 @@ public class DSFilter {
   private HashMap<String, ArrayList<String>> listAttributes = new HashMap<String, ArrayList<String>>();
 
   public DSFilter() {
-    listAttributes.put("weather", new ArrayList<String>());
-    listAttributes.put("alcohol_involved", new ArrayList<String>());
+    for (HashMap<String, String> h : DSFilter.getFilterNames()) {
+      listAttributes.put(h.get("name"), new ArrayList<String>());
+    }
   }
 
   public String getWhereClause() {
@@ -102,6 +101,7 @@ public class DSFilter {
         HashMap<String, String> val = new HashMap<String, String>();
         val.put("name", line.getString("name"));
         val.put("label", line.getString("label"));
+        val.put("select", line.getString("select"));
         filterNames.add(val);
       }
     } catch (Exception e) {
