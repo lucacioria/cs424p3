@@ -114,9 +114,9 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       Point2f p = map.locationPoint(location);
 
      // fill(colorBy(colorFilter, accident));
-      fill(MyColorEnum.BLACK);
+      fill(MyColorEnum.BLACK,100);
       stroke(MyColorEnum.BLACK);
-      ellipse(p.x - getX0(), p.y - getY0(), 15, 15);
+      ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
 
       if (accident.selected) {
         popUp(accident, p.x - getX0(), p.y - getY0());
