@@ -101,7 +101,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         Point2f center = new Point2f(m.touchX, m.touchY);
         map.setCenter(map.pointLocation(center));
         lastTouchTime = 0;
-
+        updateCorners();
       }
       lastTouchTime = System.currentTimeMillis();
       updateCorners();
@@ -121,7 +121,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
      fill(colorBy(colorFilter, accident));
      // fill(MyColorEnum.BLACK,100);
       stroke(MyColorEnum.BLACK);
-      ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
+      if(location.lon>m.upperLeftLocation.lon){
+      ellipse(p.x - getX0(), p.y - getY0(), 10, 10);}
 
       if (accident.selected) {
         popUp(accident, p.x - getX0(), p.y - getY0());
