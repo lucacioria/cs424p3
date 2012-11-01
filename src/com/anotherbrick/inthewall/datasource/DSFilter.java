@@ -5,6 +5,8 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
 
+import javax.swing.DebugGraphics;
+
 import us.monoid.json.JSONArray;
 import us.monoid.json.JSONException;
 import us.monoid.json.JSONObject;
@@ -17,9 +19,12 @@ public class DSFilter {
   public Float latitudeMax;
   public Float longitudeMin;
   public Float longitudeMax;
-  public String weather;
+  private HashMap<String, ArrayList<String>> listAttributes = new HashMap<String, ArrayList<String>>();
 
-  private ArrayList<HashMap<String, String>> filterNames = new ArrayList<HashMap<String, String>>();
+  public DSFilter() {
+    listAttributes.put("weather", new ArrayList<String>());
+    listAttributes.put("alcohol_involved", new ArrayList<String>());
+  }
 
   public String getWhereClause() {
     ArrayList<String> a = new ArrayList<String>();
@@ -27,13 +32,47 @@ public class DSFilter {
     if (latitudeMin != null) a.add("latitude > " + latitudeMin);
     if (longitudeMax != null) a.add("longitude < " + longitudeMax);
     if (longitudeMin != null) a.add("longitude > " + longitudeMin);
+    Iterator<String> it = listAttributes.keySet().iterator();
+    while (it.hasNext()) {
+      String name = it.next();
+      ArrayList<String> values = listAttributes.get(name);
+      if (values.size() > 0) {
+        String codes = getCodesByName(name, values);
+        a.add(name + " IN (" + codes + ")");
+      }
+    }
     return join(a, " AND ");
   }
 
-  private String join(ArrayList<String> a, String separator) {
+  private String getCodesByName(String name, ArrayList<String> values) {
+    HashMap<String, ArrayList<Integer>> mappings = getMapping(name);
+    ArrayList<String> out = new ArrayList<String>();
+    for (String value : values) {
+      ArrayList<Integer> codes = mappings.get(value);
+      out.add(join(codes, ", "));
+    }
+    return join(out, ", ");
+  }
+
+  public void setAttributeWithList(String name, ArrayList<? extends Object> list) {
+    ArrayList<String> attributeValues = listAttributes.get(name);
+    attributeValues.clear();
+    for (Object o : list) {
+      attributeValues.add(o.toString());
+    }
+  }
+
+  public ArrayList<String> getAttributeValues(String name) {
+    return listAttributes.get(name);
+  }
+
+  private String join(ArrayList<? extends Object> a, String separator) {
     String out = "";
-    for (String s : a) {
-      out += s + separator;
+    if (a.size() == 0) {
+      return "";
+    }
+    for (Object s : a) {
+      out += s.toString() + separator;
     }
     return out.substring(0, out.length() - separator.length());
   }

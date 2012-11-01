@@ -17,6 +17,7 @@ class FilterList extends VizPanel implements TouchEnabled, EventSubscriber {
   }
 
   private VizList list;
+  public String name;
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -29,10 +30,15 @@ class FilterList extends VizPanel implements TouchEnabled, EventSubscriber {
     m.notificationCenter.registerToEvent(EventName.FILTER_LIST_OPEN, this);
   }
 
-  private void setupVizList(ArrayList<String> values) {
+  @SuppressWarnings("unchecked")
+  private void setupVizList(FilterRow row) {
     list = new VizList(0, 0, getWidth(), getHeight(), this);
-    list.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 10, values, false,
+    list.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 10, row.values, false,
         SelectionMode.MULTIPLE);
+    ArrayList<Object> attributeValues = (ArrayList<Object>) (ArrayList<? extends Object>) m.currentFilter
+        .getAttributeValues(row.name);
+    list.setSelected(new ArrayList<Object>(attributeValues));
+    name = row.name;
     addTouchSubscriber(list);
   }
 
@@ -46,20 +52,27 @@ class FilterList extends VizPanel implements TouchEnabled, EventSubscriber {
     return false;
   }
 
-  @SuppressWarnings("unchecked")
   @Override
   public void eventReceived(EventName eventName, Object data) {
     switch (eventName) {
     case FILTER_LIST_OPEN:
-      setupVizList((ArrayList<String>) data);
+      setupVizList((FilterRow) data);
       setVisible(true);
       break;
     case FILTER_LIST_CLOSE:
-      setVisible(false);
+      if (isVisible()) {
+        setVisible(false);
+        removeTouchSubscriber(list);
+        updateFilter();
+      }
       break;
     default:
       break;
     }
   }
 
+  private void updateFilter() {
+    ArrayList<? extends Object> selected = list.getSelected();
+    m.currentFilter.setAttributeWithList(name, selected);
+  }
 }

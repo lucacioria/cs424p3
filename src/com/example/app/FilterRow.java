@@ -15,15 +15,15 @@ import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
 import com.anotherbrick.inthewall.datasource.DSFilter;
 
-class FilterRow extends VizPanel implements TouchEnabled, EventSubscriber {
+class FilterRow extends VizPanel implements TouchEnabled {
 
   public FilterRow(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
   }
 
   public String label, name;
-  private ArrayList<String> values = new ArrayList<String>();
-  private VizButton openListButton;
+  ArrayList<String> values = new ArrayList<String>();
+  VizButton openListButton;
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -34,7 +34,6 @@ class FilterRow extends VizPanel implements TouchEnabled, EventSubscriber {
   public void setup() {
     values = DSFilter.getValues(name);
     setupOpenListButton();
-    m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
   }
 
   private void setupOpenListButton() {
@@ -62,22 +61,6 @@ class FilterRow extends VizPanel implements TouchEnabled, EventSubscriber {
     openListButton.drawTextCentered();
     popStyle();
     return false;
-  }
-
-  @Override
-  public void eventReceived(EventName eventName, Object data) {
-    if (eventName == EventName.BUTTON_TOUCHED && data.toString().equals(name + "FilterRowButton")) {
-      if (openListButton.isSelected()) {
-        openListButton.setSelected(false);
-        m.notificationCenter.notifyEvent(EventName.FILTER_LIST_CLOSE);
-        println("close list: " + name);
-      } else {
-        println("open list: " + name);
-        openListButton.setSelected(true);
-        m.notificationCenter.notifyEvent(EventName.FILTER_LIST_OPEN, values);
-      }
-    }
-
   }
 
 }

@@ -93,6 +93,10 @@ public abstract class VizPanel {
     touchChildren.add(child);
   }
 
+  public void removeTouchSubscriber(TouchEnabled child) {
+    touchChildren.remove(child);
+  }
+
   public void arc(float x, float y, float startEdge, float stopEdge, float startAngle,
       float stopAngle) {
     p.arc(x0Zoom + s(x), y0Zoom + s(y), s(startEdge), s(stopEdge), startAngle, stopAngle);
@@ -393,8 +397,7 @@ public abstract class VizPanel {
   }
 
   public void setVisible(boolean visible) {
-    if (visible == this.visible)
-      return;
+    if (visible == this.visible) return;
     this.visible = visible;
     setToRedraw();
   }
@@ -408,8 +411,7 @@ public abstract class VizPanel {
   }
 
   boolean startDraw() {
-    if (!needsRedraw() || !isVisible())
-      return false;
+    if (!needsRedraw() || !isVisible()) return false;
     log("DRAW " + toString());
     return true;
   }
