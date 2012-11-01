@@ -56,6 +56,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		accident.dimension = 15f;
 		accidents.add(accident);
 
+		updateCorners();
 	}
 
 	@Override
@@ -98,8 +99,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 
 			}
 			lastTouchTime = System.currentTimeMillis();
-			println("" + System.currentTimeMillis());
-
+			updateCorners();
 			return true;
 		} else {
 			mapTouched = false;
@@ -160,6 +160,7 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 				map.ty += (m.touchY - firstTouch.y) / map.sc;
 				firstTouch = new PVector(m.touchX, m.touchY);
 			}
+			updateCorners();
 		}
 	}
 
@@ -344,4 +345,11 @@ public class VizModMap extends VizPanel implements TouchEnabled {
 		}
 		return MyColorEnum.BLACK;
 	}
+	
+	public void updateCorners(){
+		m.upperLeftLocation=map.pointLocation(getX0(), getY0());
+		m.upperRightLocation=map.pointLocation(getX0()+getWidth(), getY0());
+		m.lowerLeftLocation=map.pointLocation(getX0(), getY0()+getHeight());
+		m.lowerRightLocation=map.pointLocation(getX0()+getWidth(), getY0()+getHeight());
+		}
 }

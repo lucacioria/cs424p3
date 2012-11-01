@@ -1,7 +1,9 @@
 package com.anotherbrick.inthewall;
 
-import com.anotherbrick.inthewall.datasource.DSFilter;
+import java.util.ArrayList;
+
 import com.anotherbrick.inthewall.datasource.DataSourceSQL;
+import com.modestmaps.geo.Location;
 
 public class Model {
 
@@ -11,11 +13,21 @@ public class Model {
   public float touchX;
   public float touchY;
   public TouchEnabled currentModalVizPanel;
-  // Application Public Variables
-  public DSFilter currentFilter = new DSFilter();
+  public ArrayList<Object> selectedGenres = new ArrayList<Object>();
+  public ArrayList<Object> selectedMonsters = new ArrayList<Object>();
+  public ArrayList<Object> selectedCountries = new ArrayList<Object>();
 
-  //
+  public VizList genrePanel;
+  public VizList monsterPanel;
+  public VizList countriesPanel;
+  public VizList moviesList;
 
+  
+  public enum Datas {
+    NUMBER_OF_MOVIES, AVERAGE_RATING, AVERAGE_BUDGET, AVERAGE_VOTES
+  };
+
+  public Datas currentDataDisplayed = Datas.NUMBER_OF_MOVIES;
   public DataSourceSQL dataSourceSQL;
 
   public static void setup(Main p, DataSourceSQL dataSourceSQL,
