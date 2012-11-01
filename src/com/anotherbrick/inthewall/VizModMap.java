@@ -24,6 +24,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   long lastTouchTime;
   private VizMapLegend legend;
   private String colorFilter = "weather";
+  private VizButton zoomInButton;
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -59,6 +60,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     accidents.add(accident);
 
     updateCorners();
+    setupZoomButtons();
   }
 
   @Override
@@ -79,6 +81,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
 
     drawClusterGrid();
     legend.draw();
+    zoomInButton.draw();
     popStyle();
 
     return false;
@@ -339,6 +342,17 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       }
     }
     return MyColorEnum.BLACK;
+  }
+  
+  public void setupZoomButtons(){
+    zoomInButton = new VizButton(-20, getHeight()/2, 20 , 20, this);
+    zoomInButton.name = "submitFilterBox";
+    zoomInButton.text = "+";
+    zoomInButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
+        255f, 10);
+    zoomInButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
+        255f, 10);
+    addTouchSubscriber(zoomInButton);
   }
 
   @Override
