@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import processing.core.PConstants;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.datasource.DSFilter;
 
 public class VizMapLegend extends VizPanel implements TouchEnabled {
 private String colorFilter="";
@@ -33,7 +34,7 @@ public void setup(){
 		rect(0,0,getWidth(),getHeight());
 		textSize(10);
 		fill(MyColorEnum.WHITE);
-		text("Color coding by: "+colorFilter.toUpperCase(),5,15);
+		text("Color coding by: "+DSFilter.getLabelByName(colorFilter).toUpperCase(),5,15);
 		int legendColumn=1;
 		
 		//for(float i=getHeight()/3+5;i<getHeight();i=i+getHeight()/3){
