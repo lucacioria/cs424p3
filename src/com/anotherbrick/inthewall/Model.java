@@ -3,6 +3,7 @@ package com.anotherbrick.inthewall;
 import java.util.ArrayList;
 
 import com.anotherbrick.inthewall.datasource.DataSourceSQL;
+import com.modestmaps.geo.Location;
 
 public class Model {
 
@@ -21,6 +22,11 @@ public class Model {
   public VizList countriesPanel;
   public VizList moviesList;
 
+  public Location upperLeftLocation;
+  public Location upperRightLocation;
+  public Location lowerLeftLocation;
+  public Location lowerRightLocation;
+  
   public enum Datas {
     NUMBER_OF_MOVIES, AVERAGE_RATING, AVERAGE_BUDGET, AVERAGE_VOTES
   };
