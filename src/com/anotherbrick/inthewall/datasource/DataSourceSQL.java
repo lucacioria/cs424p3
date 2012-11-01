@@ -2,6 +2,8 @@ package com.anotherbrick.inthewall.datasource;
 
 import java.util.ArrayList;
 
+import com.anotherbrick.inthewall.Model;
+
 import processing.core.PApplet;
 import de.bezier.data.sql.MySQL;
 
@@ -22,25 +24,36 @@ public class DataSourceSQL {
     }
   }
 
-  public ArrayList<DSCrash> getCrashes(DSFilter f) {
+  public void getCrashes(DSFilter f) {
     ArrayList<DSCrash> crashes = new ArrayList<DSCrash>();
     String query;
     if (sql.connect()) {
-      query = "SELECT _year, _case, latitude, longitude FROM crashes WHERE " + f.getWhereClause();
+      // public int month;
+      // public int hour;
+      // public int minutes;
+      // public int day_of_week;
+      // public String weather;
+      // public String alcohol_involved;
+      // public int[] travel_speed;
+      // public int[] vehicle_configuration;
+      // public int[] age;
+      query = "SELECT _year, _state, _case, latitude, longitude FROM crashes WHERE "
+          + f.getWhereClause();
       sql.query(query);
       createArrayFromQuery(crashes);
-      return crashes;
+      Model.getInstance().crashes = crashes;
+      Model.getInstance().currentStateCode = crashes.get(0)._state;
     }
-    return null;
   }
 
   private void createArrayFromQuery(ArrayList<DSCrash> array) {
     while (sql.next()) {
       DSCrash event = new DSCrash();
       event._year = sql.getInt(1);
-      event._crash = sql.getInt(2);
-      event.latitude = sql.getFloat(3);
-      event.longitude = sql.getFloat(4);
+      event._state = sql.getInt(2);
+      event._case = sql.getInt(3);
+      event.latitude = sql.getFloat(4);
+      event.longitude = sql.getFloat(5);
       array.add(event);
     }
   }

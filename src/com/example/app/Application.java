@@ -56,9 +56,10 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.CURRENT_FILTER_UPDATED) {
-      println("asdf");
-      ArrayList<DSCrash> crashes = m.dataSourceSQL.getCrashes(m.currentFilter);
-      println(crashes.size() + "");
+      println("loading from database..");
+      m.dataSourceSQL.getCrashes(m.currentFilter);
+      println(m.crashes.size() + "");
+      m.notificationCenter.notifyEvent(EventName.CRASHES_UPDATED);
     }
   }
 }

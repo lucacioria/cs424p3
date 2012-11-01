@@ -43,6 +43,11 @@ public class DSFilter {
     return join(a, " AND ");
   }
 
+  public static String getStateNameByCode(int code) {
+    getMapping("_sate");
+    return null;
+  }
+
   private String getCodesByName(String name, ArrayList<String> values) {
     HashMap<String, ArrayList<Integer>> mappings = getMapping(name);
     ArrayList<String> out = new ArrayList<String>();
