@@ -11,14 +11,11 @@ public class Model {
   public float touchX;
   public float touchY;
   public TouchEnabled currentModalVizPanel;
-
+  // Application Public Variables
   public DSFilter currentFilter = new DSFilter();
 
-  public enum Datas {
-    NUMBER_OF_MOVIES, AVERAGE_RATING, AVERAGE_BUDGET, AVERAGE_VOTES
-  };
+  //
 
-  public Datas currentDataDisplayed = Datas.NUMBER_OF_MOVIES;
   public DataSourceSQL dataSourceSQL;
 
   public static void setup(Main p, DataSourceSQL dataSourceSQL,
