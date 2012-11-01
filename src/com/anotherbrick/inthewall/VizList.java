@@ -22,7 +22,7 @@ public class VizList extends VizPanel implements TouchEnabled {
     super(x0, y0, width, height, parent);
   }
 
-  public ArrayList<Object> getSelected() {
+  public ArrayList<? extends Object> getSelected() {
     return selectedObjects;
   }
 

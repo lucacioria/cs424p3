@@ -1,7 +1,6 @@
 package com.anotherbrick.inthewall;
 
-import java.util.ArrayList;
-
+import com.anotherbrick.inthewall.datasource.DSFilter;
 import com.anotherbrick.inthewall.datasource.DataSourceSQL;
 
 public class Model {
@@ -12,14 +11,8 @@ public class Model {
   public float touchX;
   public float touchY;
   public TouchEnabled currentModalVizPanel;
-  public ArrayList<Object> selectedGenres = new ArrayList<Object>();
-  public ArrayList<Object> selectedMonsters = new ArrayList<Object>();
-  public ArrayList<Object> selectedCountries = new ArrayList<Object>();
 
-  public VizList genrePanel;
-  public VizList monsterPanel;
-  public VizList countriesPanel;
-  public VizList moviesList;
+  public DSFilter currentFilter = new DSFilter();
 
   public enum Datas {
     NUMBER_OF_MOVIES, AVERAGE_RATING, AVERAGE_BUDGET, AVERAGE_VOTES

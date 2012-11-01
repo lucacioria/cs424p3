@@ -9,7 +9,7 @@ import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 
 public class VizButton extends VizPanel implements TouchEnabled {
 
-  private String text = "";
+  public String text = "";
   private float xOffset = 0;
   private float yOffset = 0;
   // common styles
@@ -150,6 +150,7 @@ public class VizButton extends VizPanel implements TouchEnabled {
       drawDisabled();
       break;
     }
+    drawTextCentered();
     return false;
   }
 
