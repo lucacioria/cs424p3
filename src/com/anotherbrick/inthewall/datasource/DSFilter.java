@@ -110,6 +110,13 @@ public class DSFilter {
     return filterNames;
   }
 
+  public static String getLabelByName(String name) {
+    for (HashMap<String, String> h : getFilterNames()) {
+      if (h.get("name").equals(name)) return h.get("label");
+    }
+    return null;
+  }
+
   private static HashMap<String, ArrayList<Integer>> getMapping(String name) {
     HashMap<String, ArrayList<Integer>> o = new HashMap<String, ArrayList<Integer>>();
     try {
