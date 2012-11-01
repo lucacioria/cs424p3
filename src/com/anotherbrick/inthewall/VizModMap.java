@@ -23,7 +23,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private boolean mapTouched;
   long lastTouchTime;
   private VizMapLegend legend;
-  private String colorFilter = "alcohol_involved";
+  private String colorFilter = "weather";
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -115,8 +115,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       Location location = new Location(accident.latitude, accident.longitude);
       Point2f p = map.locationPoint(location);
 
-     // fill(colorBy(colorFilter, accident));
-      fill(MyColorEnum.BLACK,100);
+     fill(colorBy(colorFilter, accident));
+     // fill(MyColorEnum.BLACK,100);
       stroke(MyColorEnum.BLACK);
       ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
 
