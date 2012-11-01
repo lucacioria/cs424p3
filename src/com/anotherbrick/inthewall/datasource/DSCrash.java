@@ -19,6 +19,7 @@ public class DSCrash {
 
 	//not mandatory attributes
 	public String drug_involved;
+	public String roadway_surface_condition;
 	
 	public Float dimension;
 	public boolean selected = false;
