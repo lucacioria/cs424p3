@@ -2,6 +2,7 @@ package com.anotherbrick.inthewall;
 
 import java.util.ArrayList;
 
+import com.anotherbrick.inthewall.datasource.DSFilter;
 import com.anotherbrick.inthewall.datasource.DataSourceSQL;
 import com.modestmaps.geo.Location;
 
@@ -22,13 +23,15 @@ public class Model {
   public VizList countriesPanel;
   public VizList moviesList;
 
-  
   public enum Datas {
     NUMBER_OF_MOVIES, AVERAGE_RATING, AVERAGE_BUDGET, AVERAGE_VOTES
   };
 
   public Datas currentDataDisplayed = Datas.NUMBER_OF_MOVIES;
   public DataSourceSQL dataSourceSQL;
+  public Location upperLeftLocation;
+  public Location lowerRightLocation;
+  public DSFilter currentFilter = new DSFilter();
 
   public static void setup(Main p, DataSourceSQL dataSourceSQL,
       VizNotificationCenter notificationCenter) {
