@@ -109,6 +109,7 @@ public class DSFilter {
         val.put("name", line.getString("name"));
         val.put("label", line.getString("label"));
         val.put("select", line.getString("select"));
+        val.put("default", line.getString("default"));
         filterNames.add(val);
       }
     } catch (Exception e) {

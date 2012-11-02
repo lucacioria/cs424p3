@@ -1,7 +1,8 @@
 {
 	lines: [
-		{name: _state, label: state, select: single},
-		{name: weather, label: weather, select: multiple},
-		{name: alcohol_involved, label: 'alcohol involved', select: multiple}
+		{name: _state, label: state, select: single, default: Illinois},
+		{name: weather, label: weather, select: multiple, default: null},
+		{name: alcohol_involved, label: 'alcohol involved', select: multiple, default: null},
+		{name: drug_involved, label: 'drug involved', select: multiple, default: null}
 	]
 }
