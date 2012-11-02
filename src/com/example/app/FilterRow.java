@@ -55,6 +55,7 @@ class FilterRow extends VizPanel implements TouchEnabled {
     background(MyColorEnum.DARK_GRAY);
     // label
     textSize(10);
+    fill(MyColorEnum.WHITE);
     textAlign(PApplet.LEFT, PApplet.CENTER);
     text(label, 10, 10);
     // open list button

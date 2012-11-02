@@ -6,6 +6,7 @@ import processing.core.PApplet;
 import processing.core.PVector;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.datasource.DSFilter;
 
 public class VizRow extends VizPanel {
 
@@ -43,8 +44,11 @@ public class VizRow extends VizPanel {
     textSize(12);
     fill(MyColorEnum.WHITE);
     textAlign(PApplet.LEFT, PApplet.CENTER);
-    text(cropAtNChars != -1 ? Helper.limitStringLength(name, cropAtNChars, true) : name, 10,
-        getHeight() / 2);
+    // SCHIFEZZA PER PROGETTO 3 ATTENZIONE!!
+    String nomePulito = DSFilter.clearLabel(name);
+    text(
+        cropAtNChars != -1 ? Helper.limitStringLength(nomePulito, cropAtNChars, true) : nomePulito,
+        10, getHeight() / 2);
     popStyle();
     return false;
   }

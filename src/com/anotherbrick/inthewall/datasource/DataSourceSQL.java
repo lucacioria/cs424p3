@@ -2,6 +2,7 @@ package com.anotherbrick.inthewall.datasource;
 
 import java.util.ArrayList;
 
+import com.anotherbrick.inthewall.BarData;
 import com.anotherbrick.inthewall.Model;
 
 import processing.core.PApplet;
@@ -46,6 +47,25 @@ public class DataSourceSQL {
     }
   }
 
+  public void getCrashesCountBy(DSFilter f, String groupField) {
+    ArrayList<BarData> crashesCountForBarchart = new ArrayList<BarData>();
+    String query;
+    if (sql.connect()) {
+      query = "SELECT " + groupField + " as label, count(*) as count" + " FROM krashes WHERE "
+          + f.getWhereClause() + " GROUP BY " + groupField;
+      sql.query(query);
+      while (sql.next()) {
+        BarData barData = new BarData();
+        barData.value = sql.getInt("count");
+        barData.label = sql.getString("label");
+        crashesCountForBarchart.add(barData);
+      }
+      Model.getInstance().crashesCountForBarchart = DSFilter.adaptCountByToLabels(
+          crashesCountForBarchart, groupField);
+      Model.getInstance().currentGroupField = groupField;
+    }
+  }
+
   private void createArrayFromQuery(ArrayList<DSCrash> array) {
     while (sql.next()) {
       DSCrash event = new DSCrash();
@@ -60,6 +80,7 @@ public class DataSourceSQL {
       event.alcohol_involved = DSFilter.getValueByCode("alcohol_involved",
           sql.getInt("alcohol_involved"));
       event.drug_involved = DSFilter.getValueByCode("drug_involved", sql.getInt("drug_involved"));
+      event.day_of_week = DSFilter.getValueByCode("day_of_week", sql.getInt("day_of_week"));
       array.add(event);
     }
   }

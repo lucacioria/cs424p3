@@ -25,6 +25,8 @@ public class Model {
   public DSFilter currentFilter = new DSFilter();
   public ArrayList<DSCrash> crashes = null;
   public int currentStateCode;
+  public String currentGroupField;
+  public ArrayList<BarData> crashesCountForBarchart;
 
   public static void setup(Main p, DataSourceSQL dataSourceSQL,
       VizNotificationCenter notificationCenter) {
