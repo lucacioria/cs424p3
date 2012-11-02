@@ -1,8 +1,12 @@
-package com.anotherbrick.inthewall;
+package com.anotherbrick.inthewall.BarChart;
 
 import processing.core.PApplet;
 
+import com.anotherbrick.inthewall.Config;
+import com.anotherbrick.inthewall.TouchEnabled;
+import com.anotherbrick.inthewall.VizPanel;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
 import com.anotherbrick.inthewall.datasource.DSFilter;
 
 public class VizBar extends VizPanel implements TouchEnabled {

@@ -2,6 +2,7 @@ package com.anotherbrick.inthewall;
 
 import java.util.ArrayList;
 
+import com.anotherbrick.inthewall.BarChart.BarData;
 import com.anotherbrick.inthewall.datasource.DSCrash;
 import com.anotherbrick.inthewall.datasource.DSFilter;
 import com.anotherbrick.inthewall.datasource.DataSourceSQL;
