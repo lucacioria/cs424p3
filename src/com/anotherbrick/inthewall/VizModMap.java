@@ -23,12 +23,9 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private VizMapLegend legend;
 
   private String colorFilter = "alcohol_involved";
-<<<<<<< HEAD
 
   private VizButton zoomInButton;
   private VizButton zoomOutButton;
-=======
->>>>>>> origin/master
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
