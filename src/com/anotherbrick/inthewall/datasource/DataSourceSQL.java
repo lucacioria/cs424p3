@@ -60,7 +60,8 @@ public class DataSourceSQL {
         barData.label = sql.getString("label");
         crashesCountForBarchart.add(barData);
       }
-      Model.getInstance().crashesCountForBarchart = crashesCountForBarchart;
+      Model.getInstance().crashesCountForBarchart = DSFilter.adaptCountByToLabels(
+          crashesCountForBarchart, groupField);
       Model.getInstance().currentGroupField = groupField;
     }
   }
@@ -79,6 +80,7 @@ public class DataSourceSQL {
       event.alcohol_involved = DSFilter.getValueByCode("alcohol_involved",
           sql.getInt("alcohol_involved"));
       event.drug_involved = DSFilter.getValueByCode("drug_involved", sql.getInt("drug_involved"));
+      event.day_of_week = DSFilter.getValueByCode("day_of_week", sql.getInt("day_of_week"));
       array.add(event);
     }
   }

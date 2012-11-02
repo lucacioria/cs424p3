@@ -39,13 +39,14 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
 
   private void drawYAxis() {
     pushStyle();
+    textAlign(PApplet.RIGHT, PApplet.CENTER);
+    textSize(8);
+    fill(MyColorEnum.WHITE);
     float max = getMaxValue();
     int numberOfTicks = 10;
     float tickValue = max / numberOfTicks;
     for (int i = 0; i < numberOfTicks; i++) {
       float y = chartYBottom - PApplet.map(i, 0, numberOfTicks - 1, 0, chartHeight);
-      textAlign(PApplet.RIGHT, PApplet.CENTER);
-      textSize(8);
       String numberLabel = (int) (tickValue * i) + "";
       text(numberLabel, chartXLeft - 5, y);
     }
@@ -53,9 +54,12 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
   }
 
   private void drawTitle() {
+    pushStyle();
     textSize(15);
+    fill(MyColorEnum.WHITE);
     textAlign(PApplet.CENTER, PApplet.TOP);
     text(title, chartXLeft + chartWidth / 2, 10);
+    popStyle();
   }
 
   private void drawBars() {

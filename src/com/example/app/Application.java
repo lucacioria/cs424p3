@@ -81,7 +81,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
       m.dataSourceSQL.getCrashes(m.currentFilter);
       println(m.crashes.size() + "");
       m.notificationCenter.notifyEvent(EventName.CRASHES_UPDATED);
-      m.dataSourceSQL.getCrashesCountBy(m.currentFilter, "weather");
+      m.dataSourceSQL.getCrashesCountBy(m.currentFilter, "day_of_week");
       m.notificationCenter.notifyEvent(EventName.CRASHES_COUNT_BY_VALUE_UPDATED);
     }
   }

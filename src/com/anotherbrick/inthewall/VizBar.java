@@ -3,6 +3,7 @@ package com.anotherbrick.inthewall;
 import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.datasource.DSFilter;
 
 public class VizBar extends VizPanel implements TouchEnabled {
 
@@ -40,7 +41,7 @@ public class VizBar extends VizPanel implements TouchEnabled {
     fill(textColor);
     textSize(8);
     textAlign(PApplet.CENTER, PApplet.TOP);
-    text(barData.label, xLeft + (xRight - xLeft) / 2, yBottom + 3);
+    text(DSFilter.clearLabel(barData.label), xLeft + (xRight - xLeft) / 2, yBottom + 3);
     //
     popStyle();
     return false;

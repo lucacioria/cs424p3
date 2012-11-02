@@ -9,7 +9,7 @@ public class DSCrash {
   public int month;
   public int hour;
   public int minutes;
-  public int day_of_week;
+  public String day_of_week;
   public String weather;
   public String alcohol_involved;
   public int[] travel_speed;

@@ -1,8 +1,8 @@
 package com.anotherbrick.inthewall.datasource;
 
 import java.io.IOException;
-import java.nio.MappedByteBuffer;
 import java.util.ArrayList;
+import java.util.Collections;
 import java.util.HashMap;
 import java.util.Iterator;
 
@@ -10,6 +10,7 @@ import us.monoid.json.JSONArray;
 import us.monoid.json.JSONException;
 import us.monoid.json.JSONObject;
 
+import com.anotherbrick.inthewall.BarData;
 import com.anotherbrick.inthewall.Config;
 import com.anotherbrick.inthewall.Helper;
 
@@ -95,6 +96,7 @@ public class DSFilter {
     } catch (Exception e) {
       e.printStackTrace();
     }
+    Collections.sort(o);
     return o;
   }
 
@@ -194,5 +196,34 @@ public class DSFilter {
       if (value == 99) return -1;
     }
     return value;
+  }
+
+  public static String clearLabel(String label) {
+    return label.replaceAll("^[0-9]+\\_", "");
+  }
+
+  public static ArrayList<BarData> adaptCountByToLabels(ArrayList<BarData> crashesCountForBarchart,
+      String groupField) {
+    ArrayList<BarData> o = new ArrayList<BarData>();
+    HashMap<String, Integer> temp = new HashMap<String, Integer>();
+    for (BarData barData : crashesCountForBarchart) {
+      int code = Integer.parseInt(barData.label);
+      String label = getValueByCode(groupField, code);
+      if (temp.containsKey(label) == false) {
+        temp.put(label, 0);
+      }
+      Integer val = temp.get(label);
+      temp.put(label, val + (int) barData.value);
+    }
+    ArrayList<String> possibleValues = getValues(groupField);
+    for (String possibleValue : possibleValues) {
+      if (temp.containsKey(possibleValue)) {
+        BarData barData = new BarData();
+        barData.label = possibleValue;
+        barData.value = temp.get(possibleValue);
+        o.add(barData);
+      }
+    }
+    return o;
   }
 }
