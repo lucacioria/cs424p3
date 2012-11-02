@@ -2,6 +2,8 @@ package com.anotherbrick.inthewall;
 
 import java.util.ArrayList;
 
+import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
@@ -21,7 +23,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private boolean mapTouched;
   long lastTouchTime;
   private VizMapLegend legend;
-  private int numberOfClusters=2;
+  private int numberOfClusters=10;
   private ArrayList<Cluster> clusters=new ArrayList<Cluster>();
 
   private String colorFilter = "alcohol_involved";
@@ -51,6 +53,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     legend.setup();
 
     updateCorners();
+    updateClusters();
   }
 
   private void centerAndZoomOnState(int stateCode) {
@@ -81,9 +84,10 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     drawAccidents(accidents);
 
     drawClusterGrid();
-    legend.draw();
-    updateClusters();
     drawClusters();
+    legend.draw();
+    
+    
     popStyle();
 
     return false;
@@ -104,9 +108,11 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         map.setCenter(map.pointLocation(center));
         lastTouchTime = 0;
         updateCorners();
+        updateClusters();
       }
       lastTouchTime = System.currentTimeMillis();
       updateCorners();
+      updateClusters();
 
       return true;
     } else {
@@ -166,6 +172,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         firstTouch = new PVector(m.touchX, m.touchY);
       }
       updateCorners();
+      updateClusters();
     }
   }
 
@@ -352,10 +359,18 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   }
   
   public void drawClusters(){
+    int clusterLevel = (int)getWidth()/numberOfClusters;
     for(Cluster cluster: clusters){
-      fill(MyColorEnum.RED);
-      ellipse(cluster.getCenter().x, cluster.getCenter().y, cluster.getCount(), cluster.getCount());
+      fill(MyColorEnum.DARKER_BLUE);
+      float dimension =PApplet.map(cluster.getCount(),0,50,0,clusterLevel);
+      if(dimension>clusterLevel){dimension=clusterLevel;}
+      ellipse(cluster.getCenter().x, cluster.getCenter().y, dimension, dimension);
+      fill(MyColorEnum.WHITE);
+      textSize(10);
+      textAlign(PConstants.CENTER, PConstants.CENTER);
+      text(cluster.getCount()+"",cluster.getCenter().x,cluster.getCenter().y);
     }
+    
   }
     
 
@@ -411,5 +426,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         map.setZoom(map.getZoom() - 1);
       }
     }
+    updateClusters();
+    updateCorners();
   }
 }
