@@ -2,6 +2,8 @@ package com.anotherbrick.inthewall;
 
 import java.util.ArrayList;
 
+import processing.core.PApplet;
+import processing.core.PConstants;
 import processing.core.PVector;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
@@ -21,7 +23,13 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private boolean mapTouched;
   long lastTouchTime;
   private VizMapLegend legend;
+  private int numberOfClusters=10;
+  private ArrayList<Cluster> clusters=new ArrayList<Cluster>();
+
   private String colorFilter = "alcohol_involved";
+
+  private VizButton zoomInButton;
+  private VizButton zoomOutButton;
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -45,6 +53,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     legend.setup();
 
     updateCorners();
+    updateClusters();
   }
 
   private void centerAndZoomOnState(int stateCode) {
@@ -75,7 +84,10 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     drawAccidents(accidents);
 
     drawClusterGrid();
+    drawClusters();
     legend.draw();
+    
+    
     popStyle();
 
     return false;
@@ -96,9 +108,11 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         map.setCenter(map.pointLocation(center));
         lastTouchTime = 0;
         updateCorners();
+        updateClusters();
       }
       lastTouchTime = System.currentTimeMillis();
       updateCorners();
+      updateClusters();
 
       return true;
     } else {
@@ -158,6 +172,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         firstTouch = new PVector(m.touchX, m.touchY);
       }
       updateCorners();
+      updateClusters();
     }
   }
 
@@ -295,7 +310,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   }
 
   public void drawClusterGrid() {
-    int clusterLevel = 256 / map.getZoom();
+   
+    int clusterLevel = (int)getWidth()/numberOfClusters;
     for (int i = 0; i < getWidth(); i++) {
       if (i % clusterLevel == 0) {
         fill(MyColorEnum.RED);
@@ -310,6 +326,53 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       }
     }
   }
+  
+  public void updateClusters(){
+    clusters.clear();
+    int clusterLevel = (int)getWidth()/numberOfClusters;
+    for (int i = 0; i < numberOfClusters; i++) {
+      for (int j = 0; j < numberOfClusters; j++) {
+      
+        fill(MyColorEnum.RED);
+       // ellipse(i+clusterLevel/2,j+clusterLevel/2,20,20);
+        Cluster cluster= new Cluster(new Point2f(clusterLevel/2+clusterLevel*i,clusterLevel/2+clusterLevel*j));
+        cluster.setCount(updateClusterCount(i, j));
+        clusters.add(cluster);
+      
+    }}
+   
+      }
+  public int updateClusterCount(int i, int j){
+    int clusterLevel = (int)getWidth()/numberOfClusters;
+    int count=0;
+    for(DSCrash crash: accidents){
+      float pointX=map.locationPoint(new Location(crash.latitude,crash.longitude)).x;
+      float pointY=map.locationPoint(new Location(crash.latitude,crash.longitude)).y;
+      if(pointX>getX0()+clusterLevel*(i)
+          && pointX<getX0()+clusterLevel*(i+1)
+          && pointY>getY0()+clusterLevel*(j)
+          && pointY<getY0()+clusterLevel*(j+1)){
+        count++;
+      }
+    }
+    return count;
+  }
+  
+  public void drawClusters(){
+    int clusterLevel = (int)getWidth()/numberOfClusters;
+    for(Cluster cluster: clusters){
+      fill(MyColorEnum.DARKER_BLUE);
+      float dimension =PApplet.map(cluster.getCount(),0,50,0,clusterLevel);
+      if(dimension>clusterLevel){dimension=clusterLevel;}
+      ellipse(cluster.getCenter().x, cluster.getCenter().y, dimension, dimension);
+      fill(MyColorEnum.WHITE);
+      textSize(10);
+      textAlign(PConstants.CENTER, PConstants.CENTER);
+      text(cluster.getCount()+"",cluster.getCenter().x,cluster.getCenter().y);
+    }
+    
+  }
+    
 
   public MyColorEnum colorBy(String filter, DSCrash crash) {
     if (filter.equals("alcohol_involved")) {
@@ -363,5 +426,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         map.setZoom(map.getZoom() - 1);
       }
     }
+    updateClusters();
+    updateCorners();
   }
 }
