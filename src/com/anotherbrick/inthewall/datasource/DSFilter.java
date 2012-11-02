@@ -186,4 +186,12 @@ public class DSFilter {
     }
     return null;
   }
+
+  public static int getIntValue(String name, int value) {
+    if (value < 0) return -1;
+    if (name.equals("number_of_fatalities")) {
+      if (value == 99) return -1;
+    }
+    return value;
+  }
 }
