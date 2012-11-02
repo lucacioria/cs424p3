@@ -49,11 +49,11 @@ public abstract class VizPanel {
     return height;
   }
 
-  private float getWidthZoom() {
+  protected float getWidthZoom() {
     return widthZoom;
   }
 
-  private float getHeightZoom() {
+  protected float getHeightZoom() {
     return heightZoom;
   }
 
@@ -150,7 +150,7 @@ public abstract class VizPanel {
   }
 
   public boolean containsPoint(float x, float y) {
-    return x > x0Zoom && x < x0Zoom + widthZoom && y > y0Zoom && y < y0Zoom + heightZoom;
+    return x > x0 && x < x0 + width && y > y0 && y < y0 + height;
   }
 
   public void createGraphicsImage(PGraphics pg, float c, float d) {
@@ -220,7 +220,7 @@ public abstract class VizPanel {
     return x0;
   }
 
-  private float getX0AbsoluteZoom() {
+  protected float getX0AbsoluteZoom() {
     return x0Zoom;
   }
 
@@ -232,7 +232,7 @@ public abstract class VizPanel {
     return y0;
   }
 
-  private float getY0AbsoluteZoom() {
+  protected float getY0AbsoluteZoom() {
     return y0Zoom;
   }
 

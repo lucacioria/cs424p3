@@ -35,17 +35,27 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
 
     mapOffset = new PVector(0, 0);
-    mapSize = new PVector(getWidth(), getHeight());
+    mapSize = new PVector(getWidthZoom(), getHeightZoom());
 
-    map = new InteractiveMap(m.p, new Microsoft.RoadProvider(), getX0(), getY0(), mapSize.x,
-        mapSize.y);
-    float[] Illinois = focusOnState(17);
-    map.setCenterZoom(new Location(Illinois[0], Illinois[1]), (int) Illinois[2]);
+    map = new InteractiveMap(m.p, new Microsoft.RoadProvider(), getX0AbsoluteZoom(),
+        getY0AbsoluteZoom(), mapSize.x, mapSize.y);
+    centerAndZoomOnState(17);
     legend = new VizMapLegend(0, 0, getWidth(), getHeight() * 0.2f, this);
     legend.setColorFilter(colorFilter);
     legend.setup();
 
     updateCorners();
+  }
+
+  private void centerAndZoomOnState(int stateCode) {
+    float[] array = focusOnState(stateCode);
+    int zoom = (int) array[2];
+    if (c.multiply == 2) {
+      zoom += 1;
+    } else if (c.multiply == 6) {
+      zoom += 2;
+    }
+    map.setCenterZoom(new Location(array[0], array[1]), zoom);
   }
 
   @Override
@@ -82,7 +92,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       // if double touch, then zoom
       if ((System.currentTimeMillis() - lastTouchTime) < 1000) {
         map.setZoom(map.getZoom() + 1);
-        Point2f center = new Point2f(m.touchX, m.touchY);
+        Point2f center = new Point2f(x * c.multiply, y * c.multiply);
         map.setCenter(map.pointLocation(center));
         lastTouchTime = 0;
         updateCorners();
@@ -101,13 +111,13 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     for (DSCrash accident : accidents) {
       Location location = new Location(accident.latitude, accident.longitude);
       Point2f p = map.locationPoint(location);
-
+      p.x /= c.multiply;
+      p.y /= c.multiply;
       fill(colorBy(colorFilter, accident));
       // fill(MyColorEnum.BLACK,100);
       stroke(MyColorEnum.BLACK);
       if (location.lon > m.upperLeftLocation.lon) {
         ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
-
         if (accident.selected) {
           popUp(accident, p.x - getX0(), p.y - getY0());
         }
@@ -143,8 +153,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   public void manageDrag() {
     if (mapTouched) {
       if (m.touchX != firstTouch.x && m.touchY != firstTouch.y && m.touchX != 0 && m.touchY != 0) {
-        map.tx += (m.touchX - firstTouch.x) / map.sc;
-        map.ty += (m.touchY - firstTouch.y) / map.sc;
+        map.tx += (m.touchX - firstTouch.x) * c.multiply / map.sc;
+        map.ty += (m.touchY - firstTouch.y) * c.multiply / map.sc;
         firstTouch = new PVector(m.touchX, m.touchY);
       }
       updateCorners();
@@ -279,8 +289,9 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   }
 
   public void updateCorners() {
-    m.upperLeftLocation = map.pointLocation(getX0(), getY0());
-    m.lowerRightLocation = map.pointLocation(getX0() + getWidth(), getY0() + getHeight());
+    m.upperLeftLocation = map.pointLocation(getX0AbsoluteZoom(), getY0AbsoluteZoom());
+    m.lowerRightLocation = map.pointLocation(getX0AbsoluteZoom() + getWidthZoom(),
+        getY0AbsoluteZoom() + getHeightZoom());
   }
 
   public void drawClusterGrid() {
@@ -343,9 +354,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.CRASHES_UPDATED) {
       setAccidents(m.crashes);
-
-      float[] array = focusOnState(m.currentStateCode);
-      map.setCenterZoom(new Location(array[0], array[1]), (int) array[2]);
+      centerAndZoomOnState(m.currentStateCode);
     }
     if (eventName == EventName.BUTTON_TOUCHED) {
       if (data.toString().equals("zoomInButton")) {
