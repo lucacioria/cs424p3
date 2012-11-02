@@ -59,8 +59,7 @@ public class DataSourceSQL {
           sql.getInt("number_of_fatalities"));
       event.alcohol_involved = DSFilter.getValueByCode("alcohol_involved",
           sql.getInt("alcohol_involved"));
-      event.alcohol_involved = DSFilter
-          .getValueByCode("drug_involved", sql.getInt("drug_involved"));
+      event.drug_involved = DSFilter.getValueByCode("drug_involved", sql.getInt("drug_involved"));
       array.add(event);
     }
   }
