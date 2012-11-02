@@ -11,7 +11,7 @@ public class DSCrash {
   public int minutes;
   public int day_of_week;
   public String weather;
-  public String alcohol_involved;
+  public int alcohol_involved; // 1,0,-1
   public int[] travel_speed;
   public int[] vehicle_configuration;
   public int[] age;
@@ -27,15 +27,6 @@ public class DSCrash {
   public boolean selected = false;
 
   public DSCrash() {
-  }
-
-  public DSCrash(String weather, String alcohol_involved, String drug_involved, Float latitude,
-      Float longitude) {
-    this.weather = weather;
-    this.alcohol_involved = alcohol_involved;
-    this.drug_involved = drug_involved;
-    this.latitude = latitude;
-    this.longitude = longitude;
   }
 
   @Override
