@@ -21,6 +21,7 @@ public class DSCrash {
   // not mandatory attributes
   public String drug_involved;
   public String roadway_surface_condition;
+  public int number_of_fatalities;
 
   public Float dimension;
   public boolean selected = false;
@@ -28,11 +29,12 @@ public class DSCrash {
   public DSCrash() {
   }
 
-  public DSCrash(String weather, String alcohol_involved, String drug_involved, Float latitude,
+  public DSCrash(String weather, String alcohol_involved, String drug_involved, int number_of_fatalities, Float latitude,
       Float longitude) {
     this.weather = weather;
     this.alcohol_involved = alcohol_involved;
     this.drug_involved = drug_involved;
+    this.number_of_fatalities=number_of_fatalities;
     this.latitude = latitude;
     this.longitude = longitude;
   }
