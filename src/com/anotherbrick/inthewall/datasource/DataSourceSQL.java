@@ -46,6 +46,8 @@ public class DataSourceSQL {
       event.latitude = sql.getFloat("latitude");
       event.longitude = sql.getFloat("longitude");
       event.weather = DSFilter.getValueByCode("weather", sql.getInt("weather"));
+      event.number_of_fatalities = DSFilter.getIntValue("number_of_fatalities",
+          sql.getInt("number_of_fatalities"));
       array.add(event);
     }
   }
