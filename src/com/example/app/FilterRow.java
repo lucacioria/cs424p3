@@ -21,7 +21,7 @@ class FilterRow extends VizPanel implements TouchEnabled {
     super(x0, y0, width, height, parent);
   }
 
-  public String label, name;
+  public String label, name, defaultValue;
   ArrayList<String> values = new ArrayList<String>();
   VizButton openListButton;
   public boolean selectMultiple = true;

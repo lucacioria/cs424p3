@@ -2,7 +2,6 @@ package com.anotherbrick.inthewall;
 
 import java.util.ArrayList;
 
-import processing.core.PApplet;
 import processing.core.PVector;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
@@ -12,7 +11,6 @@ import com.modestmaps.InteractiveMap;
 import com.modestmaps.core.Point2f;
 import com.modestmaps.geo.Location;
 import com.modestmaps.providers.Microsoft;
-import com.mysql.jdbc.UpdatableResultSet;
 
 public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber {
   private InteractiveMap map;
@@ -24,8 +22,6 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   long lastTouchTime;
   private VizMapLegend legend;
   private String colorFilter = "alcohol_involved";
-  private VizButton zoomInButton;
-  private VizButton zoomOutButton;
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -36,6 +32,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   public void setup() {
 
     m.notificationCenter.registerToEvent(EventName.CRASHES_UPDATED, this);
+    m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
 
     mapOffset = new PVector(0, 0);
     mapSize = new PVector(getWidth(), getHeight());
@@ -49,7 +46,6 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     legend.setup();
 
     updateCorners();
-    setupZoomButtons();
   }
 
   @Override
@@ -70,8 +66,6 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
 
     drawClusterGrid();
     legend.draw();
-    zoomInButton.draw();
-    zoomOutButton.draw();
     popStyle();
 
     return false;
@@ -345,26 +339,6 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     return MyColorEnum.BLACK;
   }
 
-  public void setupZoomButtons() {
-    zoomInButton = new VizButton(-20, getHeight() / 2, 20, 20, this);
-    zoomInButton.name = "submitFilterBox";
-    zoomInButton.text = "+";
-    zoomInButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
-        255f, 10);
-    zoomInButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
-        255f, 10);
-    addTouchSubscriber(zoomInButton);
-
-    zoomOutButton = new VizButton(-20, getHeight() / 2 + 20, 20, 20, this);
-    zoomOutButton.name = "submitFilterBox";
-    zoomOutButton.text = "-";
-    zoomOutButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
-        255f, 10);
-    zoomOutButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
-        MyColorEnum.DARK_GRAY, 255f, 10);
-    addTouchSubscriber(zoomOutButton);
-  }
-
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.CRASHES_UPDATED) {
@@ -372,7 +346,13 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
 
       float[] array = focusOnState(m.currentStateCode);
       map.setCenterZoom(new Location(array[0], array[1]), (int) array[2]);
-
+    }
+    if (eventName == EventName.BUTTON_TOUCHED) {
+      if (data.toString().equals("zoomInButton")) {
+        map.setZoom(map.getZoom() + 1);
+      } else if (data.toString().equals("zoomOutButton")) {
+        map.setZoom(map.getZoom() - 1);
+      }
     }
   }
 }

@@ -15,6 +15,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
 
   private VizModMap map;
   private FilterBox filterBox;
+  private MapButtons mapButtons;
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -26,6 +27,13 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     setupMap();
     setupFilterBox();
     m.notificationCenter.registerToEvent(EventName.CURRENT_FILTER_UPDATED, this);
+    setupMapButtons();
+  }
+
+  private void setupMapButtons() {
+    mapButtons = new MapButtons(500, 200, 20, 40, this);
+    mapButtons.setup();
+    addTouchSubscriber(mapButtons);
   }
 
   private void setupFilterBox() {
@@ -46,6 +54,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     background(MyColorEnum.DARK_BLUE);
     map.draw();
     filterBox.draw();
+    mapButtons.draw();
     popStyle();
     return false;
   }

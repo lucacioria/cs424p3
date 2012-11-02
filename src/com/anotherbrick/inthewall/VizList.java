@@ -351,4 +351,12 @@ public class VizList extends VizPanel implements TouchEnabled {
 
   }
 
+  public void selectElementByString(String elementName) {
+    for (Object o : elements) {
+      if (o.toString().equals(elementName)) {
+        selectElement(o, selectionMode);
+      }
+    }
+  }
+
 }
