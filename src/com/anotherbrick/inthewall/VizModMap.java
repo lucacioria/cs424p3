@@ -23,8 +23,9 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private boolean mapTouched;
   long lastTouchTime;
   private VizMapLegend legend;
-  private String colorFilter = "weather";
+  private String colorFilter = "number_of_fatalities";
   private VizButton zoomInButton;
+  private VizButton zoomOutButton;
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -47,15 +48,15 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     legend.setColorFilter(colorFilter);
     legend.setup();
 
-    DSCrash accident = new DSCrash("sunny", "yes", "no", 41.878114f, -87.629798f);
+    DSCrash accident = new DSCrash("sunny", "yes", "no", 0,41.878114f, -87.629798f);
     accident.dimension = 15f;
     accidents.add(accident);
 
-    accident = new DSCrash("cloudy", "no", "no", 40.813809f, -89.604492f);
+    accident = new DSCrash("cloudy", "no", "no", 1, 40.813809f, -89.604492f);
     accident.dimension = 15f;
     accidents.add(accident);
 
-    accident = new DSCrash("rainy", "unknown", "unknown", 39.504041f, -88.198242f);
+    accident = new DSCrash("rainy", "unknown", "unknown",9, 39.504041f, -88.198242f);
     accident.dimension = 15f;
     accidents.add(accident);
 
@@ -82,6 +83,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     drawClusterGrid();
     legend.draw();
     zoomInButton.draw();
+    zoomOutButton.draw();
     popStyle();
 
     return false;
@@ -91,7 +93,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
     if (down) {
 
-    //  manageAccidentPopup();
+      // manageAccidentPopup();
 
       firstTouch = new PVector(x, y);
       mapTouched = true;
@@ -118,15 +120,15 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       Location location = new Location(accident.latitude, accident.longitude);
       Point2f p = map.locationPoint(location);
 
-     fill(colorBy(colorFilter, accident));
-     // fill(MyColorEnum.BLACK,100);
+      fill(colorBy(colorFilter, accident));
+      // fill(MyColorEnum.BLACK,100);
       stroke(MyColorEnum.BLACK);
-      if(location.lon>m.upperLeftLocation.lon){
-      ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
+      if (location.lon > m.upperLeftLocation.lon) {
+        ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
 
-      if (accident.selected) {
-        popUp(accident, p.x - getX0(), p.y - getY0());
-      }
+        if (accident.selected) {
+          popUp(accident, p.x - getX0(), p.y - getY0());
+        }
       }
     }
   }
@@ -294,12 +296,10 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     this.accidents = accidents;
   }
 
-  
-  public void updateCorners(){
-    m.upperLeftLocation=map.pointLocation(getX0(), getY0());
-      m.lowerRightLocation=map.pointLocation(getX0()+getWidth(), getY0()+getHeight());
-    }
-   
+  public void updateCorners() {
+    m.upperLeftLocation = map.pointLocation(getX0(), getY0());
+    m.lowerRightLocation = map.pointLocation(getX0() + getWidth(), getY0() + getHeight());
+  }
 
   public void drawClusterGrid() {
     int clusterLevel = 256 / map.getZoom();
@@ -340,15 +340,27 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         return legend.getLegendColors().get(2);
       } else if (crash.weather.equals("snow")) {
         return legend.getLegendColors().get(3);
-      }else if (crash.weather.equals("fog") || crash.weather.equals("windy")) {
+      } else if (crash.weather.equals("fog") || crash.weather.equals("windy")) {
         return legend.getLegendColors().get(4);
       }
+    } else if(filter.equals("number_of_fatalities")){
+    
+   if (crash.number_of_fatalities==1){
+        return legend.getLegendColors().get(0);
+      }
+      else if (crash.number_of_fatalities==2){
+        return legend.getLegendColors().get(1);
+      }
+      else if (crash.number_of_fatalities>=3){
+        return legend.getLegendColors().get(2);
+      }
+      
     }
     return MyColorEnum.BLACK;
   }
-  
-  public void setupZoomButtons(){
-    zoomInButton = new VizButton(-20, getHeight()/2, 20 , 20, this);
+
+  public void setupZoomButtons() {
+    zoomInButton = new VizButton(-20, getHeight() / 2, 20, 20, this);
     zoomInButton.name = "submitFilterBox";
     zoomInButton.text = "+";
     zoomInButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
@@ -356,14 +368,22 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     zoomInButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
         255f, 10);
     addTouchSubscriber(zoomInButton);
+    
+    zoomOutButton = new VizButton(-20, getHeight() / 2+20, 20, 20, this);
+    zoomOutButton.name = "submitFilterBox";
+    zoomOutButton.text = "-";
+    zoomOutButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
+        255f, 10);
+    zoomOutButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
+        255f, 10);
+    addTouchSubscriber(zoomOutButton);
   }
 
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.CRASHES_UPDATED) {
-       setAccidents(m.crashes);
-      
-      
+      setAccidents(m.crashes);
+
       float[] array = focusOnState(m.currentStateCode);
       map.setCenterZoom(new Location(array[0], array[1]), (int) array[2]);
 
