@@ -2,6 +2,7 @@ package com.anotherbrick.inthewall.datasource;
 
 import java.util.ArrayList;
 
+import com.anotherbrick.inthewall.BarData;
 import com.anotherbrick.inthewall.Model;
 
 import processing.core.PApplet;
@@ -43,6 +44,24 @@ public class DataSourceSQL {
       createArrayFromQuery(crashes);
       Model.getInstance().crashes = crashes;
       Model.getInstance().currentStateCode = crashes.get(0)._state;
+    }
+  }
+
+  public void getCrashesCountBy(DSFilter f, String groupField) {
+    ArrayList<BarData> crashesCountForBarchart = new ArrayList<BarData>();
+    String query;
+    if (sql.connect()) {
+      query = "SELECT " + groupField + " as label, count(*) as count" + " FROM krashes WHERE "
+          + f.getWhereClause() + " GROUP BY " + groupField;
+      sql.query(query);
+      while (sql.next()) {
+        BarData barData = new BarData();
+        barData.value = sql.getInt("count");
+        barData.label = sql.getString("label");
+        crashesCountForBarchart.add(barData);
+      }
+      Model.getInstance().crashesCountForBarchart = crashesCountForBarchart;
+      Model.getInstance().currentGroupField = groupField;
     }
   }
 

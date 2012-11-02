@@ -1,8 +1,14 @@
 package com.example.app;
 
+import java.util.ArrayList;
+
+import processing.core.PApplet;
+
+import com.anotherbrick.inthewall.BarData;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
+import com.anotherbrick.inthewall.VizBarChart;
 import com.anotherbrick.inthewall.VizModMap;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
@@ -16,6 +22,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   private VizModMap map;
   private FilterBox filterBox;
   private MapButtons mapButtons;
+  private BarChart barChart;
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -26,8 +33,15 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   public void setup() {
     setupMap();
     setupFilterBox();
-    m.notificationCenter.registerToEvent(EventName.CURRENT_FILTER_UPDATED, this);
     setupMapButtons();
+    setupBarChart();
+    m.notificationCenter.registerToEvent(EventName.CURRENT_FILTER_UPDATED, this);
+  }
+
+  private void setupBarChart() {
+    barChart = new BarChart(400, 100, 400, 200, this);
+    barChart.setup();
+    addTouchSubscriber(barChart);
   }
 
   private void setupMapButtons() {
@@ -55,6 +69,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     map.draw();
     filterBox.draw();
     mapButtons.draw();
+    barChart.draw();
     popStyle();
     return false;
   }
@@ -66,6 +81,8 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
       m.dataSourceSQL.getCrashes(m.currentFilter);
       println(m.crashes.size() + "");
       m.notificationCenter.notifyEvent(EventName.CRASHES_UPDATED);
+      m.dataSourceSQL.getCrashesCountBy(m.currentFilter, "weather");
+      m.notificationCenter.notifyEvent(EventName.CRASHES_COUNT_BY_VALUE_UPDATED);
     }
   }
 }
