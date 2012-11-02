@@ -362,14 +362,15 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     int clusterLevel = (int)getWidth()/numberOfClusters;
     for(Cluster cluster: clusters){
       fill(MyColorEnum.DARKER_BLUE);
+      if(cluster.getCount()>1){
       float dimension =PApplet.map(cluster.getCount(),0,50,0,clusterLevel);
-      if(dimension>clusterLevel){dimension=clusterLevel;}
+      if(dimension>clusterLevel*0.9){dimension=clusterLevel*0.9f;}
       ellipse(cluster.getCenter().x, cluster.getCenter().y, dimension, dimension);
       fill(MyColorEnum.WHITE);
       textSize(10);
       textAlign(PConstants.CENTER, PConstants.CENTER);
       text(cluster.getCount()+"",cluster.getCenter().x,cluster.getCenter().y);
-    }
+    }}
     
   }
     
