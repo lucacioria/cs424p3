@@ -122,12 +122,12 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
      // fill(MyColorEnum.BLACK,100);
       stroke(MyColorEnum.BLACK);
       if(location.lon>m.upperLeftLocation.lon){
-      ellipse(p.x - getX0(), p.y - getY0(), 10, 10);}
+      ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
 
       if (accident.selected) {
         popUp(accident, p.x - getX0(), p.y - getY0());
       }
-
+      }
     }
   }
 
@@ -340,6 +340,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         return legend.getLegendColors().get(2);
       } else if (crash.weather.equals("snow")) {
         return legend.getLegendColors().get(3);
+      }else if (crash.weather.equals("fog") || crash.weather.equals("windy")) {
+        return legend.getLegendColors().get(4);
       }
     }
     return MyColorEnum.BLACK;
