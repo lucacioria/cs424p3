@@ -23,7 +23,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private boolean mapTouched;
   long lastTouchTime;
   private VizMapLegend legend;
-  private String colorFilter = "number_of_fatalities";
+  private String colorFilter = "alcohol_involved";
   private VizButton zoomInButton;
   private VizButton zoomOutButton;
 
