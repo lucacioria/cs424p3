@@ -11,7 +11,7 @@ public class DSCrash {
   public int minutes;
   public int day_of_week;
   public String weather;
-  public String alcohol_involved;
+  public int alcohol_involved; // 1,0,-1
   public int[] travel_speed;
   public int[] vehicle_configuration;
   public int[] age;
@@ -29,6 +29,19 @@ public class DSCrash {
   public DSCrash() {
   }
 
+<<<<<<< HEAD
+=======
+  public DSCrash(String weather, String alcohol_involved, String drug_involved, int number_of_fatalities, Float latitude,
+      Float longitude) {
+    this.weather = weather;
+    this.alcohol_involved = alcohol_involved;
+    this.drug_involved = drug_involved;
+    this.number_of_fatalities=number_of_fatalities;
+    this.latitude = latitude;
+    this.longitude = longitude;
+  }
+
+>>>>>>> ebd19ff55fc443de5fb33e8762cf9d2cf2298ac0
   @Override
   public String toString() {
     return _case + "";

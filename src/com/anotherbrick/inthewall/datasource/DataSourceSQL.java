@@ -28,8 +28,8 @@ public class DataSourceSQL {
     ArrayList<DSCrash> crashes = new ArrayList<DSCrash>();
     String query;
     if (sql.connect()) {
-      query = "SELECT _year,_state,_case,number_of_vehicles,number_of_persons,weather,city,county,day,hour,month,crash_related_factor_1,crash_related_factor_2,crash_related_factor_3,time,day_of_week,first_harmful_event,holiday_related,latitude,longitude,light_condition,number_of_fatalities,number_of_travel_lanes,roadway_function_class,roadway_surface_condition,roadway_surface_type,route_signing,speed_limit,trafficway_flow,age,air_bag_availability,alcohol_test_result,injury_severity,person_related_factors_1,person_related_factors_2,person_related_factors_3,person_type,alcohol_involved,alcohol_involved_C_max,drug_involved,race,seating_position,sex,body_type,most_harmful_event,number_of_occupants,travel_speed,vehicle_configuration,vehicle_related_factors_1,vehicle_related_factors_2,driver_related_factors_1,driver_related_factors_2,driver_related_factors_3,driver_related_factors_4 "
-          + " FROM crashess WHERE " + f.getWhereClause();
+      query = "SELECT _year,_state,_case,number_of_vehicles,number_of_persons,weather,city,county,day,hour,month,crash_related_factor_1,crash_related_factor_2,crash_related_factor_3,time,day_of_week,first_harmful_event,holiday_related,latitude,longitude,light_condition,number_of_fatalities,number_of_travel_lanes,roadway_function_class,roadway_surface_condition,roadway_surface_type,route_signing,speed_limit,trafficway_flow,age,air_bag_availability,alcohol_test_result,injury_severity,person_related_factors_1,person_related_factors_2,person_related_factors_3,person_type,alcohol_involved,alcohol_involved_C_max,drug_involved,drug_involved_C_max,race,seating_position,sex,body_type,most_harmful_event,number_of_occupants,travel_speed,vehicle_configuration,vehicle_related_factors_1,vehicle_related_factors_2,driver_related_factors_1,driver_related_factors_2,driver_related_factors_3,driver_related_factors_4 "
+          + " FROM krashes WHERE " + f.getWhereClause();
       sql.query(query);
       createArrayFromQuery(crashes);
       Model.getInstance().crashes = crashes;
@@ -48,7 +48,10 @@ public class DataSourceSQL {
       event.weather = DSFilter.getValueByCode("weather", sql.getInt("weather"));
       event.number_of_fatalities = DSFilter.getIntValue("number_of_fatalities",
           sql.getInt("number_of_fatalities"));
-      event.alcohol_involved = sql.getInt("alcohol_involved_C_max");
+      event.alcohol_involved = DSFilter.getValueByCode("alcohol_involved",
+          sql.getInt("alcohol_involved_C_max"));
+      event.alcohol_involved = DSFilter.getValueByCode("drug_involved",
+          sql.getInt("drug_involved_C_max"));
       array.add(event);
     }
   }
