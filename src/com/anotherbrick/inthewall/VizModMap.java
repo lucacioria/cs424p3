@@ -323,21 +323,38 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   public void updateClusters(){
     clusters.clear();
     int clusterLevel = (int)getWidth()/numberOfClusters;
-    for (int i = 0; i < getWidth(); i++) {
-      for (int j = 0; j < getWidth(); j++) {
-      if (i % clusterLevel == 0 && j % clusterLevel == 0) {
+    for (int i = 0; i < numberOfClusters; i++) {
+      for (int j = 0; j < numberOfClusters; j++) {
+      
         fill(MyColorEnum.RED);
        // ellipse(i+clusterLevel/2,j+clusterLevel/2,20,20);
-        clusters.add(new Cluster(new Point2f(i+clusterLevel/2,j+clusterLevel/2)));
-      }
+        Cluster cluster= new Cluster(new Point2f(clusterLevel/2+clusterLevel*i,clusterLevel/2+clusterLevel*j));
+        cluster.setCount(updateClusterCount(i, j));
+        clusters.add(cluster);
+      
     }}
    
       }
+  public int updateClusterCount(int i, int j){
+    int clusterLevel = (int)getWidth()/numberOfClusters;
+    int count=0;
+    for(DSCrash crash: accidents){
+      float pointX=map.locationPoint(new Location(crash.latitude,crash.longitude)).x;
+      float pointY=map.locationPoint(new Location(crash.latitude,crash.longitude)).y;
+      if(pointX>getX0()+clusterLevel*(i)
+          && pointX<getX0()+clusterLevel*(i+1)
+          && pointY>getY0()+clusterLevel*(j)
+          && pointY<getY0()+clusterLevel*(j+1)){
+        count++;
+      }
+    }
+    return count;
+  }
   
   public void drawClusters(){
     for(Cluster cluster: clusters){
       fill(MyColorEnum.RED);
-      ellipse(cluster.getCenter().x, cluster.getCenter().y, 20, 20);
+      ellipse(cluster.getCenter().x, cluster.getCenter().y, cluster.getCount(), cluster.getCount());
     }
   }
     
