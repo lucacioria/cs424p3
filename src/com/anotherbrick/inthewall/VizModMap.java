@@ -23,7 +23,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private boolean mapTouched;
   long lastTouchTime;
   private VizMapLegend legend;
-  private String colorFilter = "alcohol_involved";
+  private String colorFilter = "weather";
+  private VizButton zoomInButton;
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -42,7 +43,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         mapSize.y);
     float[] Illinois = focusOnState(17);
     map.setCenterZoom(new Location(Illinois[0], Illinois[1]), (int) Illinois[2]);
-    legend = new VizMapLegend(0, getHeight() * 0.8f, getWidth(), getHeight() * 0.2f, this);
+    legend = new VizMapLegend(0, 0, getWidth(), getHeight() * 0.2f, this);
     legend.setColorFilter(colorFilter);
     legend.setup();
 
@@ -59,6 +60,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     accidents.add(accident);
 
     updateCorners();
+    setupZoomButtons();
   }
 
   @Override
@@ -79,6 +81,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
 
     drawClusterGrid();
     legend.draw();
+    zoomInButton.draw();
     popStyle();
 
     return false;
@@ -98,7 +101,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         Point2f center = new Point2f(m.touchX, m.touchY);
         map.setCenter(map.pointLocation(center));
         lastTouchTime = 0;
-
+        updateCorners();
       }
       lastTouchTime = System.currentTimeMillis();
       updateCorners();
@@ -115,15 +118,16 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       Location location = new Location(accident.latitude, accident.longitude);
       Point2f p = map.locationPoint(location);
 
-     // fill(colorBy(colorFilter, accident));
-      fill(MyColorEnum.BLACK,100);
+     fill(colorBy(colorFilter, accident));
+     // fill(MyColorEnum.BLACK,100);
       stroke(MyColorEnum.BLACK);
+      if(location.lon>m.upperLeftLocation.lon){
       ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
 
       if (accident.selected) {
         popUp(accident, p.x - getX0(), p.y - getY0());
       }
-
+      }
     }
   }
 
@@ -336,9 +340,22 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         return legend.getLegendColors().get(2);
       } else if (crash.weather.equals("snow")) {
         return legend.getLegendColors().get(3);
+      }else if (crash.weather.equals("fog") || crash.weather.equals("windy")) {
+        return legend.getLegendColors().get(4);
       }
     }
     return MyColorEnum.BLACK;
+  }
+  
+  public void setupZoomButtons(){
+    zoomInButton = new VizButton(-20, getHeight()/2, 20 , 20, this);
+    zoomInButton.name = "submitFilterBox";
+    zoomInButton.text = "+";
+    zoomInButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
+        255f, 10);
+    zoomInButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
+        255f, 10);
+    addTouchSubscriber(zoomInButton);
   }
 
   @Override
