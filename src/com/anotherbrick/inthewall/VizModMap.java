@@ -25,6 +25,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private VizMapLegend legend;
   private String colorFilter = "number_of_fatalities";
   private VizButton zoomInButton;
+  private VizButton zoomOutButton;
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -82,6 +83,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     drawClusterGrid();
     legend.draw();
     zoomInButton.draw();
+    zoomOutButton.draw();
     popStyle();
 
     return false;
@@ -342,16 +344,15 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         return legend.getLegendColors().get(4);
       }
     } else if(filter.equals("number_of_fatalities")){
-      if (crash.number_of_fatalities==0) {
-        return legend.getLegendColors().get(0);}
-      else if (crash.number_of_fatalities>=1 && crash.number_of_fatalities<=2){
+    
+   if (crash.number_of_fatalities==1){
+        return legend.getLegendColors().get(0);
+      }
+      else if (crash.number_of_fatalities==2){
         return legend.getLegendColors().get(1);
       }
-      else if (crash.number_of_fatalities>=3 && crash.number_of_fatalities<=5){
+      else if (crash.number_of_fatalities>=3){
         return legend.getLegendColors().get(2);
-      }
-      else if (crash.number_of_fatalities>5){
-        return legend.getLegendColors().get(3);
       }
       
     }
@@ -367,6 +368,15 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     zoomInButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
         255f, 10);
     addTouchSubscriber(zoomInButton);
+    
+    zoomOutButton = new VizButton(-20, getHeight() / 2+20, 20, 20, this);
+    zoomOutButton.name = "submitFilterBox";
+    zoomOutButton.text = "-";
+    zoomOutButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
+        255f, 10);
+    zoomOutButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
+        255f, 10);
+    addTouchSubscriber(zoomOutButton);
   }
 
   @Override

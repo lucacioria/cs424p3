@@ -15,7 +15,6 @@ public class DSCrash {
   public int[] travel_speed;
   public int[] vehicle_configuration;
   public int[] age;
-  public int number_of_fatalities;
   public Float latitude;
   public Float longitude;
 

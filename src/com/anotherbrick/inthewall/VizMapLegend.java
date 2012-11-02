@@ -103,18 +103,18 @@ public class VizMapLegend extends VizPanel implements TouchEnabled {
     else if(colorFilter.equals("number_of_fatalities")){
       legendColors.clear();
       labels.clear();
-
-      labels.add("0");
-      legendColors.add(MyColorEnum.LIGHT_GREEN);
-      
-      labels.add("1-2");
+    
+      labels.add("1");
       legendColors.add(MyColorEnum.YELLOW);
       
-      labels.add("3-5");
+      labels.add("2");
       legendColors.add(MyColorEnum.LIGHT_ORANGE);
       
-      labels.add(">5");
+      labels.add("3+");
       legendColors.add(MyColorEnum.RED);
+      
+      labels.add("unknown");
+      legendColors.add(MyColorEnum.BLACK);
     }
 
   }
