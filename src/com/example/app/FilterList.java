@@ -37,7 +37,14 @@ class FilterList extends VizPanel implements TouchEnabled, EventSubscriber {
         row.selectMultiple ? SelectionMode.MULTIPLE : SelectionMode.SINGLE);
     ArrayList<Object> attributeValues = (ArrayList<Object>) (ArrayList<? extends Object>) m.currentFilter
         .getAttributeValues(row.name);
-    list.setSelected(new ArrayList<Object>(attributeValues));
+    if (attributeValues.size() > 0 || row.defaultValue == null) {
+      list.setSelected(new ArrayList<Object>(attributeValues));
+    } else {
+      // set default
+      if (row.defaultValue != null && row.defaultValue.length() > 0) {
+        list.selectElementByString(row.defaultValue);
+      }
+    }
     name = row.name;
     addTouchSubscriber(list);
   }

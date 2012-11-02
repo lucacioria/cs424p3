@@ -2,7 +2,6 @@ package com.anotherbrick.inthewall;
 
 import java.util.ArrayList;
 
-import processing.core.PApplet;
 import processing.core.PVector;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
@@ -12,7 +11,6 @@ import com.modestmaps.InteractiveMap;
 import com.modestmaps.core.Point2f;
 import com.modestmaps.geo.Location;
 import com.modestmaps.providers.Microsoft;
-import com.mysql.jdbc.UpdatableResultSet;
 
 public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber {
   private InteractiveMap map;
@@ -25,9 +23,12 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private VizMapLegend legend;
 
   private String colorFilter = "alcohol_involved";
+<<<<<<< HEAD
 
   private VizButton zoomInButton;
   private VizButton zoomOutButton;
+=======
+>>>>>>> origin/master
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -38,20 +39,30 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   public void setup() {
 
     m.notificationCenter.registerToEvent(EventName.CRASHES_UPDATED, this);
+    m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
 
     mapOffset = new PVector(0, 0);
-    mapSize = new PVector(getWidth(), getHeight());
+    mapSize = new PVector(getWidthZoom(), getHeightZoom());
 
-    map = new InteractiveMap(m.p, new Microsoft.RoadProvider(), getX0(), getY0(), mapSize.x,
-        mapSize.y);
-    float[] Illinois = focusOnState(17);
-    map.setCenterZoom(new Location(Illinois[0], Illinois[1]), (int) Illinois[2]);
+    map = new InteractiveMap(m.p, new Microsoft.RoadProvider(), getX0AbsoluteZoom(),
+        getY0AbsoluteZoom(), mapSize.x, mapSize.y);
+    centerAndZoomOnState(17);
     legend = new VizMapLegend(0, 0, getWidth(), getHeight() * 0.2f, this);
     legend.setColorFilter(colorFilter);
     legend.setup();
 
     updateCorners();
-    setupZoomButtons();
+  }
+
+  private void centerAndZoomOnState(int stateCode) {
+    float[] array = focusOnState(stateCode);
+    int zoom = (int) array[2];
+    if (c.multiply == 2) {
+      zoom += 1;
+    } else if (c.multiply == 6) {
+      zoom += 2;
+    }
+    map.setCenterZoom(new Location(array[0], array[1]), zoom);
   }
 
   @Override
@@ -72,8 +83,6 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
 
     drawClusterGrid();
     legend.draw();
-    zoomInButton.draw();
-    zoomOutButton.draw();
     popStyle();
 
     return false;
@@ -90,7 +99,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       // if double touch, then zoom
       if ((System.currentTimeMillis() - lastTouchTime) < 1000) {
         map.setZoom(map.getZoom() + 1);
-        Point2f center = new Point2f(m.touchX, m.touchY);
+        Point2f center = new Point2f(x * c.multiply, y * c.multiply);
         map.setCenter(map.pointLocation(center));
         lastTouchTime = 0;
         updateCorners();
@@ -109,13 +118,13 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     for (DSCrash accident : accidents) {
       Location location = new Location(accident.latitude, accident.longitude);
       Point2f p = map.locationPoint(location);
-
+      p.x /= c.multiply;
+      p.y /= c.multiply;
       fill(colorBy(colorFilter, accident));
       // fill(MyColorEnum.BLACK,100);
       stroke(MyColorEnum.BLACK);
       if (location.lon > m.upperLeftLocation.lon) {
         ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
-
         if (accident.selected) {
           popUp(accident, p.x - getX0(), p.y - getY0());
         }
@@ -151,8 +160,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   public void manageDrag() {
     if (mapTouched) {
       if (m.touchX != firstTouch.x && m.touchY != firstTouch.y && m.touchX != 0 && m.touchY != 0) {
-        map.tx += (m.touchX - firstTouch.x) / map.sc;
-        map.ty += (m.touchY - firstTouch.y) / map.sc;
+        map.tx += (m.touchX - firstTouch.x) * c.multiply / map.sc;
+        map.ty += (m.touchY - firstTouch.y) * c.multiply / map.sc;
         firstTouch = new PVector(m.touchX, m.touchY);
       }
       updateCorners();
@@ -287,8 +296,9 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   }
 
   public void updateCorners() {
-    m.upperLeftLocation = map.pointLocation(getX0(), getY0());
-    m.lowerRightLocation = map.pointLocation(getX0() + getWidth(), getY0() + getHeight());
+    m.upperLeftLocation = map.pointLocation(getX0AbsoluteZoom(), getY0AbsoluteZoom());
+    m.lowerRightLocation = map.pointLocation(getX0AbsoluteZoom() + getWidthZoom(),
+        getY0AbsoluteZoom() + getHeightZoom());
   }
 
   public void drawClusterGrid() {
@@ -347,34 +357,18 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     return MyColorEnum.BLACK;
   }
 
-  public void setupZoomButtons() {
-    zoomInButton = new VizButton(-20, getHeight() / 2, 20, 20, this);
-    zoomInButton.name = "submitFilterBox";
-    zoomInButton.text = "+";
-    zoomInButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
-        255f, 10);
-    zoomInButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
-        255f, 10);
-    addTouchSubscriber(zoomInButton);
-
-    zoomOutButton = new VizButton(-20, getHeight() / 2 + 20, 20, 20, this);
-    zoomOutButton.name = "submitFilterBox";
-    zoomOutButton.text = "-";
-    zoomOutButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
-        255f, 10);
-    zoomOutButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
-        MyColorEnum.DARK_GRAY, 255f, 10);
-    addTouchSubscriber(zoomOutButton);
-  }
-
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.CRASHES_UPDATED) {
       setAccidents(m.crashes);
-
-      float[] array = focusOnState(m.currentStateCode);
-      map.setCenterZoom(new Location(array[0], array[1]), (int) array[2]);
-
+      centerAndZoomOnState(m.currentStateCode);
+    }
+    if (eventName == EventName.BUTTON_TOUCHED) {
+      if (data.toString().equals("zoomInButton")) {
+        map.setZoom(map.getZoom() + 1);
+      } else if (data.toString().equals("zoomOutButton")) {
+        map.setZoom(map.getZoom() - 1);
+      }
     }
   }
 }

@@ -14,6 +14,8 @@ public class Model {
   public VizNotificationCenter notificationCenter;
   public float touchX;
   public float touchY;
+  public float touchXZoom;
+  public float touchYZoom;
   public TouchEnabled currentModalVizPanel;
   public DataSourceSQL dataSourceSQL;
 

@@ -152,6 +152,8 @@ public class Main extends PApplet {
   private void setTouchXandYinModel() {
     m.touchX = mouseX / c.multiply;
     m.touchY = mouseY / c.multiply;
+    m.touchXZoom = mouseX;
+    m.touchYZoom = mouseY;
   }
 
   @Override
@@ -193,6 +195,8 @@ public class Main extends PApplet {
     }
     m.touchX = xPos / c.multiply;
     m.touchY = yPos / c.multiply;
+    m.touchXZoom = xPos;
+    m.touchYZoom = yPos;
   }
 
   public void touchUp(int ID, float xPos, float yPos, float xWidth, float yWidth) {
