@@ -21,6 +21,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private boolean mapTouched;
   long lastTouchTime;
   private VizMapLegend legend;
+  private int numberOfClusters=2;
+  private ArrayList<Cluster> clusters=new ArrayList<Cluster>();
 
   private String colorFilter = "alcohol_involved";
 
@@ -80,6 +82,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
 
     drawClusterGrid();
     legend.draw();
+    updateClusters();
+    drawClusters();
     popStyle();
 
     return false;
@@ -299,7 +303,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   }
 
   public void drawClusterGrid() {
-    int clusterLevel = 256 / map.getZoom();
+   
+    int clusterLevel = (int)getWidth()/numberOfClusters;
     for (int i = 0; i < getWidth(); i++) {
       if (i % clusterLevel == 0) {
         fill(MyColorEnum.RED);
@@ -314,6 +319,28 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       }
     }
   }
+  
+  public void updateClusters(){
+    clusters.clear();
+    int clusterLevel = (int)getWidth()/numberOfClusters;
+    for (int i = 0; i < getWidth(); i++) {
+      for (int j = 0; j < getWidth(); j++) {
+      if (i % clusterLevel == 0 && j % clusterLevel == 0) {
+        fill(MyColorEnum.RED);
+       // ellipse(i+clusterLevel/2,j+clusterLevel/2,20,20);
+        clusters.add(new Cluster(new Point2f(i+clusterLevel/2,j+clusterLevel/2)));
+      }
+    }}
+   
+      }
+  
+  public void drawClusters(){
+    for(Cluster cluster: clusters){
+      fill(MyColorEnum.RED);
+      ellipse(cluster.getCenter().x, cluster.getCenter().y, 20, 20);
+    }
+  }
+    
 
   public MyColorEnum colorBy(String filter, DSCrash crash) {
     if (filter.equals("alcohol_involved")) {
