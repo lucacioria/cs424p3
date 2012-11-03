@@ -1,5 +1,7 @@
 package com.anotherbrick.inthewall.datasource;
 
+import com.anotherbrick.inthewall.Cluster;
+
 public class DSCrash {
 
   // mandatory attributes
@@ -17,6 +19,8 @@ public class DSCrash {
   public int[] age;
   public Float latitude;
   public Float longitude;
+  
+  public Cluster cluster;
 
   // not mandatory attributes
   public String drug_involved;
@@ -41,6 +45,14 @@ public class DSCrash {
 
   public void setClusterNumber(int clusterNumber) {
     this.clusterNumber = clusterNumber;
+  }
+
+  public Cluster getCluster() {
+    return cluster;
+  }
+
+  public void setCluster(Cluster cluster) {
+    this.cluster = cluster;
   }
 
 }

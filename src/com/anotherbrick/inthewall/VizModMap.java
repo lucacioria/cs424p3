@@ -130,7 +130,11 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       fill(colorBy(colorFilter, accident));
       // fill(MyColorEnum.BLACK,100);
       stroke(MyColorEnum.BLACK);
-      if (location.lon > m.upperLeftLocation.lon) {
+      if (location.lon > m.upperLeftLocation.lon
+          && accident.getCluster()!=null 
+          &&accident.getCluster().getCount()<=1
+          ) {
+        System.out.println(accident.getClusterNumber());
         ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
         if (accident.selected) {
           popUp(accident, p.x - getX0(), p.y - getY0());
@@ -338,20 +342,20 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         fill(MyColorEnum.RED);
        // ellipse(i+clusterLevel/2,j+clusterLevel/2,20,20);
         Cluster cluster= new Cluster(new Point2f(clusterLevel/2+clusterLevel*i,clusterLevel/2+clusterLevel*j));
-        cluster.setCount(updateClusterCount(i, j));
+        cluster.setCount(updateClusterCount(i, j,cluster));
         clusters.add(cluster);
       
     }}
    
       }
-  public int updateClusterCount(int i, int j){
+  public int updateClusterCount(int i, int j, Cluster cluster){
     int clusterLevel = (int)getWidth()/numberOfClusters;
     int count=0;
     for(DSCrash crash: accidents){
       
       int clusterNumber=j+i*(numberOfClusters);
       crash.setClusterNumber(clusterNumber);
-     if(clusterNumber!=99){ System.out.println(clusterNumber);}
+     
       
       float pointX=map.locationPoint(new Location(crash.latitude,crash.longitude)).x;
       float pointY=map.locationPoint(new Location(crash.latitude,crash.longitude)).y;
@@ -360,6 +364,9 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
           && pointY>getY0()+clusterLevel*(j)
           && pointY<getY0()+clusterLevel*(j+1)){
         count++;
+      crash.setCluster(cluster);
+      crash.getCluster().setCount(count);
+        if(count>0){ System.out.println(clusterNumber);}
       }
     }
     return count;

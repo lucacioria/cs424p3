@@ -35,11 +35,11 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
 
   @Override
   public void setup() {
-    // setupMap();
-    // setupFilterBox();
-    // setupMapButtons();
-    // setupBarChart();
-    setupScatterPlot();
+     setupMap();
+     setupFilterBox();
+     setupMapButtons();
+     setupBarChart();
+  //  setupScatterPlot();
     m.notificationCenter.registerToEvent(EventName.CURRENT_FILTER_UPDATED, this);
   }
 
@@ -86,11 +86,11 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   public boolean draw() {
     pushStyle();
     background(MyColorEnum.DARK_BLUE);
-    // map.draw();
-    // filterBox.draw();
-    // mapButtons.draw();
-    // barChart.draw();
-    scatterPlot.draw();
+     map.draw();
+     filterBox.draw();
+     mapButtons.draw();
+     barChart.draw();
+    //scatterPlot.draw();
     popStyle();
     return false;
   }
