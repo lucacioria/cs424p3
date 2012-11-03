@@ -25,11 +25,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private VizMapLegend legend;
   private int numberOfClusters=10;
   private ArrayList<Cluster> clusters=new ArrayList<Cluster>();
-
+private int currentProvider=1;
   private String colorFilter = "alcohol_involved";
-
-  private VizButton zoomInButton;
-  private VizButton zoomOutButton;
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -439,6 +436,13 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         map.setZoom(map.getZoom() + 1);
       } else if (data.toString().equals("zoomOutButton")) {
         map.setZoom(map.getZoom() - 1);
+      }
+      else if(data.toString().equals("changeProviderButton")){
+        if(currentProvider==3){
+          currentProvider=1;}
+        else {currentProvider++;}
+        
+        setProvider(currentProvider);
       }
     }
     updateClusters();

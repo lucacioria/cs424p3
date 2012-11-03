@@ -9,6 +9,7 @@ public class MapButtons extends VizPanel implements TouchEnabled {
 
   private VizButton zoomInButton;
   private VizButton zoomOutButton;
+  private VizButton changeProviderButton;
 
   public MapButtons(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -37,12 +38,22 @@ public class MapButtons extends VizPanel implements TouchEnabled {
     zoomOutButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
         MyColorEnum.DARK_GRAY, 255f, 10);
     addTouchSubscriber(zoomOutButton);
+
+    changeProviderButton = new VizButton(0, 40, 20, 20, this);
+    changeProviderButton.name = "changeProviderButton";
+    changeProviderButton.text = "p";
+    changeProviderButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
+        255f, 255f, 10);
+    changeProviderButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
+        MyColorEnum.DARK_GRAY, 255f, 10);
+    addTouchSubscriber(changeProviderButton);
   }
 
   @Override
   public boolean draw() {
     zoomInButton.draw();
     zoomOutButton.draw();
+    changeProviderButton.draw();
     return false;
   }
 

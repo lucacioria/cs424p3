@@ -65,7 +65,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   }
 
   private void setupMapButtons() {
-    mapButtons = new MapButtons(500, 200, 20, 40, this);
+    mapButtons = new MapButtons(500, 200, 20, 60, this);
     mapButtons.setup();
     addTouchSubscriber(mapButtons);
   }
@@ -89,7 +89,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
      map.draw();
      filterBox.draw();
      mapButtons.draw();
-     barChart.draw();
+    // barChart.draw();
     //scatterPlot.draw();
     popStyle();
     return false;
