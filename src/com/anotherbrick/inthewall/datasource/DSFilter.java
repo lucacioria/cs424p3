@@ -10,9 +10,9 @@ import us.monoid.json.JSONArray;
 import us.monoid.json.JSONException;
 import us.monoid.json.JSONObject;
 
-import com.anotherbrick.inthewall.BarData;
 import com.anotherbrick.inthewall.Config;
 import com.anotherbrick.inthewall.Helper;
+import com.anotherbrick.inthewall.BarChart.BarData;
 
 public class DSFilter {
   public Float latitudeMin;

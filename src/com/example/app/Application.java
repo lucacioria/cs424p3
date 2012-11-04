@@ -3,12 +3,15 @@ package com.example.app;
 import java.util.ArrayList;
 
 import processing.core.PApplet;
+import processing.core.PVector;
 
-import com.anotherbrick.inthewall.BarData;
+import com.anotherbrick.inthewall.BarChart.BarData;
+import com.anotherbrick.inthewall.BarChart.VizBarChart;
+import com.anotherbrick.inthewall.ScatterPlot.ScatterPlotData;
+import com.anotherbrick.inthewall.ScatterPlot.VizScatterPlot;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
-import com.anotherbrick.inthewall.VizBarChart;
 import com.anotherbrick.inthewall.VizModMap;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
@@ -23,6 +26,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   private FilterBox filterBox;
   private MapButtons mapButtons;
   private BarChart barChart;
+  private VizScatterPlot scatterPlot;
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -31,11 +35,27 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
 
   @Override
   public void setup() {
-    setupMap();
-    setupFilterBox();
-    setupMapButtons();
-    setupBarChart();
+    // setupMap();
+    // setupFilterBox();
+    // setupMapButtons();
+    // setupBarChart();
+    setupScatterPlot();
     m.notificationCenter.registerToEvent(EventName.CURRENT_FILTER_UPDATED, this);
+  }
+
+  private void setupScatterPlot() {
+    scatterPlot = new VizScatterPlot(100, 50, 300, 300, this);
+    ScatterPlotData data = new ScatterPlotData();
+    ArrayList<PVector> points = new ArrayList<PVector>();
+    for (int i = 0; i < 100; i++) {
+      points.add(new PVector(m.p.random(30, 120), m.p.random(50, 600)));
+    }
+    data.setPoints(points);
+    data.title = "Thou shan't scatter!";
+    scatterPlot.data = data;
+    scatterPlot.pointRadius = 5;
+    scatterPlot.setup();
+    addTouchSubscriber(scatterPlot);
   }
 
   private void setupBarChart() {
@@ -66,10 +86,11 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   public boolean draw() {
     pushStyle();
     background(MyColorEnum.DARK_BLUE);
-    map.draw();
-    filterBox.draw();
-    mapButtons.draw();
-    barChart.draw();
+    // map.draw();
+    // filterBox.draw();
+    // mapButtons.draw();
+    // barChart.draw();
+    scatterPlot.draw();
     popStyle();
     return false;
   }

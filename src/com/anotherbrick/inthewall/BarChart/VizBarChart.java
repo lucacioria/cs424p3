@@ -1,10 +1,14 @@
-package com.anotherbrick.inthewall;
+package com.anotherbrick.inthewall.BarChart;
 
 import java.util.ArrayList;
 
 import processing.core.PApplet;
 
+import com.anotherbrick.inthewall.Config;
+import com.anotherbrick.inthewall.TouchEnabled;
+import com.anotherbrick.inthewall.VizPanel;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
 
 public class VizBarChart extends VizPanel implements TouchEnabled {
 

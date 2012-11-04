@@ -1,4 +1,4 @@
-package com.anotherbrick.inthewall;
+package com.anotherbrick.inthewall.BarChart;
 
 public class BarData {
   public String label;

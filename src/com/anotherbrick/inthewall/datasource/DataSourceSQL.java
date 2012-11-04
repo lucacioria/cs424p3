@@ -2,8 +2,8 @@ package com.anotherbrick.inthewall.datasource;
 
 import java.util.ArrayList;
 
-import com.anotherbrick.inthewall.BarData;
 import com.anotherbrick.inthewall.Model;
+import com.anotherbrick.inthewall.BarChart.BarData;
 
 import processing.core.PApplet;
 import de.bezier.data.sql.MySQL;
