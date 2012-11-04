@@ -1,6 +1,7 @@
 package com.anotherbrick.inthewall;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 import com.anotherbrick.inthewall.BarChart.BarData;
 import com.anotherbrick.inthewall.datasource.DSCrash;
@@ -26,8 +27,11 @@ public class Model {
   public DSFilter currentFilter = new DSFilter();
   public ArrayList<DSCrash> crashes = null;
   public int currentStateCode;
-  public String currentGroupField;
-  public ArrayList<BarData> crashesCountForBarchart;
+  public String currentGroupField1;
+  public String currentGroupField2;
+  public ArrayList<BarData> crashesCountForBarchart1;
+  public ArrayList<BarData> crashesCountForBarchart2;
+  public HashMap<String, ArrayList<? extends Object>> selectorPanelsState = new HashMap<String, ArrayList<? extends Object>>();
 
   public static void setup(Main p, DataSourceSQL dataSourceSQL,
       VizNotificationCenter notificationCenter) {

@@ -47,7 +47,7 @@ public class DataSourceSQL {
     }
   }
 
-  public void getCrashesCountBy(DSFilter f, String groupField) {
+  public void getCrashesCountBy(DSFilter f, String groupField, int barChartNumber) {
     ArrayList<BarData> crashesCountForBarchart = new ArrayList<BarData>();
     String query;
     if (sql.connect()) {
@@ -60,9 +60,15 @@ public class DataSourceSQL {
         barData.label = sql.getString("label");
         crashesCountForBarchart.add(barData);
       }
-      Model.getInstance().crashesCountForBarchart = DSFilter.adaptCountByToLabels(
-          crashesCountForBarchart, groupField);
-      Model.getInstance().currentGroupField = groupField;
+      if (barChartNumber == 1) {
+        Model.getInstance().crashesCountForBarchart1 = DSFilter.adaptCountByToLabels(
+            crashesCountForBarchart, groupField);
+        Model.getInstance().currentGroupField1 = groupField;
+      } else {
+        Model.getInstance().crashesCountForBarchart2 = DSFilter.adaptCountByToLabels(
+            crashesCountForBarchart, groupField);
+        Model.getInstance().currentGroupField2 = groupField;
+      }
     }
   }
 
