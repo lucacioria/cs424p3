@@ -24,6 +24,7 @@ public class DSCrash {
   public int number_of_fatalities;
 
   public Float dimension;
+  public int clusterNumber;
   public boolean selected = false;
 
   public DSCrash() {
@@ -32,6 +33,14 @@ public class DSCrash {
   @Override
   public String toString() {
     return _case + "";
+  }
+
+  public int getClusterNumber() {
+    return clusterNumber;
+  }
+
+  public void setClusterNumber(int clusterNumber) {
+    this.clusterNumber = clusterNumber;
   }
 
 }

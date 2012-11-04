@@ -170,9 +170,11 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         map.tx += (m.touchX - firstTouch.x) * c.multiply / map.sc;
         map.ty += (m.touchY - firstTouch.y) * c.multiply / map.sc;
         firstTouch = new PVector(m.touchX, m.touchY);
+     
+        updateCorners();
+        updateClusters();
       }
-      updateCorners();
-      updateClusters();
+    
     }
   }
 
@@ -346,6 +348,11 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     int clusterLevel = (int)getWidth()/numberOfClusters;
     int count=0;
     for(DSCrash crash: accidents){
+      
+      int clusterNumber=j+i*(numberOfClusters);
+      crash.setClusterNumber(clusterNumber);
+     if(clusterNumber!=99){ System.out.println(clusterNumber);}
+      
       float pointX=map.locationPoint(new Location(crash.latitude,crash.longitude)).x;
       float pointY=map.locationPoint(new Location(crash.latitude,crash.longitude)).y;
       if(pointX>getX0()+clusterLevel*(i)
@@ -363,7 +370,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     for(Cluster cluster: clusters){
       fill(MyColorEnum.DARKER_BLUE);
       if(cluster.getCount()>1){
-      float dimension =PApplet.map(cluster.getCount(),0,50,0,clusterLevel);
+      float dimension =PApplet.map(cluster.getCount(),0,50,20,clusterLevel);
       if(dimension>clusterLevel*0.9){dimension=clusterLevel*0.9f;}
       ellipse(cluster.getCenter().x, cluster.getCenter().y, dimension, dimension);
       fill(MyColorEnum.WHITE);
