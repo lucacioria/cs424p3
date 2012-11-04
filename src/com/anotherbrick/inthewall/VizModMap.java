@@ -23,9 +23,9 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private boolean mapTouched;
   long lastTouchTime;
   private VizMapLegend legend;
-  private int numberOfClusters=10;
-  private ArrayList<Cluster> clusters=new ArrayList<Cluster>();
-private int currentProvider=1;
+  private int numberOfClusters = 10;
+  private ArrayList<Cluster> clusters = new ArrayList<Cluster>();
+  private int currentProvider = 1;
   private String colorFilter = "alcohol_involved";
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
@@ -83,8 +83,7 @@ private int currentProvider=1;
     drawClusterGrid();
     drawClusters();
     legend.draw();
-    
-    
+
     popStyle();
 
     return false;
@@ -94,7 +93,7 @@ private int currentProvider=1;
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
     if (down) {
 
-      // manageAccidentPopup();
+      manageAccidentPopup();
 
       firstTouch = new PVector(x, y);
       mapTouched = true;
@@ -106,6 +105,7 @@ private int currentProvider=1;
         lastTouchTime = 0;
         updateCorners();
         updateClusters();
+
       }
       lastTouchTime = System.currentTimeMillis();
       updateCorners();
@@ -127,15 +127,19 @@ private int currentProvider=1;
       fill(colorBy(colorFilter, accident));
       // fill(MyColorEnum.BLACK,100);
       stroke(MyColorEnum.BLACK);
-      if (location.lon > m.upperLeftLocation.lon
-          && accident.getCluster()!=null 
-          &&accident.getCluster().getCount()<=1
-          ) {
-        System.out.println(accident.getClusterNumber());
-        ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
-        if (accident.selected) {
-          popUp(accident, p.x - getX0(), p.y - getY0());
+      if (location.lon > m.upperLeftLocation.lon) {
+        accident.setVisibleOnMap(true);
+        if (accident.getCluster() != null && accident.getCluster().getCount() <= 1) {
+          System.out.println(accident.getClusterNumber());
+          ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
+
+          if (accident.selected) {
+            System.out.println("qua");
+            popUp(accident, p.x - getX0(), p.y - getY0());
+          }
         }
+      } else {
+        accident.setVisibleOnMap(false);
       }
     }
   }
@@ -154,13 +158,14 @@ private int currentProvider=1;
 
   public void manageAccidentPopup() {
     for (DSCrash accident : accidents) {
+      if (accident.isVisibleOnMap()) {
+        float ics = (map.locationPoint(new Location(accident.latitude, accident.longitude))).x;
+        float ips = (map.locationPoint(new Location(accident.latitude, accident.longitude))).y;
 
-      float ics = (map.locationPoint(new Location(accident.latitude, accident.longitude))).x;
-      float ips = (map.locationPoint(new Location(accident.latitude, accident.longitude))).y;
-
-      if (dist(m.touchX, m.touchY, ics, ips) < accident.dimension) {
-        accident.selected = !accident.selected;
-        break;
+        if (dist(m.touchX, m.touchY, ics, ips) < accident.dimension) {
+          accident.selected = !accident.selected;
+          break;
+        }
       }
     }
   }
@@ -171,11 +176,11 @@ private int currentProvider=1;
         map.tx += (m.touchX - firstTouch.x) * c.multiply / map.sc;
         map.ty += (m.touchY - firstTouch.y) * c.multiply / map.sc;
         firstTouch = new PVector(m.touchX, m.touchY);
-     
+
         updateCorners();
         updateClusters();
       }
-    
+
     }
   }
 
@@ -313,8 +318,8 @@ private int currentProvider=1;
   }
 
   public void drawClusterGrid() {
-   
-    int clusterLevel = (int)getWidth()/numberOfClusters;
+
+    int clusterLevel = (int) getWidth() / numberOfClusters;
     for (int i = 0; i < getWidth(); i++) {
       if (i % clusterLevel == 0) {
         fill(MyColorEnum.RED);
@@ -329,62 +334,67 @@ private int currentProvider=1;
       }
     }
   }
-  
-  public void updateClusters(){
+
+  public void updateClusters() {
     clusters.clear();
-    int clusterLevel = (int)getWidth()/numberOfClusters;
+    int clusterLevel = (int) getWidth() / numberOfClusters;
     for (int i = 0; i < numberOfClusters; i++) {
       for (int j = 0; j < numberOfClusters; j++) {
-      
+
         fill(MyColorEnum.RED);
-       // ellipse(i+clusterLevel/2,j+clusterLevel/2,20,20);
-        Cluster cluster= new Cluster(new Point2f(clusterLevel/2+clusterLevel*i,clusterLevel/2+clusterLevel*j));
-        cluster.setCount(updateClusterCount(i, j,cluster));
+        // ellipse(i+clusterLevel/2,j+clusterLevel/2,20,20);
+        Cluster cluster = new Cluster(new Point2f(clusterLevel / 2 + clusterLevel * i, clusterLevel
+            / 2 + clusterLevel * j));
+        cluster.setCount(updateClusterCount(i, j, cluster));
         clusters.add(cluster);
-      
-    }}
-   
+
       }
-  public int updateClusterCount(int i, int j, Cluster cluster){
-    int clusterLevel = (int)getWidth()/numberOfClusters;
-    int count=0;
-    for(DSCrash crash: accidents){
-      
-      int clusterNumber=j+i*(numberOfClusters);
-      crash.setClusterNumber(clusterNumber);
-     
-      
-      float pointX=map.locationPoint(new Location(crash.latitude,crash.longitude)).x;
-      float pointY=map.locationPoint(new Location(crash.latitude,crash.longitude)).y;
-      if(pointX>getX0()+clusterLevel*(i)
-          && pointX<getX0()+clusterLevel*(i+1)
-          && pointY>getY0()+clusterLevel*(j)
-          && pointY<getY0()+clusterLevel*(j+1)){
-        count++;
-      crash.setCluster(cluster);
-      crash.getCluster().setCount(count);
-        if(count>0){ System.out.println(clusterNumber);}
+    }
+
+  }
+
+  public int updateClusterCount(int i, int j, Cluster cluster) {
+    int clusterLevel = (int) getWidth() / numberOfClusters;
+    int count = 0;
+    for (DSCrash crash : accidents) {
+      if (crash.isVisibleOnMap()) {
+        int clusterNumber = j + i * (numberOfClusters);
+        crash.setClusterNumber(clusterNumber);
+
+        float pointX = map.locationPoint(new Location(crash.latitude, crash.longitude)).x;
+        float pointY = map.locationPoint(new Location(crash.latitude, crash.longitude)).y;
+        if (pointX > getX0() + clusterLevel * (i) && pointX < getX0() + clusterLevel * (i + 1)
+            && pointY > getY0() + clusterLevel * (j) && pointY < getY0() + clusterLevel * (j + 1)) {
+          count++;
+          crash.setCluster(cluster);
+          crash.getCluster().setCount(count);
+          if (count > 0) {
+            System.out.println(clusterNumber);
+          }
+        }
       }
     }
     return count;
   }
-  
-  public void drawClusters(){
-    int clusterLevel = (int)getWidth()/numberOfClusters;
-    for(Cluster cluster: clusters){
+
+  public void drawClusters() {
+    int clusterLevel = (int) getWidth() / numberOfClusters;
+    for (Cluster cluster : clusters) {
       fill(MyColorEnum.DARKER_BLUE);
-      if(cluster.getCount()>1){
-      float dimension =PApplet.map(cluster.getCount(),0,50,20,clusterLevel);
-      if(dimension>clusterLevel*0.9){dimension=clusterLevel*0.9f;}
-      ellipse(cluster.getCenter().x, cluster.getCenter().y, dimension, dimension);
-      fill(MyColorEnum.WHITE);
-      textSize(10);
-      textAlign(PConstants.CENTER, PConstants.CENTER);
-      text(cluster.getCount()+"",cluster.getCenter().x,cluster.getCenter().y);
-    }}
-    
+      if (cluster.getCount() > 1) {
+        float dimension = PApplet.map(cluster.getCount(), 0, 50, 20, clusterLevel);
+        if (dimension > clusterLevel * 0.9) {
+          dimension = clusterLevel * 0.9f;
+        }
+        ellipse(cluster.getCenter().x, cluster.getCenter().y, dimension, dimension);
+        fill(MyColorEnum.WHITE);
+        textSize(10);
+        textAlign(PConstants.CENTER, PConstants.CENTER);
+        text(cluster.getCount() + "", cluster.getCenter().x, cluster.getCenter().y);
+      }
+    }
+
   }
-    
 
   public MyColorEnum colorBy(String filter, DSCrash crash) {
     if (filter.equals("alcohol_involved")) {
@@ -436,16 +446,18 @@ private int currentProvider=1;
         map.setZoom(map.getZoom() + 1);
       } else if (data.toString().equals("zoomOutButton")) {
         map.setZoom(map.getZoom() - 1);
-      }
-      else if(data.toString().equals("changeProviderButton")){
-        if(currentProvider==3){
-          currentProvider=1;}
-        else {currentProvider++;}
-        
+      } else if (data.toString().equals("changeProviderButton")) {
+        if (currentProvider == 3) {
+          currentProvider = 1;
+        } else {
+          currentProvider++;
+        }
+
         setProvider(currentProvider);
       }
+      updateClusters();
     }
-    updateClusters();
+
     updateCorners();
   }
 }

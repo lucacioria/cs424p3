@@ -20,6 +20,7 @@ public class DSCrash {
   public Float latitude;
   public Float longitude;
   
+  public boolean visibleOnMap=true;
   public Cluster cluster;
 
   // not mandatory attributes
@@ -27,7 +28,7 @@ public class DSCrash {
   public String roadway_surface_condition;
   public int number_of_fatalities;
 
-  public Float dimension;
+  public Float dimension=15f;
   public int clusterNumber;
   public boolean selected = false;
 
@@ -53,6 +54,14 @@ public class DSCrash {
 
   public void setCluster(Cluster cluster) {
     this.cluster = cluster;
+  }
+
+  public boolean isVisibleOnMap() {
+    return visibleOnMap;
+  }
+
+  public void setVisibleOnMap(boolean visibleOnMap) {
+    this.visibleOnMap = visibleOnMap;
   }
 
 }
