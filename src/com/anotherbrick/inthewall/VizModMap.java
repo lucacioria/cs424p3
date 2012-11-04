@@ -80,7 +80,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     rect(mapOffset.x, mapOffset.y, mapSize.x, mapSize.y);
     drawAccidents(accidents);
 
-    drawClusterGrid();
+    //drawClusterGrid();
     drawClusters();
     legend.draw();
 
@@ -130,11 +130,9 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       if (location.lon > m.upperLeftLocation.lon) {
         accident.setVisibleOnMap(true);
         if (accident.getCluster() != null && accident.getCluster().getCount() <= 1) {
-          System.out.println(accident.getClusterNumber());
           ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
 
           if (accident.selected) {
-            System.out.println("qua");
             popUp(accident, p.x - getX0(), p.y - getY0());
           }
         }
@@ -345,8 +343,9 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         // ellipse(i+clusterLevel/2,j+clusterLevel/2,20,20);
         Cluster cluster = new Cluster(new Point2f(clusterLevel / 2 + clusterLevel * i, clusterLevel
             / 2 + clusterLevel * j));
-        cluster.setCount(updateClusterCount(i, j, cluster));
         clusters.add(cluster);
+        clusters.get(clusters.size()-1).setCount(updateClusterCount(i, j, cluster));
+       
 
       }
     }
@@ -354,11 +353,22 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   }
 
   public int updateClusterCount(int i, int j, Cluster cluster) {
+   // float[]counters={0,0,0};
+    
     int clusterLevel = (int) getWidth() / numberOfClusters;
     int count = 0;
+    int clusterNumber = j + i * (numberOfClusters);
+    //attenzione al 3
+    cluster.counters.clear();
+    for(int w=0;w<3;w++){
+      cluster.counters.add(0f);
+    }
+    clusters.get(clusterNumber).percentages.clear();
+    for(int w=0;w<3;w++){
+      clusters.get(clusterNumber).percentages.add(0f);
+    }
     for (DSCrash crash : accidents) {
       if (crash.isVisibleOnMap()) {
-        int clusterNumber = j + i * (numberOfClusters);
         crash.setClusterNumber(clusterNumber);
 
         float pointX = map.locationPoint(new Location(crash.latitude, crash.longitude)).x;
@@ -366,14 +376,32 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         if (pointX > getX0() + clusterLevel * (i) && pointX < getX0() + clusterLevel * (i + 1)
             && pointY > getY0() + clusterLevel * (j) && pointY < getY0() + clusterLevel * (j + 1)) {
           count++;
+         
+   
+          if(crash.getAlcohol_involved().equals("no")){
+      clusters.get(clusterNumber).counters.set(0, clusters.get(clusterNumber).counters.get(0)+1);
+          }
+          else if(crash.getAlcohol_involved().equals("yes")){
+           clusters.get(clusterNumber).counters.set(1, clusters.get(clusterNumber).counters.get(1)+1);
+          }
+          else{
+          clusters.get(clusterNumber).counters.set(2, clusters.get(clusterNumber).counters.get(2)+1);
+          }
+          
+          
+         
+          
+          
           crash.setCluster(cluster);
           crash.getCluster().setCount(count);
           if (count > 0) {
-            System.out.println(clusterNumber);
           }
         }
       }
+
+      
     }
+    clusters.get(clusterNumber).countToPerc();
     return count;
   }
 
@@ -387,7 +415,10 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
           dimension = clusterLevel * 0.9f;
         }
        // ellipse(cluster.getCenter().x, cluster.getCenter().y, dimension, dimension);
-        drawPieChart(new float[]{0.8f, 0.2f}, legend.getLegendColors(),dimension, cluster.getCenter().x, cluster.getCenter().y);
+        ArrayList<Float> perc = new ArrayList<Float>();
+        perc.add(0.8f);
+        perc.add(0.2f);
+        drawPieChart(cluster.getPercentages(), legend.getLegendColors(),dimension, cluster.getCenter().x, cluster.getCenter().y);
         fill(MyColorEnum.WHITE);
         textSize(10);
         textAlign(PConstants.CENTER, PConstants.CENTER);
@@ -466,16 +497,16 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   }
   
   
-  public void drawPieChart(float[] percentagess, ArrayList<MyColorEnum> colorss, float diameterr, float x, float y){
+  public void drawPieChart(ArrayList<Float> percentagess, ArrayList<MyColorEnum> colorss, float diameterr, float x, float y){
 
     ArrayList<Float> angles=new ArrayList<Float>();
    float centerX=x;
   float centerY=y;
- float[] percentages=percentagess;
+  ArrayList<Float> percentages=percentagess;
  float lastAngle=0;
  
-  for(int i=0;i<percentages.length;i++){
-angles.add(percentages[i]*360);}
+  for(int i=0;i<percentages.size();i++){
+angles.add(percentages.get(i)*360);}
 float diameter=diameterr;
 ArrayList<MyColorEnum> colors=colorss;
 

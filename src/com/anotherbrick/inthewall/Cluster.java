@@ -11,7 +11,8 @@ private int count=0;
 private Point2f center;
 public ArrayList<DSCrash> accidents;
 //pie chart stuff
-private float[] percentages;
+public  ArrayList<Float> counters=new  ArrayList<Float>();
+public ArrayList<Float> percentages=new  ArrayList<Float>();;
 private ArrayList<Float> angles;
 private MyColorEnum colors;
 private float lastAngle=0;
@@ -36,5 +37,22 @@ public Point2f getCenter() {
 }
 public void setCenter(Point2f center) {
   this.center = center;
+}
+public void countToPerc(){
+percentages.clear();
+  float sum=0;
+  
+  for(int i=0;i<counters.size();i++){
+    sum=sum+counters.get(i);
+  }
+  for(int i=0;i<counters.size();i++){
+    percentages.add(counters.get(i)/sum);
+  }
+}
+public ArrayList<Float> getPercentages() {
+  return percentages;
+}
+public void setPercentages(ArrayList<Float> percentages) {
+  this.percentages = percentages;
 }
 }

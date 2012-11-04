@@ -64,4 +64,15 @@ public class DSCrash {
     this.visibleOnMap = visibleOnMap;
   }
 
-}
+  public String getAlcohol_involved() {
+    return alcohol_involved;
+  }
+
+  public void setAlcohol_involved(String alcohol_involved) {
+    this.alcohol_involved = alcohol_involved;
+  }
+  
+
+  }
+
+
