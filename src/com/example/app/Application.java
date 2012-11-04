@@ -212,4 +212,5 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
       }
     }
   }
+
 }
