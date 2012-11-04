@@ -106,4 +106,5 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
       m.notificationCenter.notifyEvent(EventName.CRASHES_COUNT_BY_VALUE_UPDATED);
     }
   }
+
 }

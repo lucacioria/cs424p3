@@ -386,7 +386,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         if (dimension > clusterLevel * 0.9) {
           dimension = clusterLevel * 0.9f;
         }
-        ellipse(cluster.getCenter().x, cluster.getCenter().y, dimension, dimension);
+       // ellipse(cluster.getCenter().x, cluster.getCenter().y, dimension, dimension);
+        drawPieChart(new float[]{0.8f, 0.2f}, legend.getLegendColors(),dimension, cluster.getCenter().x, cluster.getCenter().y);
         fill(MyColorEnum.WHITE);
         textSize(10);
         textAlign(PConstants.CENTER, PConstants.CENTER);
@@ -440,6 +441,9 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     if (eventName == EventName.CRASHES_UPDATED) {
       setAccidents(m.crashes);
       centerAndZoomOnState(m.currentStateCode);
+      updateCorners();
+      updateClusters();
+  
     }
     if (eventName == EventName.BUTTON_TOUCHED) {
       if (data.toString().equals("zoomInButton")) {
@@ -460,4 +464,27 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
 
     updateCorners();
   }
+  
+  
+  public void drawPieChart(float[] percentagess, ArrayList<MyColorEnum> colorss, float diameterr, float x, float y){
+
+    ArrayList<Float> angles=new ArrayList<Float>();
+   float centerX=x;
+  float centerY=y;
+ float[] percentages=percentagess;
+ float lastAngle=0;
+ 
+  for(int i=0;i<percentages.length;i++){
+angles.add(percentages[i]*360);}
+float diameter=diameterr;
+ArrayList<MyColorEnum> colors=colorss;
+
+for(int i=0;i<angles.size();i++){
+fill(colors.get(i));
+arc(centerX,centerY,diameter,diameter,lastAngle,lastAngle+radians(angles.get(i)));
+
+lastAngle += radians(angles.get(i));
+}
+}
+  
 }
