@@ -45,7 +45,7 @@ public class VizBar extends VizPanel implements TouchEnabled {
     fill(textColor);
     textSize(8);
     textAlign(PApplet.CENTER, PApplet.TOP);
-    text(DSFilter.clearLabel(barData.label), xLeft + (xRight - xLeft) / 2, yBottom + 3);
+    text(DSFilter.getClearLabel(barData.label), xLeft + (xRight - xLeft) / 2, yBottom + 3);
     //
     popStyle();
     return false;

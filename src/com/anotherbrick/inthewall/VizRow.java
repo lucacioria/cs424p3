@@ -45,7 +45,7 @@ public class VizRow extends VizPanel {
     fill(MyColorEnum.WHITE);
     textAlign(PApplet.LEFT, PApplet.CENTER);
     // SCHIFEZZA PER PROGETTO 3 ATTENZIONE!!
-    String nomePulito = DSFilter.clearLabel(name);
+    String nomePulito = DSFilter.getClearLabel(name);
     text(
         cropAtNChars != -1 ? Helper.limitStringLength(nomePulito, cropAtNChars, true) : nomePulito,
         10, getHeight() / 2);

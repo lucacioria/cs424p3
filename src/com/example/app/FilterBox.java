@@ -67,7 +67,6 @@ public class FilterBox extends VizPanel implements TouchEnabled, EventSubscriber
   @Override
   public boolean draw() {
     pushStyle();
-    background(MyColorEnum.RED);
     for (FilterRow row : filterRows) {
       row.draw();
     }

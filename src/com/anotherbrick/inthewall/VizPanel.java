@@ -216,6 +216,22 @@ public abstract class VizPanel {
     return x0 - parent.x0;
   }
 
+  public float getX1() {
+    return getX0() + getWidth();
+  }
+
+  public float getY1() {
+    return getY0() + getHeight();
+  }
+
+  public float getX1Absolute() {
+    return getX0Absolute() + getWidth();
+  }
+
+  public float getY1Absolute() {
+    return getY0Absolute() + getHeight();
+  }
+
   public float getX0Absolute() {
     return x0;
   }

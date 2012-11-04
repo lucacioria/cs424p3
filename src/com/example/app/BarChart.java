@@ -11,6 +11,7 @@ import com.anotherbrick.inthewall.VizPanel;
 public class BarChart extends VizPanel implements TouchEnabled, EventSubscriber {
 
   private VizBarChart barChart;
+  public int barChartNumber;
 
   public BarChart(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -24,13 +25,19 @@ public class BarChart extends VizPanel implements TouchEnabled, EventSubscriber 
 
   private void setupBarChart() {
     barChart = new VizBarChart(0, 0, getWidth(), getHeight(), this);
-    barChart.data = m.crashesCountForBarchart;
-    barChart.title = DSFilter.getLabelByName(m.currentGroupField);
+    if (barChartNumber == 1) {
+      barChart.data = m.crashesCountForBarchart1;
+      barChart.title = DSFilter.getLabelByName(m.currentGroupField1);
+    } else if (barChartNumber == 2) {
+      barChart.data = m.crashesCountForBarchart2;
+      barChart.title = DSFilter.getLabelByName(m.currentGroupField2);
+    }
   }
 
   @Override
   public boolean draw() {
     pushStyle();
+    background(MyColorEnum.LIGHT_ORANGE);
     if (barChart.title == null) {
       pushStyle();
       background(MyColorEnum.LIGHT_GREEN);
@@ -48,9 +55,15 @@ public class BarChart extends VizPanel implements TouchEnabled, EventSubscriber 
   @Override
   public void eventReceived(EventName eventName, Object data) {
     if (eventName == EventName.CRASHES_COUNT_BY_VALUE_UPDATED) {
-      barChart.data = m.crashesCountForBarchart;
-      barChart.title = m.currentGroupField;
-      barChart.setup();
+      if (barChartNumber == 1 && data.toString().equals("barChart1")) {
+        barChart.data = m.crashesCountForBarchart1;
+        barChart.title = m.currentGroupField1;
+        barChart.setup();
+      } else if (barChartNumber == 2 && data.toString().equals("barChart2")) {
+        barChart.data = m.crashesCountForBarchart2;
+        barChart.title = m.currentGroupField2;
+        barChart.setup();
+      }
     }
   }
 
