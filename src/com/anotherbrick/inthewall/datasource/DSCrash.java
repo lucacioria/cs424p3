@@ -10,13 +10,12 @@ public class DSCrash {
   public int _year;
   public int month;
   public int hour;
+  public String hour_range;
   public int minutes;
   public String day_of_week;
   public String weather;
   public String alcohol_involved;
-  public int[] travel_speed;
   public int[] vehicle_configuration;
-  public int[] age;
   public Float latitude;
   public Float longitude;
 
@@ -27,6 +26,11 @@ public class DSCrash {
   public String drug_involved;
   public String roadway_surface_condition;
   public int number_of_fatalities;
+  public int alcohol_test_result;
+  public int travel_speed;
+  public String travel_speed_range;
+  public int age;
+  public String age_range;
 
   public Float dimension = 15f;
   public boolean selected = false;
