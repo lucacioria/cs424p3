@@ -434,7 +434,11 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         }
         drawPieChart(cluster.getPercentages(), legend.getLegendColors(), dimension,
             cluster.getCenter().x, cluster.getCenter().y);
-        fill(MyColorEnum.WHITE);
+        if(colorFilter.equals("weather")){
+          fill(MyColorEnum.BLACK);
+        }
+        else{
+        fill(MyColorEnum.WHITE);}
         textSize(10);
         textAlign(PConstants.CENTER, PConstants.CENTER);
         text(cluster.getCount() + "", cluster.getCenter().x, cluster.getCenter().y);
