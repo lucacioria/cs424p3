@@ -26,7 +26,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private int numberOfClusters = 10;
   private ArrayList<Cluster> clusters = new ArrayList<Cluster>();
   private int currentProvider = 1;
-  private String colorFilter = "number_of_fatalities";
+  private String colorFilter = "alcohol_involved";
   private int clusterLevel;
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
@@ -93,9 +93,10 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       mapTouched = true;
       // if double touch, then zoom
       if ((System.currentTimeMillis() - lastTouchTime) < 1000) {
-        map.setZoom(map.getZoom() + 1);
+        
         Point2f center = new Point2f(x * c.multiply, y * c.multiply);
-        map.setCenter(map.pointLocation(center));
+        map.setCenterZoom(map.pointLocation(center), map.getZoom()+1);
+      //  map.setCenter(map.pointLocation(center));
         lastTouchTime = 0;
         updateCorners();
         updateClusters();
@@ -384,10 +385,21 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
           // inizio porcate
           if (colorFilter.equals("drug_involved")) {
             checker = crash.drug_involved;
-          } else if (colorFilter.equals("drug_involved")) {
+          } else if (colorFilter.equals("alcohol_involved")) {
             checker = crash.alcohol_involved;
           } else if (colorFilter.equals("weather")) {
-            checker = crash.weather;
+            if(crash.weather.equals("1_sunny"))
+                checker="Sunny";
+            else if(crash.weather.equals("2_rainy")||crash.weather.equals("3_hail"))
+              checker="Rainy / Hail";
+            else if(crash.weather.equals("4_snow"))
+              checker="Snow";
+            else if(crash.weather.equals("5_fog")||crash.weather.equals("6_windy"))
+              checker="Foggy / Windy";
+            else if(crash.weather.equals("7_cloudy"))
+              checker="Cloudy";
+            else if(crash.weather.equals("8_unknown"))
+              checker="Unknown";
           } else if (colorFilter.equals("number_of_fatalities")) {
             if (crash.number_of_fatalities == 1)
               checker = "1";

@@ -67,22 +67,22 @@ public class VizMapLegend extends VizPanel implements TouchEnabled {
       legendColors.clear();
       labels.clear();
 
-      labels.add("1_sunny");
+      labels.add("Sunny");
       legendColors.add(MyColorEnum.YELLOW);
 
-      labels.add("7_cloudy");
+      labels.add("Cloudy");
       legendColors.add(MyColorEnum.LIGHT_BLUE);
 
-      labels.add("2_rainy");
+      labels.add("Rainy / Hail");
       legendColors.add(MyColorEnum.DARK_BLUE);
 
-      labels.add("4_snow");
+      labels.add("Snow");
       legendColors.add(MyColorEnum.WHITE);
 
-      labels.add("5_fog");
+      labels.add("Foggy / Windy");
       legendColors.add(MyColorEnum.LIGHT_GRAY);
 
-      labels.add("8_unknown");
+      labels.add("Unknown");
       legendColors.add(MyColorEnum.BLACK);
     }
 
