@@ -39,6 +39,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
 
     m.notificationCenter.registerToEvent(EventName.CRASHES_UPDATED, this);
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
+    m.notificationCenter.registerToEvent(EventName.CHANGED_MAP_COLOR_ATTRIBUTE, this);
 
     mapOffset = new PVector(0, 0);
     mapSize = new PVector(getWidthZoom(), getHeightZoom());
@@ -46,14 +47,18 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     map = new InteractiveMap(m.p, new Microsoft.RoadProvider(), getX0AbsoluteZoom(),
         getY0AbsoluteZoom(), mapSize.x, mapSize.y);
     centerAndZoomOnState(17);
-    legend = new VizMapLegend(0, 0, getWidth(), getHeight() * 0.2f, this);
-    legend.setColorFilter(colorFilter);
-    legend.setup();
+    setupLegend();
 
     clusterLevel = (int) getWidth() / numberOfClusters;
 
     updateCorners();
     updateClusters();
+  }
+
+  private void setupLegend() {
+    legend = new VizMapLegend(0, 0, getWidth(), getHeight() * 0.2f, this);
+    legend.setColorFilter(colorFilter);
+    legend.setup();
   }
 
   private void centerAndZoomOnState(int stateCode) {
@@ -76,6 +81,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     // drawClusterGrid();
     drawClusters();
     drawAccidents(accidents);
+    setupLegend();
     legend.draw();
 
     popStyle();
@@ -145,19 +151,19 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
 
   private void drawPopUp(DSCrash accident, float ics, float ips) {
     pushStyle();
-    fill(MyColorEnum.BLACK,150f);
+    fill(MyColorEnum.BLACK, 150f);
     rect(ics, ips, 100, 54);
     fill(255);
     textSize(6);
     // text("latitude: " + accident.latitude, ics + 5, ips + 7);
     // text("longitude: "+ accident.longitude, ics + 5, ips + 7+7);
-    text("Date: " +accident.month.substring(2)+" "+accident._year, ics + 5, ips + 7);
+    text("Date: " + accident.month.substring(2) + " " + accident._year, ics + 5, ips + 7);
     text("Day of week: " + accident.day_of_week.substring(2), ics + 5, ips + 7 + 7 * 1);
     text("Average age: " + accident.age, ics + 5, ips + 7 + 7 * 2);
     text("Number of fatalities: " + accident.number_of_fatalities, ics + 5, ips + 7 + 7 * 3);
     text("Roadway surface: " + accident.roadway_surface_condition, ics + 5, ips + 7 + 7 * 4);
     text("Genders involved: " + accident.sex, ics + 5, ips + 7 + 7 * 5);
-    text("Vehicle type: " + accident.vehicle_configuration, ics + 5, ips + 7 + 7 * 6);  
+    text("Vehicle type: " + accident.vehicle_configuration, ics + 5, ips + 7 + 7 * 6);
 
     popStyle();
   }
@@ -412,13 +418,13 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
               checker = "2";
             else if (crash.number_of_fatalities >= 2) checker = "3+";
           }
-boolean found=false;
-          for (int q = 0; q < legend.getLabels().size() && found==false; q++) {
-            
+          boolean found = false;
+          for (int q = 0; q < legend.getLabels().size() && found == false; q++) {
+
             String currentLabel = legend.getLabels().get(q);
             if (checker.equals(currentLabel)) {
               cluster.counters.set(q, cluster.counters.get(q) + 1);
-              found=true;
+              found = true;
             }
           }
 
@@ -442,11 +448,11 @@ boolean found=false;
         }
         drawPieChart(cluster.getPercentages(), legend.getLegendColors(), dimension,
             cluster.getCenter().x, cluster.getCenter().y);
-        if(colorFilter.equals("weather")){
+        if (colorFilter.equals("weather")) {
           fill(MyColorEnum.BLACK);
+        } else {
+          fill(MyColorEnum.WHITE);
         }
-        else{
-        fill(MyColorEnum.WHITE);}
         textSize(10);
         textAlign(PConstants.CENTER, PConstants.CENTER);
         text(cluster.getCount() + "", cluster.getCenter().x, cluster.getCenter().y);
@@ -519,6 +525,9 @@ boolean found=false;
         }
         setProvider(currentProvider);
       }
+    }
+    if (eventName == EventName.CHANGED_MAP_COLOR_ATTRIBUTE) {
+      this.colorFilter = data.toString();
     }
 
   }

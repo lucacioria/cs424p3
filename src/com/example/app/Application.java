@@ -2,20 +2,17 @@ package com.example.app;
 
 import java.util.ArrayList;
 
-import processing.core.PApplet;
 import processing.core.PVector;
 
-import com.anotherbrick.inthewall.BarChart.BarData;
-import com.anotherbrick.inthewall.BarChart.VizBarChart;
-import com.anotherbrick.inthewall.ScatterPlot.ScatterPlotData;
-import com.anotherbrick.inthewall.ScatterPlot.VizScatterPlot;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizModMap;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
-import com.anotherbrick.inthewall.datasource.DSFilter;
 import com.anotherbrick.inthewall.VizPanel;
+import com.anotherbrick.inthewall.ScatterPlot.ScatterPlotData;
+import com.anotherbrick.inthewall.ScatterPlot.VizScatterPlot;
+import com.anotherbrick.inthewall.datasource.DSFilter;
 
 public class Application extends VizPanel implements TouchEnabled, EventSubscriber {
 
@@ -43,6 +40,8 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   //
   private BlackBox blackBox;
   private float stdPadding = 10;
+  private MapButtons2 mapButtons2;
+  private SelectorPanel scatterSelector;
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -57,6 +56,8 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     //
     setupBlackBox();
     //
+    setupScatterSelector();
+    setupMapSelector();
     setupFilterBox();
     setupBarChart1Selector();
     setupBarChart2Selector();
@@ -69,6 +70,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     //
     setupScatterPlot();
     setupMapButtons();
+    setupMapButtons2();
     //
     m.notificationCenter.registerToEvent(EventName.CURRENT_FILTER_UPDATED, this);
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
@@ -124,6 +126,22 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
 
   }
 
+  private void setupScatterSelector() {
+    scatterSelector = new SelectorPanel(910, 200, getHeight() - 170, 150, this);
+    scatterSelector.panelName = "scatterSelector";
+    scatterSelector.setVisible(false);
+    scatterSelector.setup();
+    addTouchSubscriber(scatterSelector);
+  }
+
+  private void setupMapSelector() {
+    mapSelector = new SelectorPanel(910, 200, getHeight() - 170, 150, this);
+    mapSelector.panelName = "mapSelector";
+    mapSelector.setVisible(false);
+    mapSelector.setup();
+    addTouchSubscriber(mapSelector);
+  }
+
   private void setupBarChart1Selector() {
     barChart1Selector = new SelectorPanel(400, 200, 200, 150, this);
     barChart1Selector.panelName = "selectorBarChart1";
@@ -149,9 +167,15 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   }
 
   private void setupMapButtons() {
-    mapButtons = new MapButtons(1360 / 6 * 4, (getHeight() / 2), 20, 60, this);
+    mapButtons = new MapButtons(1360 / 6 * 4, (getHeight() / 2), 20, 40, this);
     mapButtons.setup();
     addTouchSubscriber(mapButtons);
+  }
+
+  private void setupMapButtons2() {
+    mapButtons2 = new MapButtons2(910, getHeight() - 20, this);
+    mapButtons2.setup();
+    addTouchSubscriber(mapButtons2);
   }
 
   private void setupBarChart1Buttons() {
@@ -192,6 +216,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     blackBox.draw();
     //
     mapButtons.draw();
+    mapButtons2.draw();
 
     barChart1.draw();
     barChart1Buttons.draw();
@@ -205,6 +230,8 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     //
     barChart1Selector.draw();
     barChart2Selector.draw();
+    mapSelector.draw();
+    scatterSelector.draw();
     popStyle();
     return false;
   }
@@ -303,6 +330,23 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
         m.notificationCenter.notifyEvent(EventName.CRASHES_COUNT_BY_VALUE_UPDATED, "barChart2");
       } else {
         ArrayList<String> values = DSFilter.getValues("_state");
+        sdata.values = values;
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
+      }
+    } else if (name.equals("selectColorByButton")) {
+      SelectorPanelData sdata = new SelectorPanelData();
+      sdata.name = "mapSelector";
+      sdata.panelName = "mapSelector";
+      if (mapSelector.isVisible()) {
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_CLOSE, sdata);
+        m.notificationCenter.notifyEvent(EventName.CHANGED_MAP_COLOR_ATTRIBUTE,
+            m.selectorPanelsState.get("mapSelector").get(0).toString());
+      } else {
+        ArrayList<String> values = new ArrayList<String>();
+        values.add("weather");
+        values.add("alcohol_involved");
+        values.add("drug_involved");
+        values.add("number_of_fatalities");
         sdata.values = values;
         m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
       }

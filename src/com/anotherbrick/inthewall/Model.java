@@ -54,6 +54,9 @@ public class Model {
     list = new ArrayList<String>();
     list.add("Alaska");
     selectorPanelsState.put("selectorBarChart2State", list);
+    list = new ArrayList<String>();
+    list.add("alcohol_involved");
+    selectorPanelsState.put("mapSelector", list);
   }
 
   public static Model getInstance() {
