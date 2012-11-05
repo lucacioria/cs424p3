@@ -23,6 +23,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
 
   // filters
   private FilterBox filterBox;
+  private EventButtons eventButtons;
   // map
   private VizModMap map;
   private MapButtons mapButtons;
@@ -39,11 +40,14 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   private SelectorPanel scatterPlotSelector;
   private VizScatterPlot scatterPlot;
   //
+  private SelectorPanel eventSelector;
+  //
   private BlackBox blackBox;
   private float stdPadding = 10;
   private MapButtons2 mapButtons2;
   private SelectorPanel scatterSelector;
   private ScatterButtons scatterButtons;
+  private EventPanel eventPanel;
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -60,6 +64,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     //
     setupScatterSelector();
     setupMapSelector();
+    setupEventSelector();
     setupFilterBox();
     setupBarChart1Selector();
     setupBarChart2Selector();
@@ -75,10 +80,17 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     setupMapButtons2();
     setupScatterButtons();
     //
+    setupEventPanel();
+    setupEventButtons();
     m.notificationCenter.registerToEvent(EventName.CURRENT_FILTER_UPDATED, this);
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
     m.notificationCenter.registerToEvent(EventName.SCATTER_PLOT_AXIS_UPDATED, this);
     if (c.initializeVisualization) initializeVisualization();
+  }
+
+  private void setupEventPanel() {
+    eventPanel = new EventPanel(639, 200, 253, 175, this);
+    eventPanel.setup();
   }
 
   private void initializeVisualization() {
@@ -87,7 +99,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     state.add("Illinois");
     filter.setAttributeWithList("_state", state);
     ArrayList<String> year = new ArrayList<String>();
-    year.add("10_2010");
+    year.add("09_2009");
     filter.setAttributeWithList("_year", year);
     m.currentFilter = filter;
     m.notificationCenter.notifyEvent(EventName.BUTTON_TOUCHED, "submitFilterBox");
@@ -147,6 +159,15 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     addTouchSubscriber(mapSelector);
   }
 
+  private void setupEventSelector() {
+    eventSelector = new SelectorPanel(700, 200, 230, 150, this);
+    eventSelector.panelName = "eventSelector";
+    eventSelector.setVisible(false);
+
+    eventSelector.setup();
+    addTouchSubscriber(eventSelector);
+  }
+
   private void setupBarChart1Selector() {
     barChart1Selector = new SelectorPanel(400, 200, 200, 150, this);
     barChart1Selector.panelName = "selectorBarChart1";
@@ -181,6 +202,12 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     mapButtons2 = new MapButtons2(910, getHeight() - 20, this);
     mapButtons2.setup();
     addTouchSubscriber(mapButtons2);
+  }
+
+  private void setupEventButtons() {
+    eventButtons = new EventButtons(840, 364, this);
+    eventButtons.setup();
+    addTouchSubscriber(eventButtons);
   }
 
   private void setupScatterButtons() {
@@ -226,24 +253,27 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     //
     blackBox.draw();
     //
+    eventPanel.draw();
     mapButtons.draw();
     mapButtons2.draw();
-    scatterButtons.draw();
+    // scatterButtons.draw();
 
     barChart1.draw();
     barChart1Buttons.draw();
+    eventButtons.draw();
 
     barChart2.draw();
     barChart2Buttons.draw();
 
-    scatterPlot.draw();
+    // scatterPlot.draw();
     //
     filterBox.draw();
     //
     barChart1Selector.draw();
     barChart2Selector.draw();
     mapSelector.draw();
-    scatterSelector.draw();
+    eventSelector.draw();
+    // scatterSelector.draw();
     popStyle();
     return false;
   }
@@ -392,6 +422,24 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
         values.add("alcohol_involved");
         values.add("drug_involved");
         values.add("number_of_fatalities");
+        sdata.values = values;
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
+      }
+    } else if (name.equals("selectEventButton")) {
+      SelectorPanelData sdata = new SelectorPanelData();
+      sdata.name = "eventSelector";
+      sdata.panelName = "eventSelector";
+      if (eventSelector.isVisible()) {
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_CLOSE, sdata);
+        m.notificationCenter.notifyEvent(EventName.EVENT_CHANGED,
+            m.selectorPanelsState.get("eventSelector").get(0).toString());
+      } else {
+        ArrayList<String> values = new ArrayList<String>();
+        values.add("2001 - Illinois and alcohol");
+        values.add("2003 - Michigan changes speed");
+        values.add("2006 - Texas changes speed");
+        values.add("2009 - Illinois trucks speed");
+        values.add("2010 - Wisconsin and alcohol");
         sdata.values = values;
         m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
       }
