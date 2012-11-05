@@ -92,7 +92,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       firstTouch = new PVector(x, y);
       mapTouched = true;
       // if double touch, then zoom
-      if ((System.currentTimeMillis() - lastTouchTime) < 1000) {
+      if ((System.currentTimeMillis() - lastTouchTime) < 400) {
 
         Point2f center = new Point2f(x * c.multiply, y * c.multiply);
         map.setCenterZoom(map.pointLocation(center), map.getZoom() + 1);
@@ -145,14 +145,20 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
 
   private void drawPopUp(DSCrash accident, float ics, float ips) {
     pushStyle();
-    fill(MyColorEnum.RED);
-    rect(ics, ips, 100, 40);
+    fill(MyColorEnum.BLACK,150f);
+    rect(ics, ips, 100, 54);
     fill(255);
     textSize(6);
     // text("latitude: " + accident.latitude, ics + 5, ips + 7);
     // text("longitude: "+ accident.longitude, ics + 5, ips + 7+7);
-    text("Weather: " + accident.weather, ics + 5, ips + 7);
-    text("Alcohol involved: " + accident.alcohol_involved, ics + 5, ips + 7 + 7 * 1);
+    text("Date: " +accident.month.substring(2)+" "+accident._year, ics + 5, ips + 7);
+    text("Day of week: " + accident.day_of_week.substring(2), ics + 5, ips + 7 + 7 * 1);
+    text("Average age: " + accident.age, ics + 5, ips + 7 + 7 * 2);
+    text("Number of fatalities: " + accident.number_of_fatalities, ics + 5, ips + 7 + 7 * 3);
+    text("Roadway surface: " + accident.roadway_surface_condition, ics + 5, ips + 7 + 7 * 4);
+    text("Genders involved: " + accident.sex, ics + 5, ips + 7 + 7 * 5);
+    text("Vehicle type: " + accident.vehicle_configuration, ics + 5, ips + 7 + 7 * 6);  
+
     popStyle();
   }
 
@@ -406,11 +412,13 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
               checker = "2";
             else if (crash.number_of_fatalities >= 2) checker = "3+";
           }
-
-          for (int q = 0; q < legend.getLabels().size(); q++) {
+boolean found=false;
+          for (int q = 0; q < legend.getLabels().size() && found==false; q++) {
+            
             String currentLabel = legend.getLabels().get(q);
             if (checker.equals(currentLabel)) {
               cluster.counters.set(q, cluster.counters.get(q) + 1);
+              found=true;
             }
           }
 
