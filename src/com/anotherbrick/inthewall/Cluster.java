@@ -48,6 +48,8 @@ public class Cluster {
 
     for (int i = 0; i < counters.size(); i++) {
       sum = sum + counters.get(i);
+     // System.out.println(counters.get(i));
+
     }
     for (int i = 0; i < counters.size(); i++) {
       percentages.add(counters.get(i) / sum);

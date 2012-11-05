@@ -26,7 +26,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private int numberOfClusters = 10;
   private ArrayList<Cluster> clusters = new ArrayList<Cluster>();
   private int currentProvider = 1;
-  private String colorFilter = "drug_involved";
+  private String colorFilter = "number_of_fatalities";
   private int clusterLevel;
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
@@ -364,7 +364,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   public void updateClusterCount(int i, int j, Cluster cluster) {
     int count = 0;
     String checker = "";
-    int maximum=legend.getLabels().size();
+    int maximum = legend.getLabels().size();
     // attenzione al 3
     cluster.counters.clear();
     for (int w = 0; w < maximum; w++) {
@@ -381,21 +381,28 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
             && crash.yOnMap > getY0() + clusterLevel * (j)
             && crash.yOnMap < getY0() + clusterLevel * (j + 1)) {
           count++;
-//inizio porcate
-          if (colorFilter.equals("drug_involved")){
-            checker=crash.drug_involved;
+          // inizio porcate
+          if (colorFilter.equals("drug_involved")) {
+            checker = crash.drug_involved;
+          } else if (colorFilter.equals("drug_involved")) {
+            checker = crash.alcohol_involved;
+          } else if (colorFilter.equals("weather")) {
+            checker = crash.weather;
+          } else if (colorFilter.equals("number_of_fatalities")) {
+            if (crash.number_of_fatalities == 1)
+              checker = "1";
+            else if (crash.number_of_fatalities == 2)
+              checker = "2";
+            else if (crash.number_of_fatalities >= 2) checker = "3+";
           }
-          else if (colorFilter.equals("drug_involved")){
-            checker=crash.alcohol_involved;
-          }
-          
-        
-            for(int q=0;q<legend.getLabels().size();q++){
+
+          for (int q = 0; q < legend.getLabels().size(); q++) {
             if (checker.equals(legend.getLabels().get(q))) {
               cluster.counters.set(q, cluster.counters.get(q) + 1);
-            } }
-          
-          //fine porcate
+            }
+          }
+
+          // fine porcate
           cluster.setCount(count);
           crash.setCluster(cluster);
         }
