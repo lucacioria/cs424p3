@@ -22,16 +22,37 @@ public class EventPanel extends VizPanel implements EventSubscriber {
   public boolean draw() {
     pushStyle();
     background(MyColorEnum.DARK_GRAY);
+    fill(MyColorEnum.WHITE);
     switch (currentEvent) {
     case 1:
+      textSize(15);
+      text("2001 - Illinois and alcohol",10,20);
+      textSize(10);
+     text("Illinois State increases the the penalties for\nalcohol involvement in the DUL laws",10,70);
       break;
     case 2:
+      textSize(15);
+      text("2003 - Michigan changes speed",10,20);
+      textSize(10);
+     text("Michigan State lowers the speed limit",10,70);
       break;
     case 3:
+      textSize(15);
+      text("2006 - Texas changes speed",10,20);
+      textSize(10);
+     text("Texas had the highest posted speed limit\nwhich is 80 mph in the US",10,70);
       break;
     case 4:
+      textSize(15);
+      text("2009 - Illinois trucks speed",10,20);
+      textSize(10);
+     text("Illinois increased the truck speed limit to 65 mph",10,70);
       break;
     case 5:
+      textSize(15);
+      text("2010 - Wisconsin and alcohol",10,20);
+      textSize(10);
+     text("Wisconsin State increases the the penalties\nfor alcohol related offenses",10,70);
       break;
     }
     popStyle();
