@@ -27,6 +27,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   private ArrayList<Cluster> clusters = new ArrayList<Cluster>();
   private int currentProvider = 1;
   private String colorFilter = "alcohol_involved";
+  private int clusterLevel;
 
   public VizModMap(float x0, float y0, float width, float height, VizPanel parent) {
     super(x0, y0, width, height, parent);
@@ -49,6 +50,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     legend.setColorFilter(colorFilter);
     legend.setup();
 
+    clusterLevel = (int) getWidth() / numberOfClusters;
+
     updateCorners();
     updateClusters();
   }
@@ -66,22 +69,13 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
 
   @Override
   public boolean draw() {
-
     manageDrag();
     pushStyle();
-
     background(MyColorEnum.BLACK);
-
     map.draw();
-    // map.setCenterZoom(new Location(array[0], array[1]), (int) array[2]);
-    noFill();
-    stroke(MyColorEnum.RED);
-    strokeWeight(2);
-    rect(mapOffset.x, mapOffset.y, mapSize.x, mapSize.y);
-    drawAccidents(accidents);
-
-    //drawClusterGrid();
+    // drawClusterGrid();
     drawClusters();
+    drawAccidents(accidents);
     legend.draw();
 
     popStyle();
@@ -93,7 +87,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
     if (down) {
 
-      manageAccidentPopup();
+      manageAccidentPopup(x, y);
 
       firstTouch = new PVector(x, y);
       mapTouched = true;
@@ -110,39 +104,46 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       lastTouchTime = System.currentTimeMillis();
       updateCorners();
       updateClusters();
-
       return true;
     } else {
       mapTouched = false;
+      updateCorners();
+      updateClusters();
       return false;
     }
   }
 
   public void drawAccidents(ArrayList<DSCrash> accidents) {
-    for (DSCrash accident : accidents) {
-      Location location = new Location(accident.latitude, accident.longitude);
+    DSCrash crashForPopup = null;
+    for (DSCrash crash : accidents) {
+      if (crash.isVisibleOnMap()) {
+        Location location = new Location(crash.latitude, crash.longitude);
+        Point2f p = map.locationPoint(location);
+        p.x /= c.multiply;
+        p.y /= c.multiply;
+        fill(colorBy(colorFilter, crash), 150f);
+        strokeWeight(0.3f);
+        stroke(MyColorEnum.BLACK);
+        if (crash.getCluster() != null && crash.getCluster().getCount() <= 1) {
+          ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
+
+          if (crash.selected) {
+            crashForPopup = crash;
+          }
+        }
+      }
+    }
+    if (crashForPopup != null) {
+      Location location = new Location(crashForPopup.latitude, crashForPopup.longitude);
       Point2f p = map.locationPoint(location);
       p.x /= c.multiply;
       p.y /= c.multiply;
-      fill(colorBy(colorFilter, accident));
-      // fill(MyColorEnum.BLACK,100);
-      stroke(MyColorEnum.BLACK);
-      if (location.lon > m.upperLeftLocation.lon) {
-        accident.setVisibleOnMap(true);
-        if (accident.getCluster() != null && accident.getCluster().getCount() <= 1) {
-          ellipse(p.x - getX0(), p.y - getY0(), 10, 10);
-
-          if (accident.selected) {
-            popUp(accident, p.x - getX0(), p.y - getY0());
-          }
-        }
-      } else {
-        accident.setVisibleOnMap(false);
-      }
+      drawPopUp(crashForPopup, p.x - getX0(), p.y - getY0());
     }
   }
 
-  private void popUp(DSCrash accident, float ics, float ips) {
+  private void drawPopUp(DSCrash accident, float ics, float ips) {
+    pushStyle();
     fill(MyColorEnum.RED);
     rect(ics, ips, 100, 40);
     fill(255);
@@ -151,17 +152,15 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     // text("longitude: "+ accident.longitude, ics + 5, ips + 7+7);
     text("Weather: " + accident.weather, ics + 5, ips + 7);
     text("Alcohol involved: " + accident.alcohol_involved, ics + 5, ips + 7 + 7 * 1);
-
+    popStyle();
   }
 
-  public void manageAccidentPopup() {
-    for (DSCrash accident : accidents) {
-      if (accident.isVisibleOnMap()) {
-        float ics = (map.locationPoint(new Location(accident.latitude, accident.longitude))).x;
-        float ips = (map.locationPoint(new Location(accident.latitude, accident.longitude))).y;
-
-        if (dist(m.touchX, m.touchY, ics, ips) < accident.dimension) {
-          accident.selected = !accident.selected;
+  public void manageAccidentPopup(float x, float y) {
+    for (DSCrash crash : accidents) {
+      if (crash.isVisibleOnMap()) {
+        if (dist(x, y, crash.xOnMap, crash.yOnMap) < crash.dimension
+            && crash.cluster.getCount() == 1) {
+          crash.selected = !crash.selected;
           break;
         }
       }
@@ -174,11 +173,9 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
         map.tx += (m.touchX - firstTouch.x) * c.multiply / map.sc;
         map.ty += (m.touchY - firstTouch.y) * c.multiply / map.sc;
         firstTouch = new PVector(m.touchX, m.touchY);
-
         updateCorners();
         updateClusters();
       }
-
     }
   }
 
@@ -336,96 +333,86 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
   public void updateClusters() {
     clusters.clear();
     int clusterLevel = (int) getWidth() / numberOfClusters;
+    updateVisibilityOfCrashes();
     for (int i = 0; i < numberOfClusters; i++) {
       for (int j = 0; j < numberOfClusters; j++) {
-
-        fill(MyColorEnum.RED);
-        // ellipse(i+clusterLevel/2,j+clusterLevel/2,20,20);
         Cluster cluster = new Cluster(new Point2f(clusterLevel / 2 + clusterLevel * i, clusterLevel
             / 2 + clusterLevel * j));
         clusters.add(cluster);
-        clusters.get(clusters.size()-1).setCount(updateClusterCount(i, j, cluster));
-       
-
+        updateClusterCount(i, j, cluster);
       }
     }
 
   }
 
-  public int updateClusterCount(int i, int j, Cluster cluster) {
-   // float[]counters={0,0,0};
-    
-    int clusterLevel = (int) getWidth() / numberOfClusters;
+  private void updateVisibilityOfCrashes() {
+    for (DSCrash crash : accidents) {
+      if (crash.longitude > m.upperLeftLocation.lon && crash.longitude < m.lowerRightLocation.lon
+          && crash.latitude < m.upperLeftLocation.lat && crash.latitude > m.lowerRightLocation.lat) {
+        crash.setVisibleOnMap(true);
+        crash.xOnMap = map.locationPoint(new Location(crash.latitude, crash.longitude)).x
+            / c.multiply;
+        crash.yOnMap = map.locationPoint(new Location(crash.latitude, crash.longitude)).y
+            / c.multiply;
+      } else {
+        crash.setVisibleOnMap(false);
+      }
+    }
+
+  }
+
+  public void updateClusterCount(int i, int j, Cluster cluster) {
     int count = 0;
-    int clusterNumber = j + i * (numberOfClusters);
-    //attenzione al 3
+    // attenzione al 3
     cluster.counters.clear();
-    for(int w=0;w<3;w++){
+    for (int w = 0; w < 3; w++) {
       cluster.counters.add(0f);
     }
-    clusters.get(clusterNumber).percentages.clear();
-    for(int w=0;w<3;w++){
-      clusters.get(clusterNumber).percentages.add(0f);
+    cluster.percentages.clear();
+    for (int w = 0; w < 3; w++) {
+      cluster.percentages.add(0f);
     }
     for (DSCrash crash : accidents) {
       if (crash.isVisibleOnMap()) {
-        crash.setClusterNumber(clusterNumber);
-
-        float pointX = map.locationPoint(new Location(crash.latitude, crash.longitude)).x;
-        float pointY = map.locationPoint(new Location(crash.latitude, crash.longitude)).y;
-        if (pointX > getX0() + clusterLevel * (i) && pointX < getX0() + clusterLevel * (i + 1)
-            && pointY > getY0() + clusterLevel * (j) && pointY < getY0() + clusterLevel * (j + 1)) {
+        if (crash.xOnMap > getX0() + clusterLevel * (i)
+            && crash.xOnMap < getX0() + clusterLevel * (i + 1)
+            && crash.yOnMap > getY0() + clusterLevel * (j)
+            && crash.yOnMap < getY0() + clusterLevel * (j + 1)) {
           count++;
-         
-   
-          if(crash.getAlcohol_involved().equals("no")){
-      clusters.get(clusterNumber).counters.set(0, clusters.get(clusterNumber).counters.get(0)+1);
+
+          if (crash.alcohol_involved.equals("no")) {
+            cluster.counters.set(0, cluster.counters.get(0) + 1);
+          } else if (crash.alcohol_involved.equals("yes")) {
+            cluster.counters.set(1, cluster.counters.get(1) + 1);
+          } else {
+            cluster.counters.set(2, cluster.counters.get(2) + 1);
           }
-          else if(crash.getAlcohol_involved().equals("yes")){
-           clusters.get(clusterNumber).counters.set(1, clusters.get(clusterNumber).counters.get(1)+1);
-          }
-          else{
-          clusters.get(clusterNumber).counters.set(2, clusters.get(clusterNumber).counters.get(2)+1);
-          }
-          
-          
-         
-          
-          
+          cluster.setCount(count);
           crash.setCluster(cluster);
-          crash.getCluster().setCount(count);
-          if (count > 0) {
-          }
         }
       }
-
-      
     }
-    clusters.get(clusterNumber).countToPerc();
-    return count;
+    cluster.countToPerc();
   }
 
   public void drawClusters() {
+    pushStyle();
     int clusterLevel = (int) getWidth() / numberOfClusters;
     for (Cluster cluster : clusters) {
-      fill(MyColorEnum.DARKER_BLUE);
       if (cluster.getCount() > 1) {
         float dimension = PApplet.map(cluster.getCount(), 0, 50, 20, clusterLevel);
         if (dimension > clusterLevel * 0.9) {
           dimension = clusterLevel * 0.9f;
         }
-       // ellipse(cluster.getCenter().x, cluster.getCenter().y, dimension, dimension);
-        ArrayList<Float> perc = new ArrayList<Float>();
-        perc.add(0.8f);
-        perc.add(0.2f);
-        drawPieChart(cluster.getPercentages(), legend.getLegendColors(),dimension, cluster.getCenter().x, cluster.getCenter().y);
+        drawPieChart(cluster.getPercentages(), legend.getLegendColors(), dimension,
+            cluster.getCenter().x, cluster.getCenter().y);
         fill(MyColorEnum.WHITE);
         textSize(10);
         textAlign(PConstants.CENTER, PConstants.CENTER);
         text(cluster.getCount() + "", cluster.getCenter().x, cluster.getCenter().y);
       }
     }
-
+    popStyle();
   }
 
   public MyColorEnum colorBy(String filter, DSCrash crash) {
@@ -474,48 +461,49 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       centerAndZoomOnState(m.currentStateCode);
       updateCorners();
       updateClusters();
-  
     }
     if (eventName == EventName.BUTTON_TOUCHED) {
       if (data.toString().equals("zoomInButton")) {
         map.setZoom(map.getZoom() + 1);
+        updateCorners();
+        updateClusters();
       } else if (data.toString().equals("zoomOutButton")) {
         map.setZoom(map.getZoom() - 1);
+        updateCorners();
+        updateClusters();
       } else if (data.toString().equals("changeProviderButton")) {
         if (currentProvider == 3) {
           currentProvider = 1;
         } else {
           currentProvider++;
         }
-
         setProvider(currentProvider);
       }
-      updateClusters();
     }
 
-    updateCorners();
   }
-  
-  
-  public void drawPieChart(ArrayList<Float> percentagess, ArrayList<MyColorEnum> colorss, float diameterr, float x, float y){
 
-    ArrayList<Float> angles=new ArrayList<Float>();
-   float centerX=x;
-  float centerY=y;
-  ArrayList<Float> percentages=percentagess;
- float lastAngle=0;
- 
-  for(int i=0;i<percentages.size();i++){
-angles.add(percentages.get(i)*360);}
-float diameter=diameterr;
-ArrayList<MyColorEnum> colors=colorss;
+  public void drawPieChart(ArrayList<Float> percentages, ArrayList<MyColorEnum> colors,
+      float diameterr, float x, float y) {
+    pushStyle();
+    strokeWeight(0.3f);
+    stroke(MyColorEnum.BLACK);
+    ArrayList<Float> angles = new ArrayList<Float>();
+    float centerX = x;
+    float centerY = y;
+    float lastAngle = 0;
 
-for(int i=0;i<angles.size();i++){
-fill(colors.get(i));
-arc(centerX,centerY,diameter,diameter,lastAngle,lastAngle+radians(angles.get(i)));
+    for (int i = 0; i < percentages.size(); i++) {
+      angles.add(percentages.get(i) * 360);
+    }
+    float diameter = diameterr;
 
-lastAngle += radians(angles.get(i));
-}
-}
-  
+    for (int i = 0; i < angles.size(); i++) {
+      fill(colors.get(i), 150f);
+      arc(centerX, centerY, diameter, diameter, lastAngle, lastAngle + radians(angles.get(i)));
+      lastAngle += radians(angles.get(i));
+    }
+    popStyle();
+  }
+
 }

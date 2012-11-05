@@ -198,7 +198,7 @@ public class DSFilter {
     return value;
   }
 
-  public static String clearLabel(String label) {
+  public static String getClearLabel(String label) {
     return label.replaceAll("^[0-9]+\\_", "");
   }
 

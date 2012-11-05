@@ -14,6 +14,7 @@ import com.anotherbrick.inthewall.EventSubscriber;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizModMap;
 import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
+import com.anotherbrick.inthewall.datasource.DSFilter;
 import com.anotherbrick.inthewall.VizPanel;
 
 public class Application extends VizPanel implements TouchEnabled, EventSubscriber {
@@ -71,6 +72,19 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     //
     m.notificationCenter.registerToEvent(EventName.CURRENT_FILTER_UPDATED, this);
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
+    initializeVisualization();
+  }
+
+  private void initializeVisualization() {
+    DSFilter filter = new DSFilter();
+    ArrayList<String> state = new ArrayList<String>();
+    state.add("Alaska");
+    filter.setAttributeWithList("_state", state);
+    ArrayList<String> weather = new ArrayList<String>();
+    weather.add("2_rainy");
+    filter.setAttributeWithList("weather", weather);
+    m.currentFilter = filter;
+    m.notificationCenter.notifyEvent(EventName.BUTTON_TOUCHED, "submitFilterBox");
   }
 
   private void setupBlackBox() {
@@ -127,7 +141,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   }
 
   private void setupMapButtons() {
-    mapButtons = new MapButtons(500, 200, 20, 60, this);
+    mapButtons = new MapButtons(1360 / 6 * 4, (getHeight() / 2), 20, 60, this);
     mapButtons.setup();
     addTouchSubscriber(mapButtons);
   }
@@ -165,7 +179,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     background(MyColorEnum.DARK_BLUE);
     map.draw();
     //
-    blackBox.draw();
+    // blackBox.draw();
     //
     mapButtons.draw();
 
@@ -204,13 +218,13 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
           m.notificationCenter.notifyEvent(EventName.CRASHES_COUNT_BY_VALUE_UPDATED, "barChart1");
         } else {
           ArrayList<String> values = new ArrayList<String>();
-          values.add("Weather");
-          values.add("Year");
+          values.add("weather");
+          values.add("hour");
+          values.add("roadway_surface_condition");
           sdata.values = values;
           m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
         }
       }
     }
   }
-
 }

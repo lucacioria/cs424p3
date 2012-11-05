@@ -37,6 +37,7 @@ public class BarChart extends VizPanel implements TouchEnabled, EventSubscriber 
   @Override
   public boolean draw() {
     pushStyle();
+    background(MyColorEnum.LIGHT_ORANGE);
     if (barChart.title == null) {
       pushStyle();
       background(MyColorEnum.LIGHT_GREEN);

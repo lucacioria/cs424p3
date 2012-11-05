@@ -19,8 +19,8 @@ public class DSCrash {
   public int[] age;
   public Float latitude;
   public Float longitude;
-  
-  public boolean visibleOnMap=true;
+
+  public boolean visibleOnMap = true;
   public Cluster cluster;
 
   // not mandatory attributes
@@ -28,9 +28,10 @@ public class DSCrash {
   public String roadway_surface_condition;
   public int number_of_fatalities;
 
-  public Float dimension=15f;
-  public int clusterNumber;
+  public Float dimension = 15f;
   public boolean selected = false;
+  public float xOnMap;
+  public float yOnMap;
 
   public DSCrash() {
   }
@@ -38,14 +39,6 @@ public class DSCrash {
   @Override
   public String toString() {
     return _case + "";
-  }
-
-  public int getClusterNumber() {
-    return clusterNumber;
-  }
-
-  public void setClusterNumber(int clusterNumber) {
-    this.clusterNumber = clusterNumber;
   }
 
   public Cluster getCluster() {
@@ -64,15 +57,4 @@ public class DSCrash {
     this.visibleOnMap = visibleOnMap;
   }
 
-  public String getAlcohol_involved() {
-    return alcohol_involved;
-  }
-
-  public void setAlcohol_involved(String alcohol_involved) {
-    this.alcohol_involved = alcohol_involved;
-  }
-  
-
-  }
-
-
+}
