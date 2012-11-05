@@ -72,7 +72,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     //
     m.notificationCenter.registerToEvent(EventName.CURRENT_FILTER_UPDATED, this);
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
-    initializeVisualization();
+    if (c.initializeVisualization) initializeVisualization();
   }
 
   private void initializeVisualization() {
@@ -179,7 +179,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     background(MyColorEnum.DARK_BLUE);
     map.draw();
     //
-    // blackBox.draw();
+    blackBox.draw();
     //
     mapButtons.draw();
 
@@ -218,9 +218,15 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
           m.notificationCenter.notifyEvent(EventName.CRASHES_COUNT_BY_VALUE_UPDATED, "barChart1");
         } else {
           ArrayList<String> values = new ArrayList<String>();
+          values.add("_year");
+          values.add("month");
+          values.add("hour_range");
           values.add("weather");
-          values.add("hour");
           values.add("roadway_surface_condition");
+          values.add("alcohol_involved");
+          values.add("drug_involved");
+          values.add("age_range");
+          values.add("travel_speed_range");
           sdata.values = values;
           m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
         }

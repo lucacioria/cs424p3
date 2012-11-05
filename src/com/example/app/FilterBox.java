@@ -50,7 +50,7 @@ public class FilterBox extends VizPanel implements TouchEnabled, EventSubscriber
 
   private void setupFilterRows() {
     filterRows = new ArrayList<FilterRow>();
-    float rowHeight = 30;
+    float rowHeight = 22;
     ArrayList<HashMap<String, String>> filterNames = DSFilter.getFilterNames();
     for (int i = 0; i < filterNames.size(); i++) {
       FilterRow row = new FilterRow(0, i * rowHeight, 200, rowHeight, this);

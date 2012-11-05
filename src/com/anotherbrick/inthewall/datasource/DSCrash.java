@@ -8,7 +8,7 @@ public class DSCrash {
   public int _state;
   public int _case;
   public int _year;
-  public int month;
+  public String month;
   public int hour;
   public String hour_range;
   public int minutes;
@@ -31,6 +31,7 @@ public class DSCrash {
   public String travel_speed_range;
   public int age;
   public String age_range;
+  public String sex;
 
   public Float dimension = 15f;
   public boolean selected = false;

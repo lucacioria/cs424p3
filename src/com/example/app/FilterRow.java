@@ -39,7 +39,7 @@ class FilterRow extends VizPanel implements TouchEnabled {
 
   private void setupOpenListButton() {
     float buttonWidth = 50;
-    openListButton = new VizButton(getWidth() - buttonWidth, 0, buttonWidth, 20, this);
+    openListButton = new VizButton(getWidth() - buttonWidth, 1, buttonWidth, 20, this);
     addTouchSubscriber(openListButton);
     openListButton.name = name + "FilterRowButton";
     openListButton.setText("SELECT");

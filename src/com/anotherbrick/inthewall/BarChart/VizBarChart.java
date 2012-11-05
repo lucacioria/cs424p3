@@ -31,7 +31,6 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
   @Override
   public boolean draw() {
     pushStyle();
-    background(MyColorEnum.LIGHT_GREEN);
     drawBars();
     drawTitle();
     drawYAxis();
@@ -86,6 +85,7 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
   }
 
   private void updateBars() {
+    bars.clear();
     int n = data.size();
     float barWidth = chartWidth / n;
     float maxValue = getMaxValue();

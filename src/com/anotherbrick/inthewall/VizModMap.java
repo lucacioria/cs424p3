@@ -93,10 +93,10 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
       mapTouched = true;
       // if double touch, then zoom
       if ((System.currentTimeMillis() - lastTouchTime) < 1000) {
-        
+
         Point2f center = new Point2f(x * c.multiply, y * c.multiply);
-        map.setCenterZoom(map.pointLocation(center), map.getZoom()+1);
-      //  map.setCenter(map.pointLocation(center));
+        map.setCenterZoom(map.pointLocation(center), map.getZoom() + 1);
+        // map.setCenter(map.pointLocation(center));
         lastTouchTime = 0;
         updateCorners();
         updateClusters();
@@ -388,18 +388,17 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
           } else if (colorFilter.equals("alcohol_involved")) {
             checker = crash.alcohol_involved;
           } else if (colorFilter.equals("weather")) {
-            if(crash.weather.equals("1_sunny"))
-                checker="Sunny";
-            else if(crash.weather.equals("2_rainy")||crash.weather.equals("3_hail"))
-              checker="Rainy / Hail";
-            else if(crash.weather.equals("4_snow"))
-              checker="Snow";
-            else if(crash.weather.equals("5_fog")||crash.weather.equals("6_windy"))
-              checker="Foggy / Windy";
-            else if(crash.weather.equals("7_cloudy"))
-              checker="Cloudy";
-            else if(crash.weather.equals("8_unknown"))
-              checker="Unknown";
+            if (crash.weather.equals("1_sunny"))
+              checker = "Sunny";
+            else if (crash.weather.equals("2_rainy") || crash.weather.equals("3_hail"))
+              checker = "Rainy / Hail";
+            else if (crash.weather.equals("4_snow"))
+              checker = "Snow";
+            else if (crash.weather.equals("5_fog") || crash.weather.equals("6_windy"))
+              checker = "Foggy / Windy";
+            else if (crash.weather.equals("7_cloudy"))
+              checker = "Cloudy";
+            else if (crash.weather.equals("8_unknown")) checker = "Unknown";
           } else if (colorFilter.equals("number_of_fatalities")) {
             if (crash.number_of_fatalities == 1)
               checker = "1";
@@ -409,7 +408,8 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
           }
 
           for (int q = 0; q < legend.getLabels().size(); q++) {
-            if (checker.equals(legend.getLabels().get(q))) {
+            String currentLabel = legend.getLabels().get(q);
+            if (checker.equals(currentLabel)) {
               cluster.counters.set(q, cluster.counters.get(q) + 1);
             }
           }

@@ -33,13 +33,13 @@ public class DataSourceSQL {
           + "hour,month,crash_related_factor_1,crash_related_factor_2,crash_related_factor_3,time,"
           + "day_of_week,first_harmful_event,holiday_related,latitude,longitude,light_condition,"
           + "number_of_fatalities,number_of_travel_lanes,roadway_function_class,roadway_surface_condition,"
-          + "roadway_surface_type,route_signing,speed_limit,trafficway_flow,age,air_bag_availability,"
+          + "roadway_surface_type,route_signing,speed_limit,trafficway_flow,age, age_range, air_bag_availability,"
           + "alcohol_test_result,injury_severity,person_related_factors_1,person_related_factors_2,"
           + "person_related_factors_3,person_type,alcohol_involved,drug_involved,"
           + "race,seating_position,sex,body_type,most_harmful_event,number_of_occupants,"
           + "travel_speed,vehicle_configuration,vehicle_related_factors_1,vehicle_related_factors_2,"
           + "driver_related_factors_1,driver_related_factors_2,driver_related_factors_3,driver_related_factors_4 "
-          + " FROM krashes WHERE " + f.getWhereClause();
+          + " FROM krashes3 WHERE " + f.getWhereClause();
       sql.query(query);
       createArrayFromQuery(crashes);
       Model.getInstance().crashes = crashes;
@@ -51,7 +51,7 @@ public class DataSourceSQL {
     ArrayList<BarData> crashesCountForBarchart = new ArrayList<BarData>();
     String query;
     if (sql.connect()) {
-      query = "SELECT " + groupField + " as label, count(*) as count" + " FROM krashes WHERE "
+      query = "SELECT " + groupField + " as label, count(*) as count" + " FROM krashes3 WHERE "
           + f.getWhereClause() + " GROUP BY " + groupField;
       sql.query(query);
       while (sql.next()) {
@@ -80,13 +80,20 @@ public class DataSourceSQL {
       event._case = sql.getInt("_case");
       event.latitude = sql.getFloat("latitude");
       event.longitude = sql.getFloat("longitude");
+      // value
       event.weather = DSFilter.getValueByCode("weather", sql.getInt("weather"));
-      event.number_of_fatalities = DSFilter.getIntValue("number_of_fatalities",
-          sql.getInt("number_of_fatalities"));
       event.alcohol_involved = DSFilter.getValueByCode("alcohol_involved",
           sql.getInt("alcohol_involved"));
       event.drug_involved = DSFilter.getValueByCode("drug_involved", sql.getInt("drug_involved"));
       event.day_of_week = DSFilter.getValueByCode("day_of_week", sql.getInt("day_of_week"));
+      event.month = DSFilter.getValueByCode("month", sql.getInt("month"));
+      event.age_range = DSFilter.getValueByCode("age_range", ((int) sql.getFloat("age_range")));
+      event.sex = DSFilter.getValueByCode("sex", ((int) sql.getFloat("sex")));
+      // numeric
+      event.number_of_fatalities = DSFilter.getIntValue("number_of_fatalities",
+          sql.getInt("number_of_fatalities"));
+      event.age = DSFilter.getIntValue("age", ((int) sql.getFloat("age")));
+      //
       array.add(event);
     }
   }
