@@ -406,11 +406,13 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
               checker = "2";
             else if (crash.number_of_fatalities >= 2) checker = "3+";
           }
-
-          for (int q = 0; q < legend.getLabels().size(); q++) {
+boolean found=false;
+          for (int q = 0; q < legend.getLabels().size() && found==false; q++) {
+            
             String currentLabel = legend.getLabels().get(q);
             if (checker.equals(currentLabel)) {
               cluster.counters.set(q, cluster.counters.get(q) + 1);
+              found=true;
             }
           }
 
