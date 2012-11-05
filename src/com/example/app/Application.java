@@ -80,11 +80,19 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     ArrayList<String> state = new ArrayList<String>();
     state.add("Alaska");
     filter.setAttributeWithList("_state", state);
-    ArrayList<String> weather = new ArrayList<String>();
-    weather.add("2_rainy");
-    filter.setAttributeWithList("weather", weather);
+    ArrayList<String> day_of_week = new ArrayList<String>();
+    day_of_week.add("1_Sunday");
+    filter.setAttributeWithList("day_of_week", day_of_week);
     m.currentFilter = filter;
     m.notificationCenter.notifyEvent(EventName.BUTTON_TOUCHED, "submitFilterBox");
+    touchBarChartsToUpdateThem();
+  }
+
+  private void touchBarChartsToUpdateThem() {
+    m.notificationCenter.notifyEvent(EventName.BUTTON_TOUCHED, "barchartSelectXButton1");
+    m.notificationCenter.notifyEvent(EventName.BUTTON_TOUCHED, "barchartSelectXButton1");
+    m.notificationCenter.notifyEvent(EventName.BUTTON_TOUCHED, "barchartSelectXButton2");
+    m.notificationCenter.notifyEvent(EventName.BUTTON_TOUCHED, "barchartSelectXButton2");
   }
 
   private void setupBlackBox() {
@@ -149,6 +157,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   private void setupBarChart1Buttons() {
     barChart1Buttons = new BarChartButtons(barChart1.getX1() - BarChartButtons.width,
         barChart1.getY1() - stdPadding, this);
+    barChart1Buttons.barChartNumber = 1;
     barChart1Buttons.setup();
     addTouchSubscriber(barChart1Buttons);
   }
@@ -156,6 +165,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   private void setupBarChart2Buttons() {
     barChart2Buttons = new BarChartButtons(barChart2.getX1() - BarChartButtons.width,
         barChart2.getY1() - stdPadding, this);
+    barChart2Buttons.barChartNumber = 2;
     barChart2Buttons.setup();
     addTouchSubscriber(barChart2Buttons);
   }
@@ -205,31 +215,96 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
       println("loading from database..");
       m.dataSourceSQL.getCrashes(m.currentFilter);
       println(m.crashes.size() + "");
+      //
       m.notificationCenter.notifyEvent(EventName.CRASHES_UPDATED);
+      touchBarChartsToUpdateThem();
     } else if (eventName == EventName.BUTTON_TOUCHED) {
-      if (data.toString().equals("barchartSelectXButton1")) {
-        SelectorPanelData sdata = new SelectorPanelData();
-        sdata.name = "selectorBarChart1XAxis";
-        sdata.panelName = "selectorBarChart1";
-        if (barChart1Selector.isVisible()) {
-          m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_CLOSE, sdata);
-          m.dataSourceSQL.getCrashesCountBy(m.currentFilter, m.selectorPanelsState.get(sdata.name)
-              .get(0).toString(), 1);
-          m.notificationCenter.notifyEvent(EventName.CRASHES_COUNT_BY_VALUE_UPDATED, "barChart1");
-        } else {
-          ArrayList<String> values = new ArrayList<String>();
-          values.add("_year");
-          values.add("month");
-          values.add("hour_range");
-          values.add("weather");
-          values.add("roadway_surface_condition");
-          values.add("alcohol_involved");
-          values.add("drug_involved");
-          values.add("age_range");
-          values.add("travel_speed_range");
-          sdata.values = values;
-          m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
-        }
+      manageButtons(data.toString());
+    }
+  }
+
+  private void manageButtons(String name) {
+    if (name.equals("barchartSelectXButton1")) {
+      SelectorPanelData sdata = new SelectorPanelData();
+      sdata.name = "selectorBarChart1XAxis";
+      sdata.panelName = "selectorBarChart1";
+      if (barChart1Selector.isVisible()) {
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_CLOSE, sdata);
+        m.dataSourceSQL.getCrashesCountBy(m.currentFilter, m.selectorPanelsState.get(sdata.name)
+            .get(0).toString(), m.selectorPanelsState.get("selectorBarChart1State").get(0)
+            .toString(), 1);
+        m.notificationCenter.notifyEvent(EventName.CRASHES_COUNT_BY_VALUE_UPDATED, "barChart1");
+      } else {
+        ArrayList<String> values = new ArrayList<String>();
+        values.add("_year");
+        values.add("month");
+        values.add("hour_range");
+        values.add("weather");
+        values.add("roadway_surface_condition");
+        values.add("alcohol_involved");
+        values.add("drug_involved");
+        values.add("age_range");
+        values.add("day_of_week");
+        values.add("travel_speed_range");
+        sdata.values = values;
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
+      }
+    } else if (name.equals("barchartSelectStateButton1")) {
+      // SelectorPanelData sdata = new SelectorPanelData();
+      // sdata.name = "selectorBarChart1State";
+      // sdata.panelName = "selectorBarChart1";
+      // if (barChart1Selector.isVisible()) {
+      // m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_CLOSE,
+      // sdata);
+      // m.dataSourceSQL.getCrashesCountBy(m.currentFilter,
+      // m.selectorPanelsState.get("selectorBarChart1XAxis").get(0).toString(),
+      // m.selectorPanelsState.get(sdata.name).get(0).toString(), 1);
+      // m.notificationCenter.notifyEvent(EventName.CRASHES_COUNT_BY_VALUE_UPDATED,
+      // "barChart1");
+      // } else {
+      // ArrayList<String> values = DSFilter.getValues("_state");
+      // sdata.values = values;
+      // m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
+      // }
+    } else if (name.equals("barchartSelectXButton2")) {
+      SelectorPanelData sdata = new SelectorPanelData();
+      sdata.name = "selectorBarChart2XAxis";
+      sdata.panelName = "selectorBarChart2";
+      if (barChart2Selector.isVisible()) {
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_CLOSE, sdata);
+        m.dataSourceSQL.getCrashesCountBy(m.currentFilter, m.selectorPanelsState.get(sdata.name)
+            .get(0).toString(), m.selectorPanelsState.get("selectorBarChart2State").get(0)
+            .toString(), 2);
+        m.notificationCenter.notifyEvent(EventName.CRASHES_COUNT_BY_VALUE_UPDATED, "barChart2");
+      } else {
+        ArrayList<String> values = new ArrayList<String>();
+        values.add("_year");
+        values.add("month");
+        values.add("hour_range");
+        values.add("weather");
+        values.add("roadway_surface_condition");
+        values.add("alcohol_involved");
+        values.add("drug_involved");
+        values.add("age_range");
+        values.add("day_of_week");
+        values.add("travel_speed_range");
+        sdata.values = values;
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
+      }
+    } else if (name.equals("barchartSelectStateButton2")) {
+      SelectorPanelData sdata = new SelectorPanelData();
+      sdata.name = "selectorBarChart2State";
+      sdata.panelName = "selectorBarChart2";
+      if (barChart2Selector.isVisible()) {
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_CLOSE, sdata);
+        m.dataSourceSQL.getCrashesCountBy(m.currentFilter,
+            m.selectorPanelsState.get("selectorBarChart2XAxis").get(0).toString(),
+            m.selectorPanelsState.get(sdata.name).get(0).toString(), 2);
+        m.notificationCenter.notifyEvent(EventName.CRASHES_COUNT_BY_VALUE_UPDATED, "barChart2");
+      } else {
+        ArrayList<String> values = DSFilter.getValues("_state");
+        sdata.values = values;
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
       }
     }
   }

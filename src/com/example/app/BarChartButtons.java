@@ -9,10 +9,9 @@ public class BarChartButtons extends VizPanel implements TouchEnabled {
 
   public int barChartNumber = 1;
   private VizButton selectXButton;
-  private VizButton selectYButton;
   private VizButton selectStateButton;
   private static float height = 20;
-  static float width = 150;
+  static float width = 100;
   private float buttonWidth = 50;
 
   public BarChartButtons(float x0, float y0, VizPanel parent) {
@@ -33,31 +32,24 @@ public class BarChartButtons extends VizPanel implements TouchEnabled {
     selectXButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
         MyColorEnum.DARK_GRAY, 255f, 10);
     addTouchSubscriber(selectXButton);
-
-    selectYButton = new VizButton(50, 0, buttonWidth, 20, this);
-    selectYButton.name = "barchartSelectYButton" + barChartNumber;
-    selectYButton.text = "Y Axis";
-    selectYButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY, 255f,
-        255f, 10);
-    selectYButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
-        MyColorEnum.DARK_GRAY, 255f, 10);
-    addTouchSubscriber(selectYButton);
-
-    selectStateButton = new VizButton(100, 0, buttonWidth, 20, this);
-    selectStateButton.name = "barchartSelectStateButton" + barChartNumber;
-    selectStateButton.text = "State";
-    selectStateButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
-        255f, 255f, 10);
-    selectStateButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
-        MyColorEnum.DARK_GRAY, 255f, 10);
-    addTouchSubscriber(selectStateButton);
+    if (barChartNumber == 2) {
+      selectStateButton = new VizButton(50, 0, buttonWidth, 20, this);
+      selectStateButton.name = "barchartSelectStateButton" + barChartNumber;
+      selectStateButton.text = "State";
+      selectStateButton.setStyle(MyColorEnum.LIGHT_GRAY, MyColorEnum.WHITE, MyColorEnum.DARK_GRAY,
+          255f, 255f, 10);
+      selectStateButton.setStylePressed(MyColorEnum.MEDIUM_GRAY, MyColorEnum.WHITE,
+          MyColorEnum.DARK_GRAY, 255f, 10);
+      addTouchSubscriber(selectStateButton);
+    }
   }
 
   @Override
   public boolean draw() {
     selectXButton.draw();
-    selectYButton.draw();
-    selectStateButton.draw();
+    if (barChartNumber == 2) {
+      selectStateButton.draw();
+    }
     return false;
   }
 

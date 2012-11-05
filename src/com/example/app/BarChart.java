@@ -56,11 +56,13 @@ public class BarChart extends VizPanel implements TouchEnabled, EventSubscriber 
     if (eventName == EventName.CRASHES_COUNT_BY_VALUE_UPDATED) {
       if (barChartNumber == 1 && data.toString().equals("barChart1")) {
         barChart.data = m.crashesCountForBarchart1;
-        barChart.title = m.currentGroupField1;
+        barChart.title = DSFilter.getLabelByName(m.currentGroupField1) + " ("
+            + DSFilter.getValueByCode("_state", m.currentStateCode) + ")";
         barChart.setup();
       } else if (barChartNumber == 2 && data.toString().equals("barChart2")) {
         barChart.data = m.crashesCountForBarchart2;
-        barChart.title = m.currentGroupField2;
+        barChart.title = DSFilter.getLabelByName(m.currentGroupField2) + " ("
+            + m.selectorPanelsState.get("selectorBarChart2State").get(0).toString() + ")";
         barChart.setup();
       }
     }

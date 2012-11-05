@@ -42,6 +42,18 @@ public class Model {
     this.p = p;
     this.dataSourceSQL = dataSourceSQL;
     this.notificationCenter = notificationCenter;
+    ArrayList<String> list = new ArrayList<String>();
+    list.add("weather");
+    selectorPanelsState.put("selectorBarChart1XAxis", list);
+    list = new ArrayList<String>();
+    list.add("day_of_week");
+    selectorPanelsState.put("selectorBarChart2XAxis", list);
+    list = new ArrayList<String>();
+    list.add("Illinois");
+    selectorPanelsState.put("selectorBarChart1State", list);
+    list = new ArrayList<String>();
+    list.add("Alaska");
+    selectorPanelsState.put("selectorBarChart2State", list);
   }
 
   public static Model getInstance() {

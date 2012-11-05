@@ -28,7 +28,7 @@ public class DSFilter {
     }
   }
 
-  public String getWhereClause() {
+  public String getWhereClause(boolean includeState) {
     ArrayList<String> a = new ArrayList<String>();
     if (latitudeMax != null) a.add("latitude < " + latitudeMax);
     if (latitudeMin != null) a.add("latitude > " + latitudeMin);
@@ -37,6 +37,7 @@ public class DSFilter {
     Iterator<String> it = listAttributes.keySet().iterator();
     while (it.hasNext()) {
       String name = it.next();
+      if (includeState == false && name.equals("_state")) continue;
       ArrayList<String> values = listAttributes.get(name);
       if (values.size() > 0) {
         String codes = getCodesByName(name, values);
@@ -46,12 +47,7 @@ public class DSFilter {
     return join(a, " AND ");
   }
 
-  public static String getStateNameByCode(int code) {
-    getMapping("_sate");
-    return null;
-  }
-
-  private String getCodesByName(String name, ArrayList<String> values) {
+  public static String getCodesByName(String name, ArrayList<String> values) {
     HashMap<String, ArrayList<Integer>> mappings = getMapping(name);
     ArrayList<String> out = new ArrayList<String>();
     for (String value : values) {
@@ -73,7 +69,7 @@ public class DSFilter {
     return listAttributes.get(name);
   }
 
-  private String join(ArrayList<? extends Object> a, String separator) {
+  private static String join(ArrayList<? extends Object> a, String separator) {
     String out = "";
     if (a.size() == 0) {
       return "";

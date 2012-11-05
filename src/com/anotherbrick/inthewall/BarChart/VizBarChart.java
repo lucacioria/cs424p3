@@ -79,7 +79,7 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
     chartXLeft = 50;
     chartXRight = getWidth() - 20;
     chartYTop = 40;
-    chartYBottom = getHeight() - 20;
+    chartYBottom = getHeight() - 30;
     chartWidth = chartXRight - chartXLeft;
     chartHeight = chartYBottom - chartYTop;
   }

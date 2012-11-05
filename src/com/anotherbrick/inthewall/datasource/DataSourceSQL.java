@@ -39,7 +39,7 @@ public class DataSourceSQL {
           + "race,seating_position,sex,body_type,most_harmful_event,number_of_occupants,"
           + "travel_speed,vehicle_configuration,vehicle_related_factors_1,vehicle_related_factors_2,"
           + "driver_related_factors_1,driver_related_factors_2,driver_related_factors_3,driver_related_factors_4 "
-          + " FROM krashes3 WHERE " + f.getWhereClause();
+          + " FROM krashes3 WHERE " + f.getWhereClause(true);
       sql.query(query);
       createArrayFromQuery(crashes);
       Model.getInstance().crashes = crashes;
@@ -47,12 +47,18 @@ public class DataSourceSQL {
     }
   }
 
-  public void getCrashesCountBy(DSFilter f, String groupField, int barChartNumber) {
+  public void getCrashesCountBy(DSFilter f, String groupField, String state, int barChartNumber) {
     ArrayList<BarData> crashesCountForBarchart = new ArrayList<BarData>();
     String query;
     if (sql.connect()) {
+      ArrayList<String> states = new ArrayList<String>();
+      states.add(barChartNumber == 1 ? DSFilter.getValueByCode("_state",
+          Model.getInstance().currentStateCode) : state);
+      String where = f.getWhereClause(false);
       query = "SELECT " + groupField + " as label, count(*) as count" + " FROM krashes3 WHERE "
-          + f.getWhereClause() + " GROUP BY " + groupField;
+          + where + (where.length() > 0 ? " AND " : " ") + "_state IN ("
+          + DSFilter.getCodesByName("_state", states) + ") GROUP BY " + groupField;
+      System.out.println(query);
       sql.query(query);
       while (sql.next()) {
         BarData barData = new BarData();
