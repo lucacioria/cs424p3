@@ -53,6 +53,7 @@ public class VizScatterPlotChart extends VizPanel implements TouchEnabled {
   }
 
   private void drawPoints() {
+    if (data == null) return;
     pushStyle();
     fill(pointColor, 150f);
     noStroke();

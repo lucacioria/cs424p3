@@ -1,18 +1,14 @@
 package com.anotherbrick.inthewall.ScatterPlot;
 
-import java.util.ArrayList;
-
 import processing.core.PApplet;
 
-import com.anotherbrick.inthewall.Config;
+import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizPanel;
-import com.anotherbrick.inthewall.Config.MyColorEnum;
-import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
 
 public class VizScatterPlot extends VizPanel implements TouchEnabled {
 
-  public ScatterPlotData data;
+  private ScatterPlotData data;
   public MyColorEnum backgroundColor = MyColorEnum.DARK_GRAY;
   public MyColorEnum chartBackgroundColor = MyColorEnum.MEDIUM_GRAY;
   public MyColorEnum pointColor = MyColorEnum.LIGHT_ORANGE;
@@ -29,13 +25,20 @@ public class VizScatterPlot extends VizPanel implements TouchEnabled {
     return propagateTouch(x, y, down, touchType);
   }
 
+  public void setData(ScatterPlotData data) {
+    this.data = data;
+    setupChart();
+  }
+
   @Override
   public boolean draw() {
     pushStyle();
     background(MyColorEnum.LIGHT_GREEN);
     drawTitle();
     drawYAxis();
-    chart.draw();
+    if (chart.data != null) {
+      chart.draw();
+    }
     popStyle();
     return false;
   }
@@ -77,9 +80,9 @@ public class VizScatterPlot extends VizPanel implements TouchEnabled {
   private void setupChart() {
     chart = new VizScatterPlotChart(50, 50, getWidth() - 70, getHeight() - 70, this);
     chart.backgroundColor = chartBackgroundColor;
-    chart.data = data;
     chart.pointColor = pointColor;
     chart.pointRadius = pointRadius;
+    chart.data = data;
     chart.setup();
     addTouchSubscriber(chart);
   }

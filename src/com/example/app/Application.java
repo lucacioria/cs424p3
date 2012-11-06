@@ -12,6 +12,7 @@ import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
 import com.anotherbrick.inthewall.ScatterPlot.ScatterPlotData;
 import com.anotherbrick.inthewall.ScatterPlot.VizScatterPlot;
+import com.anotherbrick.inthewall.datasource.DSCrash;
 import com.anotherbrick.inthewall.datasource.DSFilter;
 
 public class Application extends VizPanel implements TouchEnabled, EventSubscriber {
@@ -42,6 +43,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   private float stdPadding = 10;
   private MapButtons2 mapButtons2;
   private SelectorPanel scatterSelector;
+  private ScatterButtons scatterButtons;
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -71,20 +73,22 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     setupScatterPlot();
     setupMapButtons();
     setupMapButtons2();
+    setupScatterButtons();
     //
     m.notificationCenter.registerToEvent(EventName.CURRENT_FILTER_UPDATED, this);
     m.notificationCenter.registerToEvent(EventName.BUTTON_TOUCHED, this);
+    m.notificationCenter.registerToEvent(EventName.SCATTER_PLOT_AXIS_UPDATED, this);
     if (c.initializeVisualization) initializeVisualization();
   }
 
   private void initializeVisualization() {
     DSFilter filter = new DSFilter();
     ArrayList<String> state = new ArrayList<String>();
-    state.add("Alaska");
+    state.add("Illinois");
     filter.setAttributeWithList("_state", state);
-    ArrayList<String> day_of_week = new ArrayList<String>();
-    day_of_week.add("1_Sunday");
-    filter.setAttributeWithList("day_of_week", day_of_week);
+    ArrayList<String> year = new ArrayList<String>();
+    year.add("10_2010");
+    filter.setAttributeWithList("_year", year);
     m.currentFilter = filter;
     m.notificationCenter.notifyEvent(EventName.BUTTON_TOUCHED, "submitFilterBox");
     touchBarChartsToUpdateThem();
@@ -112,9 +116,9 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     }
     data.setPoints(points);
     data.title = "Thou shan't scatter!";
-    scatterPlot.data = data;
     scatterPlot.pointRadius = 5;
     scatterPlot.setup();
+    scatterPlot.setData(data);
     addTouchSubscriber(scatterPlot);
   }
 
@@ -127,7 +131,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   }
 
   private void setupScatterSelector() {
-    scatterSelector = new SelectorPanel(910, 200, getHeight() - 170, 150, this);
+    scatterSelector = new SelectorPanel(630, 188 - 100, 200, 100, this);
     scatterSelector.panelName = "scatterSelector";
     scatterSelector.setVisible(false);
     scatterSelector.setup();
@@ -138,6 +142,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     mapSelector = new SelectorPanel(910, 200, getHeight() - 170, 150, this);
     mapSelector.panelName = "mapSelector";
     mapSelector.setVisible(false);
+
     mapSelector.setup();
     addTouchSubscriber(mapSelector);
   }
@@ -176,6 +181,12 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     mapButtons2 = new MapButtons2(910, getHeight() - 20, this);
     mapButtons2.setup();
     addTouchSubscriber(mapButtons2);
+  }
+
+  private void setupScatterButtons() {
+    scatterButtons = new ScatterButtons(630, 188, this);
+    scatterButtons.setup();
+    addTouchSubscriber(scatterButtons);
   }
 
   private void setupBarChart1Buttons() {
@@ -217,6 +228,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     //
     mapButtons.draw();
     mapButtons2.draw();
+    scatterButtons.draw();
 
     barChart1.draw();
     barChart1Buttons.draw();
@@ -247,7 +259,40 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
       touchBarChartsToUpdateThem();
     } else if (eventName == EventName.BUTTON_TOUCHED) {
       manageButtons(data.toString());
+
+    } else if (eventName == EventName.SCATTER_PLOT_AXIS_UPDATED) {
+      udpateScatterPlot();
     }
+  }
+
+  private void udpateScatterPlot() {
+    ScatterPlotData data = new ScatterPlotData();
+    String x = m.selectorPanelsState.get("scatterSelectorX").get(0).toString();
+    String y = m.selectorPanelsState.get("scatterSelectorY").get(0).toString();
+    data.title = x + " / " + y;
+    ArrayList<PVector> points = new ArrayList<PVector>();
+    // compute points
+    for (DSCrash crash : m.crashes) {
+      PVector p = new PVector();
+      if (x.equals("age")) {
+        p.x = crash.age;
+      } else if (x.equals("alcohol_test_result")) {
+        p.x = crash.alcohol_test_result;
+      } else if (x.equals("travel_speed ")) {
+        p.x = crash.travel_speed;
+      }
+      if (y.equals("age")) {
+        p.y = crash.age;
+      } else if (y.equals("alcohol_test_result")) {
+        p.y = crash.alcohol_test_result;
+      } else if (y.equals("travel_speed ")) {
+        p.y = crash.travel_speed;
+      }
+      points.add(p);
+    }
+    //
+    data.setPoints(points);
+    scatterPlot.setData(data);
   }
 
   private void manageButtons(String name) {
@@ -347,6 +392,34 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
         values.add("alcohol_involved");
         values.add("drug_involved");
         values.add("number_of_fatalities");
+        sdata.values = values;
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
+      }
+    } else if (name.equals("scatterXButton")) {
+      SelectorPanelData sdata = new SelectorPanelData();
+      sdata.name = "scatterSelectorX";
+      sdata.panelName = "scatterSelector";
+      if (scatterSelector.isVisible()) {
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_CLOSE, sdata);
+        m.notificationCenter.notifyEvent(EventName.SCATTER_PLOT_AXIS_UPDATED);
+      } else {
+        ArrayList<String> values = new ArrayList<String>();
+        values.add("travel_speed");
+        values.add("age");
+        sdata.values = values;
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
+      }
+    } else if (name.equals("scatterYButton")) {
+      SelectorPanelData sdata = new SelectorPanelData();
+      sdata.name = "scatterSelectorY";
+      sdata.panelName = "scatterSelector";
+      if (scatterSelector.isVisible()) {
+        m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_CLOSE, sdata);
+        m.notificationCenter.notifyEvent(EventName.SCATTER_PLOT_AXIS_UPDATED);
+      } else {
+        ArrayList<String> values = new ArrayList<String>();
+        values.add("travel_speed");
+        values.add("age");
         sdata.values = values;
         m.notificationCenter.notifyEvent(EventName.SELECTOR_PANEL_OPEN, sdata);
       }

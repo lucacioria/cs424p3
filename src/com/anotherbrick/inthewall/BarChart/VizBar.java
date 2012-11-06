@@ -36,7 +36,6 @@ public class VizBar extends VizPanel implements TouchEnabled {
   public boolean draw() {
     pushStyle();
     // set styles
-    background(MyColorEnum.LIGHT_BLUE);
     fill(barColor);
     noStroke();
     // rect

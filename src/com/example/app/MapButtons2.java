@@ -10,7 +10,7 @@ public class MapButtons2 extends VizPanel implements TouchEnabled {
   private VizButton selectColorByButton;
   private VizButton changeProviderButton;
   public static float width = 100;
-  public static float height = 100;
+  public static float height = 20;
 
   public MapButtons2(float x0, float y0, VizPanel parent) {
     super(x0, y0, width, height, parent);

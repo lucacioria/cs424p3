@@ -191,6 +191,12 @@ public class DSFilter {
     if (name.equals("number_of_fatalities")) {
       if (value == 99) return -1;
     }
+    if (name.equals("travel_speed")) {
+      if (value > 200 || value < 0) return -1;
+    }
+    if (name.equals("age")) {
+      if (value > 97 || value < 0) return -1;
+    }
     return value;
   }
 

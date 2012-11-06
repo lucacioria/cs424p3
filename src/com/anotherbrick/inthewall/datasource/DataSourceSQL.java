@@ -99,6 +99,8 @@ public class DataSourceSQL {
       event.number_of_fatalities = DSFilter.getIntValue("number_of_fatalities",
           sql.getInt("number_of_fatalities"));
       event.age = DSFilter.getIntValue("age", ((int) sql.getFloat("age")));
+      event.travel_speed = DSFilter.getIntValue("travel_speed",
+          ((int) sql.getFloat("travel_speed")));
       //
       array.add(event);
     }

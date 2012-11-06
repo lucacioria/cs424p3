@@ -13,7 +13,7 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
   public String title;
   public ArrayList<BarData> data;
   public MyColorEnum backgroundColor = MyColorEnum.DARK_GRAY;
-  public MyColorEnum barColor = MyColorEnum.LIGHT_ORANGE;
+  public MyColorEnum barColor = MyColorEnum.LIGHT_BLUE;
   public MyColorEnum textColor = MyColorEnum.WHITE;
 
   private float chartXLeft, chartXRight, chartYBottom, chartYTop, chartWidth, chartHeight;
@@ -31,6 +31,7 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
   @Override
   public boolean draw() {
     pushStyle();
+    background(backgroundColor);
     drawBars();
     drawTitle();
     drawYAxis();

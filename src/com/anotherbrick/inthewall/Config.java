@@ -154,7 +154,7 @@ public class Config {
     case DARKERER_BLUE:
       return hex("#1D3660");
     case LIGHT_BLUE:
-      return hex("#65B6F3");
+      return hex("#5b7599");
     case LIGHT_GREEN:
       return hex("#52923C");
     case LIGHT_ORANGE:
@@ -176,7 +176,7 @@ public class Config {
     case GRAPH_COLOR_4:
       return hex("#4fc1bb");
     case YELLOW:
-    	return hex("#FFFF00");
+      return hex("#FFFF00");
     default:
       return 0;
     }

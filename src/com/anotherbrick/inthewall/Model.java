@@ -57,6 +57,12 @@ public class Model {
     list = new ArrayList<String>();
     list.add("alcohol_involved");
     selectorPanelsState.put("mapSelector", list);
+    list = new ArrayList<String>();
+    list.add("age");
+    selectorPanelsState.put("scatterSelectorY", list);
+    list = new ArrayList<String>();
+    list.add("travel_speed");
+    selectorPanelsState.put("scatterSelectorX", list);
   }
 
   public static Model getInstance() {

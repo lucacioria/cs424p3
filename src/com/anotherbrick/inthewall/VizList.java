@@ -86,7 +86,7 @@ public class VizList extends VizPanel implements TouchEnabled {
             toggleElement(element, selectionMode);
           }
         } else {
-          element = elements.get(row + startIndex);
+          element = elements.get(PApplet.min(row + startIndex, elements.size() - 1));
           toggleElement(element, selectionMode);
         }
       }

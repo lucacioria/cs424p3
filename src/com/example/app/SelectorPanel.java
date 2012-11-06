@@ -34,8 +34,8 @@ class SelectorPanel extends VizPanel implements TouchEnabled, EventSubscriber {
   @SuppressWarnings("unchecked")
   private void setupVizList(SelectorPanelData data) {
     list = new VizList(0, 0, getWidth(), getHeight(), this);
-    list.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, 10, data.values, false,
-        SelectionMode.SINGLE);
+    list.setup(MyColorEnum.LIGHT_GRAY, MyColorEnum.MEDIUM_GRAY, (int) (getHeight() / 20),
+        data.values, false, SelectionMode.SINGLE);
     ArrayList<Object> attributeValues = (ArrayList<Object>) (ArrayList<? extends Object>) m.selectorPanelsState
         .get(data.name);
     if ((attributeValues != null && attributeValues.size() > 0)) {
