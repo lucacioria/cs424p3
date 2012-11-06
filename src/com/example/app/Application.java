@@ -89,7 +89,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   }
 
   private void setupEventPanel() {
-    eventPanel = new EventPanel(638, 200, 252, 200, this);
+    eventPanel = new EventPanel(639, 200, 253, 175, this);
     eventPanel.setup();
   }
 

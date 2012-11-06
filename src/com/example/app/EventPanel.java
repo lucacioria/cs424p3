@@ -20,13 +20,12 @@ public class EventPanel extends VizPanel implements EventSubscriber {
 
   @Override
   public boolean draw() {
+    pushStyle();
     background(MyColorEnum.DARK_GRAY);
     switch (currentEvent) {
     case 1:
-      background(MyColorEnum.RED);
       break;
     case 2:
-      background(MyColorEnum.LIGHT_ORANGE);
       break;
     case 3:
       break;
@@ -35,6 +34,7 @@ public class EventPanel extends VizPanel implements EventSubscriber {
     case 5:
       break;
     }
+    popStyle();
     return false;
   }
 
