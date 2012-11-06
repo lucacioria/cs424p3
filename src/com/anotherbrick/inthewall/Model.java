@@ -63,6 +63,9 @@ public class Model {
     list = new ArrayList<String>();
     list.add("travel_speed");
     selectorPanelsState.put("scatterSelectorX", list);
+    list = new ArrayList<String>();
+    list.add("2001 - Illinois and alcohol");
+    selectorPanelsState.put("eventSelector", list);
   }
 
   public static Model getInstance() {

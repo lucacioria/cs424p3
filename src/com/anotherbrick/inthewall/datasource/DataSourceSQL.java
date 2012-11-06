@@ -93,14 +93,13 @@ public class DataSourceSQL {
       event.drug_involved = DSFilter.getValueByCode("drug_involved", sql.getInt("drug_involved"));
       event.day_of_week = DSFilter.getValueByCode("day_of_week", sql.getInt("day_of_week"));
       event.month = DSFilter.getValueByCode("month", sql.getInt("month"));
-      event.age_range = DSFilter.getValueByCode("age_range", ((int) sql.getFloat("age_range")));
+      event.age_range = DSFilter.getValueByCode("age_range", sql.getInt("age_range"));
       event.sex = DSFilter.getValueByCode("sex", ((int) sql.getFloat("sex")));
       // numeric
       event.number_of_fatalities = DSFilter.getIntValue("number_of_fatalities",
           sql.getInt("number_of_fatalities"));
-      event.age = DSFilter.getIntValue("age", ((int) sql.getFloat("age")));
-      event.travel_speed = DSFilter.getIntValue("travel_speed",
-          ((int) sql.getFloat("travel_speed")));
+      event.age = DSFilter.getIntValue("age", sql.getInt("age"));
+      event.travel_speed = DSFilter.getIntValue("travel_speed", sql.getInt("travel_speed"));
       //
       array.add(event);
     }
