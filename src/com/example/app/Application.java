@@ -21,6 +21,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     super(x0, y0, width, height);
   }
 
+  private PopulationButton populationButton;
   // filters
   private FilterBox filterBox;
   private EventButtons eventButtons;
@@ -61,6 +62,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     setupMap();
     //
     setupBlackBox();
+    setupPopulationButton();
     //
     setupScatterSelector();
     setupMapSelector();
@@ -198,6 +200,12 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     addTouchSubscriber(mapButtons);
   }
 
+  private void setupPopulationButton() {
+    populationButton = new PopulationButton(585, 182, this);
+    populationButton.setup();
+    addTouchSubscriber(populationButton);
+  }
+
   private void setupMapButtons2() {
     mapButtons2 = new MapButtons2(910, getHeight() - 20, this);
     mapButtons2.setup();
@@ -257,6 +265,7 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
     mapButtons.draw();
     mapButtons2.draw();
     // scatterButtons.draw();
+    populationButton.draw();
 
     barChart1.draw();
     barChart1Buttons.draw();
@@ -326,6 +335,10 @@ public class Application extends VizPanel implements TouchEnabled, EventSubscrib
   }
 
   private void manageButtons(String name) {
+    if (name.equals("populationButton")) {
+      m.population = !m.population;
+      touchBarChartsToUpdateThem();
+    }
     if (name.equals("barchartSelectXButton1")) {
       SelectorPanelData sdata = new SelectorPanelData();
       sdata.name = "selectorBarChart1XAxis";

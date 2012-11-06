@@ -78,6 +78,19 @@ public class DataSourceSQL {
     }
   }
 
+  public int getStatePopulation(int currentStateCode) {
+    String query;
+    if (sql.connect()) {
+      query = "SELECT population FROM states WHERE id = " + currentStateCode;
+      System.out.println(query);
+      sql.query(query);
+      while (sql.next()) {
+        return sql.getInt("population");
+      }
+    }
+    return -1;
+  }
+
   private void createArrayFromQuery(ArrayList<DSCrash> array) {
     while (sql.next()) {
       DSCrash event = new DSCrash();

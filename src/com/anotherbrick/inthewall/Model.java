@@ -32,6 +32,7 @@ public class Model {
   public ArrayList<BarData> crashesCountForBarchart1;
   public ArrayList<BarData> crashesCountForBarchart2;
   public HashMap<String, ArrayList<? extends Object>> selectorPanelsState = new HashMap<String, ArrayList<? extends Object>>();
+  public boolean population = false;
 
   public static void setup(Main p, DataSourceSQL dataSourceSQL,
       VizNotificationCenter notificationCenter) {

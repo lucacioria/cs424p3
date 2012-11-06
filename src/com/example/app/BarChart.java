@@ -1,5 +1,6 @@
 package com.example.app;
 
+import com.anotherbrick.inthewall.BarChart.BarData;
 import com.anotherbrick.inthewall.BarChart.VizBarChart;
 import com.anotherbrick.inthewall.Config.MyColorEnum;
 import com.anotherbrick.inthewall.EventSubscriber;
@@ -56,6 +57,14 @@ public class BarChart extends VizPanel implements TouchEnabled, EventSubscriber 
     if (eventName == EventName.CRASHES_COUNT_BY_VALUE_UPDATED) {
       if (barChartNumber == 1 && data.toString().equals("barChart1")) {
         barChart.data = m.crashesCountForBarchart1;
+        //
+        if (m.population) {
+          int pop = m.dataSourceSQL.getStatePopulation(m.currentStateCode);
+          for (BarData x : m.crashesCountForBarchart1) {
+            x.value /= pop;
+          }
+        }
+        //
         barChart.title = DSFilter.getLabelByName(m.currentGroupField1) + " ("
             + DSFilter.getValueByCode("_state", m.currentStateCode) + ")";
         barChart.setup();

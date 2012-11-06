@@ -28,6 +28,11 @@ public class BlackBox extends VizPanel implements TouchEnabled {
     text("Objects in the", 10, 30);
     fill(MyColorEnum.WHITE, 200f);
     text("Rear View Mirror", 10, 60);
+    if (m.population) {
+      textSize(10);
+      fill(MyColorEnum.WHITE, 200f);
+      text("Showing Per Capita data..", 370, 195);
+    }
     popStyle();
     return false;
   }

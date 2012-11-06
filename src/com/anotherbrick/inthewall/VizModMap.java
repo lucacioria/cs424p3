@@ -528,6 +528,7 @@ public class VizModMap extends VizPanel implements TouchEnabled, EventSubscriber
     }
     if (eventName == EventName.CHANGED_MAP_COLOR_ATTRIBUTE) {
       this.colorFilter = data.toString();
+      setupLegend();
       updateClusters();
     }
 

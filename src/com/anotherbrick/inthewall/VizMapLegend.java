@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import processing.core.PConstants;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.datasource.DSFilter;
 
 public class VizMapLegend extends VizPanel implements TouchEnabled {
   private String colorFilter = "";
@@ -27,9 +28,9 @@ public class VizMapLegend extends VizPanel implements TouchEnabled {
     pushStyle();
     fill(MyColorEnum.BLACK);
     rect(0, 0, getWidth(), getHeight());
-    textSize(10);
+    textSize(12);
     fill(MyColorEnum.WHITE);
-    text("Color coding by: " + colorFilter.toUpperCase(), 5, 15);
+    text("Color coding by: " + (DSFilter.getLabelByName(colorFilter)).toUpperCase(), 5, 15);
     int legendColumn = 1;
 
     // for(float i=getHeight()/3+5;i<getHeight();i=i+getHeight()/3){
@@ -37,12 +38,12 @@ public class VizMapLegend extends VizPanel implements TouchEnabled {
 
       fill(legendColors.get(i - 1));
       stroke(MyColorEnum.WHITE);
-      strokeWeight(1);
+      strokeWeight(0.5f);
       rectMode(PConstants.CENTER);
       rect(70 + 95 * (legendColumn - 1), (i + 1) % 2 * getHeight() / 3 + 30, 10, 10);
       fill(MyColorEnum.WHITE);
       textAlign(PConstants.LEFT, PConstants.CENTER);
-      textSize(8);
+      textSize(10);
       text(labels.get(i - 1), 80 + 95 * (legendColumn - 1), (i + 1) % 2 * getHeight() / 3 + 30);
       if (i % 2 == 0) {
         legendColumn++;
@@ -99,20 +100,20 @@ public class VizMapLegend extends VizPanel implements TouchEnabled {
       labels.add("unknown");
       legendColors.add(MyColorEnum.BLACK);
     }
-    
-    else if(colorFilter.equals("number_of_fatalities")){
+
+    else if (colorFilter.equals("number_of_fatalities")) {
       legendColors.clear();
       labels.clear();
-    
+
       labels.add("1");
       legendColors.add(MyColorEnum.YELLOW);
-      
+
       labels.add("2");
       legendColors.add(MyColorEnum.LIGHT_ORANGE);
-      
+
       labels.add("3+");
       legendColors.add(MyColorEnum.RED);
-      
+
       labels.add("unknown");
       legendColors.add(MyColorEnum.BLACK);
     }

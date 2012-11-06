@@ -5,6 +5,7 @@ import java.util.ArrayList;
 import processing.core.PApplet;
 
 import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.Helper;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizPanel;
 
@@ -49,7 +50,14 @@ public class VizBarChart extends VizPanel implements TouchEnabled {
     float tickValue = max / numberOfTicks;
     for (int i = 0; i < numberOfTicks; i++) {
       float y = chartYBottom - PApplet.map(i, 0, numberOfTicks - 1, 0, chartHeight);
-      String numberLabel = (int) (tickValue * i) + "";
+      String numberLabel = "";
+      if ((tickValue * i) > 10) {
+        numberLabel = Helper.floatToString((tickValue * i), 0, true);
+      } else if ((tickValue * i) > 1) {
+        numberLabel = Helper.floatToString((tickValue * i), 1, true);
+      } else {
+        numberLabel = Helper.floatToString((tickValue * i), 3, true);
+      }
       text(numberLabel, chartXLeft - 5, y);
     }
     popStyle();
