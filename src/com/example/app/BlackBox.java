@@ -21,7 +21,14 @@ public class BlackBox extends VizPanel implements TouchEnabled {
 
   @Override
   public boolean draw() {
+    pushStyle();
     background(MyColorEnum.BLACK);
+    textSize(25);
+    fill(MyColorEnum.WHITE, 150f);
+    text("Objects in the", 10, 30);
+    fill(MyColorEnum.WHITE, 200f);
+    text("Rear View Mirror", 10, 60);
+    popStyle();
     return false;
   }
 

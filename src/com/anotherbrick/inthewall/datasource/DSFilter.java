@@ -69,7 +69,7 @@ public class DSFilter {
     return listAttributes.get(name);
   }
 
-  private static String join(ArrayList<? extends Object> a, String separator) {
+  public static String join(ArrayList<? extends Object> a, String separator) {
     String out = "";
     if (a.size() == 0) {
       return "";

@@ -2,17 +2,13 @@ package com.example.app;
 
 import java.util.ArrayList;
 
-import javax.jws.Oneway;
-
 import processing.core.PApplet;
 
-import com.anotherbrick.inthewall.EventSubscriber;
+import com.anotherbrick.inthewall.Config.MyColorEnum;
+import com.anotherbrick.inthewall.Helper;
 import com.anotherbrick.inthewall.TouchEnabled;
 import com.anotherbrick.inthewall.VizButton;
-import com.anotherbrick.inthewall.VizNotificationCenter.EventName;
 import com.anotherbrick.inthewall.VizPanel;
-import com.anotherbrick.inthewall.Config.MyColorEnum;
-import com.anotherbrick.inthewall.TouchEnabled.TouchTypeEnum;
 import com.anotherbrick.inthewall.datasource.DSFilter;
 
 class FilterRow extends VizPanel implements TouchEnabled {
@@ -25,6 +21,7 @@ class FilterRow extends VizPanel implements TouchEnabled {
   ArrayList<String> values = new ArrayList<String>();
   VizButton openListButton;
   public boolean selectMultiple = true;
+  private String sublabel;
 
   @Override
   public boolean touch(float x, float y, boolean down, TouchTypeEnum touchType) {
@@ -55,8 +52,10 @@ class FilterRow extends VizPanel implements TouchEnabled {
     background(MyColorEnum.DARK_GRAY);
     // label
     textSize(10);
-    fill(MyColorEnum.WHITE);
     textAlign(PApplet.LEFT, PApplet.CENTER);
+    fill(MyColorEnum.WHITE, 100f);
+    text(label + " " + getSublabel(), 10, 10);
+    fill(MyColorEnum.WHITE);
     text(label, 10, 10);
     // open list button
     openListButton.draw();
@@ -65,4 +64,11 @@ class FilterRow extends VizPanel implements TouchEnabled {
     return false;
   }
 
+  private String getSublabel() {
+    ArrayList<String> sub = new ArrayList<String>();
+    for (String a : m.currentFilter.getAttributeValues(name)) {
+      sub.add(DSFilter.getClearLabel(a));
+    }
+    return Helper.limitStringLength(DSFilter.join(sub, ","), 20, true);
+  }
 }
